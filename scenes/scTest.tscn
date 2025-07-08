@@ -1,0 +1,50 @@
+[gd_scene load_steps=6 format=3 uid="uid://buxn1xvymrjak"]
+
+[ext_resource type="Script" uid="uid://b8sbc7sui6deu" path="res://src/NoteMaster.gd" id="2_5uccs"]
+[ext_resource type="PackedScene" uid="uid://di0imgmhwfavl" path="res://objects/NotePlayer.tscn" id="2_e7qg6"]
+[ext_resource type="Resource" uid="uid://dp6wkail2otb" path="res://assets/instruments/instPiano.tres" id="2_l8utc"]
+[ext_resource type="Script" uid="uid://dss76llmhvtvh" path="res://src/components/Scale.gd" id="3_l8utc"]
+
+[sub_resource type="Resource" id="Resource_dwu3b"]
+script = ExtResource("3_l8utc")
+type = 0
+metadata/_custom_type_script = "uid://dss76llmhvtvh"
+
+[node name="ScTest" type="Node2D"]
+
+[node name="NoteMaster" type="Node2D" parent="." node_paths=PackedStringArray("notePlayers")]
+script = ExtResource("2_5uccs")
+instrument = ExtResource("2_l8utc")
+noteScale = SubResource("Resource_dwu3b")
+notePlayers = [NodePath("NotePlayer"), NodePath("NotePlayer2"), NodePath("NotePlayer3"), NodePath("NotePlayer4"), NodePath("NotePlayer5"), NodePath("NotePlayer6"), NodePath("NotePlayer7"), NodePath("NotePlayer8")]
+
+[node name="NotePlayer" parent="NoteMaster" instance=ExtResource("2_e7qg6")]
+position = Vector2(304, 671)
+
+[node name="NotePlayer2" parent="NoteMaster" instance=ExtResource("2_e7qg6")]
+position = Vector2(417, 467)
+scaleDegree = 1
+
+[node name="NotePlayer3" parent="NoteMaster" instance=ExtResource("2_e7qg6")]
+position = Vector2(586, 320)
+scaleDegree = 2
+
+[node name="NotePlayer4" parent="NoteMaster" instance=ExtResource("2_e7qg6")]
+position = Vector2(762, 210)
+scaleDegree = 3
+
+[node name="NotePlayer5" parent="NoteMaster" instance=ExtResource("2_e7qg6")]
+position = Vector2(1102, 209)
+scaleDegree = 4
+
+[node name="NotePlayer6" parent="NoteMaster" instance=ExtResource("2_e7qg6")]
+position = Vector2(1307, 327)
+scaleDegree = 5
+
+[node name="NotePlayer7" parent="NoteMaster" instance=ExtResource("2_e7qg6")]
+position = Vector2(1495, 488)
+scaleDegree = 6
+
+[node name="NotePlayer8" parent="NoteMaster" instance=ExtResource("2_e7qg6")]
+position = Vector2(1626, 665)
+scaleDegree = 7
