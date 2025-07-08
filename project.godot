@@ -11,6 +11,7 @@ config_version=5
 [application]
 
 config/name="CamMusic"
+run/main_scene="uid://buxn1xvymrjak"
 config/features=PackedStringArray("4.4", "Forward Plus")
 boot_splash/show_image=false
 config/icon="res://icon.svg"
@@ -23,8 +24,8 @@ Global="*res://src/Global.gd"
 
 window/size/viewport_width=1920
 window/size/viewport_height=1080
-window/size/window_width_override=1280
-window/size/window_height_override=720
+window/size/window_width_override=1600
+window/size/window_height_override=900
 window/stretch/mode="canvas_items"
 
 [input]

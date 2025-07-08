@@ -5,6 +5,9 @@ class_name NoteMaster extends Node2D
 @export var notePlayers: Array[NotePlayer]
 @export var noteVol := 1.0
 
+@export_group("Nodes")
+@export var instLabel: RichTextLabel
+
 
 func _ready() -> void:
 	# Setup note scale
@@ -23,3 +26,8 @@ func _ready() -> void:
 
 func setScaleType(newType: Scale.Type):
 	noteScale.setType(newType, instrument)
+	
+	var instName := instrument.resource_path.split("inst")[-1]
+	
+	instLabel.text = "Instrument: [color=yellow]" + instName
+	print(instName)
