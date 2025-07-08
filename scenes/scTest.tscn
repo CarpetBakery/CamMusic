@@ -1,14 +1,14 @@
 [gd_scene load_steps=8 format=3 uid="uid://buxn1xvymrjak"]
 
 [ext_resource type="Script" uid="uid://b8sbc7sui6deu" path="res://src/NoteMaster.gd" id="2_5uccs"]
-[ext_resource type="Resource" uid="uid://cb3kdhd1fkfwa" path="res://assets/instruments/instXylo.tres" id="2_dwu3b"]
 [ext_resource type="PackedScene" uid="uid://di0imgmhwfavl" path="res://objects/NotePlayer.tscn" id="2_e7qg6"]
+[ext_resource type="Resource" uid="uid://dp6wkail2otb" path="res://assets/instruments/instPiano.tres" id="2_l8utc"]
 [ext_resource type="Script" uid="uid://dss76llmhvtvh" path="res://src/components/Scale.gd" id="3_l8utc"]
 [ext_resource type="Texture2D" uid="uid://beiyag2p5qlqs" path="res://assets/sprites/guy.png" id="5_dwu3b"]
 
 [sub_resource type="Resource" id="Resource_dwu3b"]
 script = ExtResource("3_l8utc")
-type = 0
+type = 2
 metadata/_custom_type_script = "uid://dss76llmhvtvh"
 
 [sub_resource type="GDScript" id="GDScript_dwu3b"]
@@ -26,7 +26,7 @@ func _unhandled_input(event: InputEvent) -> void:
 [node name="NoteMaster" type="Node2D" parent="." node_paths=PackedStringArray("notePlayers", "instLabel")]
 position = Vector2(-50, 0)
 script = ExtResource("2_5uccs")
-instrument = ExtResource("2_dwu3b")
+instrument = ExtResource("2_l8utc")
 noteScale = SubResource("Resource_dwu3b")
 notePlayers = [NodePath("NotePlayer"), NodePath("NotePlayer2"), NodePath("NotePlayer3"), NodePath("NotePlayer4"), NodePath("NotePlayer5"), NodePath("NotePlayer6"), NodePath("NotePlayer7"), NodePath("NotePlayer8")]
 instLabel = NodePath("InstrumentLabel")
@@ -63,11 +63,11 @@ position = Vector2(1598, 711)
 scaleDegree = 7
 
 [node name="InstrumentLabel" type="RichTextLabel" parent="NoteMaster"]
-offset_left = 71.0
-offset_top = 969.0
-offset_right = 1969.0
-offset_bottom = 1101.0
-theme_override_font_sizes/normal_font_size = 61
+offset_left = 62.0
+offset_top = 922.0
+offset_right = 1960.0
+offset_bottom = 1150.0
+theme_override_font_sizes/normal_font_size = 42
 bbcode_enabled = true
 text = "Instrument: "
 

@@ -11,7 +11,7 @@ class_name NoteMaster extends Node2D
 
 func _ready() -> void:
 	# Setup note scale
-	setScaleType(Scale.Type.MAJOR)
+	setScaleType(noteScale.type)
 	
 	# Setup NotePlayers
 	for np in notePlayers:
@@ -28,6 +28,5 @@ func setScaleType(newType: Scale.Type):
 	noteScale.setType(newType, instrument)
 	
 	var instName := instrument.resource_path.split("inst")[-1]
-	
-	instLabel.text = "Instrument: [color=yellow]" + instName
-	print(instName)
+	instLabel.text = "Instrument: [color=yellow]" + instName + "[/color]" + \
+			"\nScale: [color=yellow]" + str(noteScale)

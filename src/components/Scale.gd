@@ -6,6 +6,7 @@ enum Type
 {
 	MAJOR, 
 	MINOR,
+	BLUES,
 }
 
 enum Note
@@ -64,3 +65,26 @@ func setType(newType: Type, instrument: Instrument):
 				instrument.streams[Note.A_SHARP],
 				instrument.streams[Note.C_HIGH],
 			]
+		
+		Type.BLUES:
+			streams = [
+				instrument.streams[Note.C],
+				instrument.streams[Note.D],
+				instrument.streams[Note.D_SHARP],
+				instrument.streams[Note.F],
+				instrument.streams[Note.F_SHARP],
+				instrument.streams[Note.G],
+				instrument.streams[Note.A_SHARP],
+				instrument.streams[Note.C_HIGH],
+			]
+
+
+func _to_string() -> String:
+	match type:
+		Type.MAJOR:
+			return "Major"
+		Type.MINOR:
+			return "Minor"
+		Type.BLUES:
+			return "Blues"
+	return ""
