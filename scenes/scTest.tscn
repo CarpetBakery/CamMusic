@@ -1,8 +1,8 @@
 [gd_scene load_steps=8 format=3 uid="uid://buxn1xvymrjak"]
 
 [ext_resource type="Script" uid="uid://b8sbc7sui6deu" path="res://src/NoteMaster.gd" id="2_5uccs"]
+[ext_resource type="Resource" uid="uid://cb3kdhd1fkfwa" path="res://assets/instruments/instXylo.tres" id="2_dwu3b"]
 [ext_resource type="PackedScene" uid="uid://di0imgmhwfavl" path="res://objects/NotePlayer.tscn" id="2_e7qg6"]
-[ext_resource type="Resource" uid="uid://dp6wkail2otb" path="res://assets/instruments/instPiano.tres" id="2_l8utc"]
 [ext_resource type="Script" uid="uid://dss76llmhvtvh" path="res://src/components/Scale.gd" id="3_l8utc"]
 [ext_resource type="Texture2D" uid="uid://beiyag2p5qlqs" path="res://assets/sprites/guy.png" id="5_dwu3b"]
 
@@ -26,7 +26,7 @@ func _unhandled_input(event: InputEvent) -> void:
 [node name="NoteMaster" type="Node2D" parent="." node_paths=PackedStringArray("notePlayers", "instLabel")]
 position = Vector2(-50, 0)
 script = ExtResource("2_5uccs")
-instrument = ExtResource("2_l8utc")
+instrument = ExtResource("2_dwu3b")
 noteScale = SubResource("Resource_dwu3b")
 notePlayers = [NodePath("NotePlayer"), NodePath("NotePlayer2"), NodePath("NotePlayer3"), NodePath("NotePlayer4"), NodePath("NotePlayer5"), NodePath("NotePlayer6"), NodePath("NotePlayer7"), NodePath("NotePlayer8")]
 instLabel = NodePath("InstrumentLabel")
@@ -62,6 +62,13 @@ scaleDegree = 6
 position = Vector2(1598, 711)
 scaleDegree = 7
 
+[node name="ColorRect" type="ColorRect" parent="NoteMaster"]
+offset_left = 50.0
+offset_top = 896.0
+offset_right = 1391.0
+offset_bottom = 1076.0
+color = Color(0, 0, 0, 0.392157)
+
 [node name="InstrumentLabel" type="RichTextLabel" parent="NoteMaster"]
 offset_left = 62.0
 offset_top = 922.0
@@ -82,3 +89,6 @@ texture = ExtResource("5_dwu3b")
 [node name="Arm" type="Line2D" parent="Guy"]
 points = PackedVector2Array(1207, 797, 965, 844)
 script = SubResource("GDScript_dwu3b")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+anchor_mode = 0
