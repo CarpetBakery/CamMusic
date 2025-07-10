@@ -119,6 +119,7 @@ transform = Transform3D(0.24705, -0.8421, 0.47941, 0, 0.494746, 0.869038, -0.969
 
 [node name="SpotLight3D" type="SpotLight3D" parent="Level/Lighting"]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0.762827, 2.03231)
+visible = false
 light_energy = 0.12
 spot_attenuation = -2.55
 
