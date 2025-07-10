@@ -28,5 +28,5 @@ func setScaleType(newType: Scale.Type):
 	noteScale.setType(newType, instrument)
 	
 	var instName := instrument.resource_path.split("inst")[-1]
-	instLabel.text = "Instrument: [color=yellow]" + instName + "[/color]" + \
+	instLabel.text = "[tornado radius=3 freq=10]Instrument: [color=yellow]" + instName + "[/color]" + \
 			"\nScale: [color=yellow]" + str(noteScale)
