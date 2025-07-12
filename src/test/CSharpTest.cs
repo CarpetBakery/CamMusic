@@ -14,8 +14,13 @@ public partial class CSharpTest : Node
         }
     }
 
-	public void Test()
-	{
+    private void Test()
+    {
         GD.Print("Working");
-	}
+    }
+
+    private void doSomething()
+    {
+        GD.Print("Something");
+    }
 }
