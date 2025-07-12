@@ -1,10 +1,11 @@
-[gd_scene load_steps=18 format=3 uid="uid://crmajnmoal4mo"]
+[gd_scene load_steps=19 format=3 uid="uid://crmajnmoal4mo"]
 
 [ext_resource type="Shader" uid="uid://lrery4a0pywy" path="res://shaders/shSky.gdshader" id="1_axlu0"]
 [ext_resource type="Material" uid="uid://c8r3skhyn0j0m" path="res://assets/materials/floor.tres" id="1_mooqf"]
 [ext_resource type="Texture2D" uid="uid://d3f8cc4pxckkx" path="res://assets/textures/sky_new.png" id="2_r5s3b"]
 [ext_resource type="Texture2D" uid="uid://dqsgu1hjtpugp" path="res://assets/textures/floor_new.png" id="4_5177l"]
 [ext_resource type="PackedScene" uid="uid://buxn1xvymrjak" path="res://scenes/scTest.tscn" id="4_r5s3b"]
+[ext_resource type="Script" uid="uid://bn1qa0yk0ms8b" path="res://src/test/CSharpTest.cs" id="6_2737y"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_r5s3b"]
 shader = ExtResource("1_axlu0")
@@ -168,3 +169,6 @@ physics_object_picking = true
 size = Vector2i(1920, 1080)
 
 [node name="ScTest" parent="SubViewport" instance=ExtResource("4_r5s3b")]
+
+[node name="C#Test" type="Node" parent="."]
+script = ExtResource("6_2737y")

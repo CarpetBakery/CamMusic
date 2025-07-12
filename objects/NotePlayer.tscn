@@ -1,6 +1,6 @@
 [gd_scene load_steps=6 format=3 uid="uid://di0imgmhwfavl"]
 
-[ext_resource type="Script" uid="uid://yp8kvcywmsgk" path="res://src/NotePlayer.gd" id="1_8al2m"]
+[ext_resource type="Script" uid="uid://yp8kvcywmsgk" path="res://src/note_player.gd" id="1_8al2m"]
 [ext_resource type="PackedScene" uid="uid://dmvgtdsrjv4da" path="res://objects/FadeEffect.tscn" id="2_fo6o1"]
 [ext_resource type="Texture2D" uid="uid://egppiwpa1guo" path="res://assets/sprites/objBubble.png" id="3_fo6o1"]
 

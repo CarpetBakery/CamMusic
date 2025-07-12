@@ -12,13 +12,13 @@ config_version=5
 
 config/name="CamMusic"
 run/main_scene="uid://buxn1xvymrjak"
-config/features=PackedStringArray("4.4", "Forward Plus")
+config/features=PackedStringArray("4.4", "C#", "Forward Plus")
 boot_splash/show_image=false
 config/icon="uid://egppiwpa1guo"
 
 [autoload]
 
-Global="*res://src/Global.gd"
+Global="*res://src/global.gd"
 
 [display]
 
@@ -27,6 +27,10 @@ window/size/viewport_height=1080
 window/size/window_width_override=1600
 window/size/window_height_override=900
 window/stretch/mode="canvas_items"
+
+[dotnet]
+
+project/assembly_name="CamMusic"
 
 [input]
 
