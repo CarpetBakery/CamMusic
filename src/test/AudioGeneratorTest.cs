@@ -9,6 +9,7 @@ public partial class AudioGeneratorTest : Node
 	AudioStreamGeneratorPlayback playback;
 
 	[ExportGroup("")]
+	[Export] bool play = true;
 	[Export] float pulseHz = 440.0f;
 	float sampleHz = 22050.0f * 2.0f;
 	float phase = 0.0f;
@@ -38,6 +39,9 @@ public partial class AudioGeneratorTest : Node
 
 	private void FillBuffer()
 	{
+		if (!play)
+			return;
+
 		float increment = pulseHz / sampleHz;
 		int toFill = playback.GetFramesAvailable();
 
