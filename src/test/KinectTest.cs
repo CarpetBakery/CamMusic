@@ -14,7 +14,7 @@ Microsoft's example code referenced
 
 public partial class KinectTest : Node3D
 {
-    public KinectSensor kinect { get; private set; }
+    public KinectSensor sensor { get; private set; }
     public string id { get; private set; }
 
     // -- Skeleton --
@@ -32,14 +32,17 @@ public partial class KinectTest : Node3D
         }
 
         // Get Kinect device
-        kinect = sensors.First();
-        Debug.Assert(kinect != null, "Error: Kinect is null.");
-        id = kinect.DeviceConnectionId;
+        sensor = sensors.First();
+        Debug.Assert(sensor != null && sensor.Status == KinectStatus.Connected, "Error: Kinect is invalid.");
+        id = sensor.DeviceConnectionId;
 
-        GD.Print(kinect.Status);
+        GD.Print(sensor.Status);
         GD.Print(id);
 
-        GetSkeleton();
+        // So we can receive skeleton frames
+        sensor.SkeletonStream.Enable();
+        // Add event handler to be called whenever there is new color frame data
+        sensor.SkeletonFrameReady += SensorSkeletonFrameReady;
     }
 
     public override void _Process(double delta)
@@ -47,16 +50,29 @@ public partial class KinectTest : Node3D
         base._Process(delta);
     }
 
-    // public void KinectAllFramesReady(object sender, EventArgs e)
+    private void SensorSkeletonFrameReady(object sender, SkeletonFrameReadyEventArgs e)
+    {
+        Skeleton[] skeletons = new Skeleton[0];
+        using (SkeletonFrame skeletonFrame = e.OpenSkeletonFrame())
+        {
+            if (skeletonFrame != null)
+            {
+                skeletons = new Skeleton[skeletonFrame.SkeletonArrayLength];
+                skeletonFrame.CopySkeletonDataTo(skeletons);
+            }
+        }
+        // TODO: Do something with this
+    }
+
     public void GetSkeleton()
     {
-        if (null == kinect || null == kinect.SkeletonStream)
+        if (null == sensor || null == sensor.SkeletonStream)
         {
             return;
         }
 
         bool haveSkeletonData = false;
-        using (SkeletonFrame skeletonFrame = kinect.SkeletonStream.OpenNextFrame(1000))
+        using (SkeletonFrame skeletonFrame = sensor.SkeletonStream.OpenNextFrame(1000))
         {
             if (skeletonFrame != null)
             {
