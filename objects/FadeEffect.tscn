@@ -1,8 +1,0 @@
-[gd_scene load_steps=3 format=3 uid="uid://dmvgtdsrjv4da"]
-
-[ext_resource type="Texture2D" uid="uid://egppiwpa1guo" path="res://assets/sprites/objBubble.png" id="1_sywq2"]
-[ext_resource type="Script" uid="uid://dtgdt20mjh3gx" path="res://src/fade_effect.gd" id="2_m7xos"]
-
-[node name="FadeEffect" type="Sprite2D"]
-texture = ExtResource("1_sywq2")
-script = ExtResource("2_m7xos")

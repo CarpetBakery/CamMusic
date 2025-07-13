@@ -1,0 +1,113 @@
+[gd_scene load_steps=11 format=3 uid="uid://buxn1xvymrjak"]
+
+[ext_resource type="Script" uid="uid://b8sbc7sui6deu" path="res://src/note_master.gd" id="2_5uccs"]
+[ext_resource type="Resource" uid="uid://dp6wkail2otb" path="res://assets/instruments/instPiano.tres" id="2_6h3db"]
+[ext_resource type="PackedScene" uid="uid://di0imgmhwfavl" path="res://objects/NotePlayer.tscn" id="2_e7qg6"]
+[ext_resource type="Script" uid="uid://dss76llmhvtvh" path="res://src/components/Scale.gd" id="3_l8utc"]
+[ext_resource type="FontFile" uid="uid://bsqsbdc7n77nc" path="res://assets/fonts/ARLRDBD.TTF" id="5_6h3db"]
+[ext_resource type="Texture2D" uid="uid://beiyag2p5qlqs" path="res://assets/sprites/guy.png" id="5_dwu3b"]
+[ext_resource type="Script" uid="uid://bl8gu5wttoir0" path="res://src/test/AudioGeneratorTest.cs" id="7_xsns0"]
+[ext_resource type="Script" uid="uid://pamjchcrdg2u" path="res://src/test/MeltyTest.cs" id="8_ct8vh"]
+
+[sub_resource type="Resource" id="Resource_dwu3b"]
+script = ExtResource("3_l8utc")
+type = 0
+metadata/_custom_type_script = "uid://dss76llmhvtvh"
+
+[sub_resource type="GDScript" id="GDScript_dwu3b"]
+resource_name = "Arm"
+script/source = "extends Line2D
+
+
+func _unhandled_input(event: InputEvent) -> void:
+	if event is InputEventMouse:
+		points[0] = event.position
+"
+
+[node name="ScTest" type="Node2D"]
+
+[node name="NoteMaster" type="Node2D" parent="." node_paths=PackedStringArray("notePlayers", "instLabel")]
+position = Vector2(-50, 0)
+script = ExtResource("2_5uccs")
+instrument = ExtResource("2_6h3db")
+noteScale = SubResource("Resource_dwu3b")
+notePlayers = [NodePath("NotePlayer"), NodePath("NotePlayer2"), NodePath("NotePlayer3"), NodePath("NotePlayer4"), NodePath("NotePlayer5"), NodePath("NotePlayer6"), NodePath("NotePlayer7"), NodePath("NotePlayer8")]
+instLabel = NodePath("InstrumentLabel")
+
+[node name="NotePlayer" parent="NoteMaster" instance=ExtResource("2_e7qg6")]
+position = Vector2(382, 739)
+
+[node name="NotePlayer2" parent="NoteMaster" instance=ExtResource("2_e7qg6")]
+position = Vector2(429, 498)
+scaleDegree = 1
+
+[node name="NotePlayer3" parent="NoteMaster" instance=ExtResource("2_e7qg6")]
+position = Vector2(586, 289)
+scaleDegree = 2
+
+[node name="NotePlayer4" parent="NoteMaster" instance=ExtResource("2_e7qg6")]
+position = Vector2(821, 189)
+scaleDegree = 3
+
+[node name="NotePlayer5" parent="NoteMaster" instance=ExtResource("2_e7qg6")]
+position = Vector2(1126, 190)
+scaleDegree = 4
+
+[node name="NotePlayer6" parent="NoteMaster" instance=ExtResource("2_e7qg6")]
+position = Vector2(1366, 244)
+scaleDegree = 5
+
+[node name="NotePlayer7" parent="NoteMaster" instance=ExtResource("2_e7qg6")]
+position = Vector2(1545, 437)
+scaleDegree = 6
+
+[node name="NotePlayer8" parent="NoteMaster" instance=ExtResource("2_e7qg6")]
+position = Vector2(1598, 711)
+scaleDegree = 7
+
+[node name="ColorRect" type="ColorRect" parent="NoteMaster"]
+offset_left = 50.0
+offset_top = 896.0
+offset_right = 1391.0
+offset_bottom = 1076.0
+mouse_filter = 2
+color = Color(0, 0, 0, 0.666667)
+
+[node name="InstrumentLabel" type="RichTextLabel" parent="NoteMaster"]
+offset_left = 62.0
+offset_top = 922.0
+offset_right = 1960.0
+offset_bottom = 1150.0
+mouse_filter = 2
+theme_override_fonts/normal_font = ExtResource("5_6h3db")
+theme_override_font_sizes/normal_font_size = 42
+bbcode_enabled = true
+text = "Instrument: "
+
+[node name="Guy" type="Node2D" parent="."]
+
+[node name="Sprite2D" type="Sprite2D" parent="Guy"]
+texture_filter = 1
+position = Vector2(966, 787)
+scale = Vector2(5.96479, 4.61702)
+texture = ExtResource("5_dwu3b")
+
+[node name="Arm" type="Line2D" parent="Guy"]
+points = PackedVector2Array(1207, 797, 965, 844)
+script = SubResource("GDScript_dwu3b")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+anchor_mode = 0
+
+[node name="AudioGeneratorTest" type="Node" parent="." node_paths=PackedStringArray("player")]
+script = ExtResource("7_xsns0")
+player = NodePath("AudioStreamPlayer")
+play = false
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="AudioGeneratorTest"]
+
+[node name="MeltyTest" type="Node" parent="." node_paths=PackedStringArray("player")]
+script = ExtResource("8_ct8vh")
+player = NodePath("AudioStreamPlayer")
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="MeltyTest"]

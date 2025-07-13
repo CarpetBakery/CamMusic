@@ -1,6 +1,0 @@
-[gd_scene load_steps=2 format=3 uid="uid://pacvi2pdfpdg"]
-
-[ext_resource type="Script" uid="uid://cxyeb0l2ugp0g" path="res://src/test/KinectTest.cs" id="1_p5h2y"]
-
-[node name="scKinectTest" type="Node3D"]
-script = ExtResource("1_p5h2y")
