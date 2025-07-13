@@ -5,5 +5,8 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="MeltySynth" Version="2.4.1" />
+    <Reference Include="Microsoft.Kinect">
+      <HintPath>$(KINECTSDK10_DIR)\Assemblies\Microsoft.Kinect.dll</HintPath>
+    </Reference>
   </ItemGroup>
 </Project>
