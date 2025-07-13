@@ -4,3 +4,5 @@
 
 [node name="scKinectTest" type="Node3D"]
 script = ExtResource("1_p5h2y")
+
+[node name="Kodot" type="Kodot" parent="."]

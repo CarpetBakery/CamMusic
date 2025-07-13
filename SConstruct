@@ -13,8 +13,15 @@ env = SConscript("godot-cpp/SConstruct")
 # - LINKFLAGS are for linking flags
 
 # tweak this if you want to use different folders, or more folders, to store your source code in.
-env.Append(CPPPATH=["src/"])
+env.Append(CPPPATH=["C:/Program Files/Microsoft SDKs/Kinect/v1.8/inc/", "src/"])
 sources = Glob("src/*.cpp")
+
+# Add libraries
+env.Append(LIBPATH = ["C:/Program Files/Microsoft SDKs/Kinect/v1.8/lib/"])
+env.Append(LIBS = [
+    "Kinect10"
+])
+# env.Append(INCPATH = ["C:/Program Files/Microsoft SDKs/Kinect/v1.8/inc/"])
 
 godotProjectName = "CamMusic"
 extensionName = "kodot"

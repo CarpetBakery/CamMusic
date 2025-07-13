@@ -1,7 +1,6 @@
 #ifndef BOIDC_H
 #define BOIDC_H
 
-#include <godot_cpp/classes/ref.hpp>
 #include <godot_cpp/classes/node2d.hpp>
 #include <godot_cpp/classes/color_palette.hpp>
 

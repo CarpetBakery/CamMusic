@@ -3,8 +3,7 @@
 #include "register_types.h"
 
 #include "gdexample.h"
-#include "boidc.h"
-#include "flockc.h"
+#include "kodot.h"
 
 #include <gdextension_interface.h>
 #include <godot_cpp/core/defs.hpp>
@@ -21,6 +20,7 @@ void initialize_example_module(ModuleInitializationLevel p_level)
 
 	// -- Register classes here --
 	GDREGISTER_RUNTIME_CLASS(GDExample);
+	GDREGISTER_RUNTIME_CLASS(Kodot);
 	// GDREGISTER_RUNTIME_CLASS(BoidC);
 	// GDREGISTER_RUNTIME_CLASS(FlockC);
 }

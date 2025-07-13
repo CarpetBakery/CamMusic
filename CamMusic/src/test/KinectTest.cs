@@ -24,6 +24,8 @@ public partial class KinectTest : Node3D
     {
         base._Ready();
 
+        return;
+
         KinectSensorCollection sensors = KinectSensor.KinectSensors;
         if (sensors.Count <= 0)
         {
