@@ -160,9 +160,11 @@ godot::TypedDictionary<int, godot::Vector2> godot::Kodot::getSkeletonJoints(int 
     HRESULT hr = kinect.sensor->NuiSkeletonGetNextFrame(0, &skeletonFrame);
     if (FAILED(hr))
     {
-        godot::print_error("Failed to get next skeleton frame.");
+        // godot::print_error("Failed to get next skeleton frame.");
         return joints;
     }
+
+    godot::print_line("WORKING!!!");
 
     // Smooth out skeleton data
     kinect.sensor->NuiTransformSmooth(&skeletonFrame, NULL);
@@ -171,12 +173,13 @@ godot::TypedDictionary<int, godot::Vector2> godot::Kodot::getSkeletonJoints(int 
         godot::print_error("Error: SkeletonId out of range.");
     }
 
+    // I think this is why it's not working
     NUI_SKELETON_DATA &skeletonData = skeletonFrame.SkeletonData[skeletonId]; 
     {
         NUI_SKELETON_TRACKING_STATE trackingState = skeletonData.eTrackingState;
         if (NUI_SKELETON_TRACKED != trackingState)
         {
-            godot::print_error("Error: Skeleton is not in a valid tracking state.");
+            // godot::print_error("Error: Skeleton is not in a valid tracking state.");
             return joints;
         }
     }
@@ -184,9 +187,9 @@ godot::TypedDictionary<int, godot::Vector2> godot::Kodot::getSkeletonJoints(int 
     // Put all joint positions into the array
     LONG x, y;
     USHORT depth;
-    const int SCREEN_WIDTH = 1280;
-    const int SCREEN_HEIGHT = 720;
-
+    const int SCREEN_WIDTH = 4;
+    const int SCREEN_HEIGHT = 4;
+    int jointCount = 0;
     for (int i = 0; i < NUI_SKELETON_POSITION_COUNT; i++)
     {
         // Check joint state
@@ -198,8 +201,12 @@ godot::TypedDictionary<int, godot::Vector2> godot::Kodot::getSkeletonJoints(int 
 
         NuiTransformSkeletonToDepthImage(skeletonData.SkeletonPositions[i], &x, &y, &depth);
         godot::Vector2 jointPoint = godot::Vector2(static_cast<float>(x * SCREEN_WIDTH), static_cast<float>(y * SCREEN_HEIGHT));
+        // godot::Vector2 jointPoint = godot::Vector2(static_cast<float>(x), static_cast<float>(y));
         joints.get_or_add(i, jointPoint);
+        jointCount += 1;
     }
+
+    godot::print_line("Getting " + godot::String(std::to_string(jointCount).c_str()) + " joints...");
     return joints;
 }
 

@@ -25,6 +25,9 @@ enum SKELETON_POSITION_INDEX
 	COUNT
 }
 
+@export var handLeft: Control
+@export var handRight: Control
+
 
 func _ready() -> void:
 	initialize()
@@ -33,8 +36,14 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	#update(delta)
 	var joints := getSkeletonJoints(0)
-	
-	if joints.keys().size() > 0:
+	if joints.is_empty():
 		return
-	
+
+	updateHands(joints)
+
+func updateHands(joints: Dictionary[int, Vector2]):
 	print(joints)
+	if joints.has(SKELETON_POSITION_INDEX.HAND_LEFT):
+		handLeft.position = joints.get(SKELETON_POSITION_INDEX.HAND_LEFT)
+	if joints.has(SKELETON_POSITION_INDEX.HAND_RIGHT):
+		handRight.position = joints.get(SKELETON_POSITION_INDEX.HAND_RIGHT)

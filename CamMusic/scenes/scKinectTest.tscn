@@ -4,5 +4,35 @@
 
 [node name="scKinectTest" type="Node3D"]
 
-[node name="Kodot" type="Kodot" parent="."]
+[node name="Kodot" type="Kodot" parent="." node_paths=PackedStringArray("handLeft", "handRight")]
 script = ExtResource("1_p5h2y")
+handLeft = NodePath("../HandLeft")
+handRight = NodePath("../HandRight")
+
+[node name="HandLeft" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="HandLeft" type="ColorRect" parent="HandLeft"]
+layout_mode = 0
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+color = Color(0.26172, 0.846222, 0.675048, 1)
+
+[node name="HandRight" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="HandRight" type="ColorRect" parent="HandRight"]
+layout_mode = 0
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+color = Color(0.914108, 0.300751, 0.300751, 1)
