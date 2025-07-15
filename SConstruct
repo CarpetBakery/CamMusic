@@ -17,7 +17,7 @@ env.Append(CPPPATH=["C:/Program Files/Microsoft SDKs/Kinect/v1.8/inc/", "src/"])
 sources = Glob("src/*.cpp")
 
 # Add libraries
-env.Append(LIBPATH = ["C:/Program Files/Microsoft SDKs/Kinect/v1.8/lib/x86/"])
+env.Append(LIBPATH = ["C:/Program Files/Microsoft SDKs/Kinect/v1.8/lib/amd64/"])
 env.Append(LIBS = [
     "Kinect10"
 ])

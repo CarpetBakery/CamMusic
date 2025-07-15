@@ -32,8 +32,9 @@ bool godot::Kodot::initialize()
         hr = NuiCreateSensorByIndex(i, &_sensor);
         if (FAILED(hr))
         {
-            godot::print_line("Error: Failed to create new sensor.");
-            return true;
+            // godot::print_line("Error: Failed to create new sensor.");
+            // return true;
+            continue;
         }
 
         // Get status of sensor, and if connected, we ccan initialize it
@@ -47,8 +48,29 @@ bool godot::Kodot::initialize()
         // This sensor wasn't OK, so release it since we're not using it
         _sensor->Release();
     }
+
+    if (NULL != kinect.sensor)
+    {
+        hr = kinect.sensor->NuiInitialize(NUI_INITIALIZE_FLAG_USES_SKELETON);
+        if (SUCCEEDED(hr))
+        {
+            // Create an event that will be signaled when skeleton data is available
+            m_hNextSkeletonEvent = CreateEventW(NULL, TRUE, FALSE, NULL);
+
+            // Open a skeleton stream to receive skeleton data
+            hr = m_pNuiSensor->NuiSkeletonTrackingEnable(m_hNextSkeletonEvent, 0); 
+        }
+    }
+
+    if (NULL == kinect.sensor || FAILED(hr))
+    {
+        godot::print_error("Error: No ready Kinect found.");
+        return true;
+    }
     
     godot::print_line("Initialized Kodot.");
+    godot::print_line(sensorCount);
+
     return false;
 }
 
