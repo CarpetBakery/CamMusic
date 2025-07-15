@@ -1,6 +1,6 @@
 *.obj
 *.dll
-*.dll
 /.godot
-*.dll
-*.obj
+*.windows.template_debug_x86_64.exp
+*.windows.template_debug_x86_64.lib
+*.windows.template_debug.x86_64.obj

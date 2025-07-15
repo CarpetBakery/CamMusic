@@ -10,21 +10,6 @@ void godot::Kodot::_bind_methods()
     ClassDB::bind_method(D_METHOD("initialize"), &godot::Kodot::initialize);
 }
 
-godot::Kodot::~Kodot()
-{
-    // Close sensor and handle if needed
-    // TODO: Check if C++ nodes are constructed/destructed only once...
-    if (kinect.sensor)
-    {
-        kinect.sensor->NuiShutdown();
-    }
-
-    if (kinect.hNextSkeletonEvent && (kinect.hNextSkeletonEvent != INVALID_HANDLE_VALUE))
-    {
-        CloseHandle(kinect.hNextSkeletonEvent);
-    }
-}
-
 void godot::Kodot::_ready() {}
 
 INuiSensor* _sensor; // Not great

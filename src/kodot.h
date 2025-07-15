@@ -29,9 +29,6 @@ namespace godot
         static void _bind_methods();
 
     public:
-        Kodot() = default;
-        ~Kodot();
-    
         void _ready() override;
 
         bool initialize();
