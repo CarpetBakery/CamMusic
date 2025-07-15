@@ -15,10 +15,9 @@ void godot::Kodot::_bind_methods()
 
 void godot::Kodot::_ready() {}
 
+INuiSensor* _sensor; // Not great
 bool godot::Kodot::initialize()
 {
-    INuiSensor* _sensor;
-
     int sensorCount = 0;
     HRESULT hr = NuiGetSensorCount(&sensorCount);
     if (FAILED(hr))
@@ -41,7 +40,7 @@ bool godot::Kodot::initialize()
         hr = _sensor->NuiStatus();
         if (S_OK == hr)
         {
-            sensor = _sensor;
+            kinect.sensor = _sensor;
             break;
         }
 
