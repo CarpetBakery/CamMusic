@@ -2,12 +2,18 @@
 #define KODOT_H
 
 #include <godot_cpp/classes/node3d.hpp>
+#include <windows.h>
+
+#define WIN32_LEAN_AND_MEAN
+
 
 struct Kinect
 {
 public:
     // Current connected Kinect sensor
     class INuiSensor* sensor;
+
+    HANDLE hNextSkeletonEvent;
 };
 
 namespace godot
@@ -24,6 +30,7 @@ namespace godot
 
     public:
         Kodot() = default;
+        ~Kodot();
     
         void _ready() override;
 

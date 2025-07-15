@@ -1,16 +1,28 @@
 #include "kodot.h"
 
 #include <godot_cpp/core/class_db.hpp>
-#include <windows.h>
 #include "NuiApi.h"
-
-#define WIN32_LEAN_AND_MEAN
 
 
 void godot::Kodot::_bind_methods()
 {
     ClassDB::bind_method(D_METHOD("update", "delta"), &godot::Kodot::update);
     ClassDB::bind_method(D_METHOD("initialize"), &godot::Kodot::initialize);
+}
+
+godot::Kodot::~Kodot()
+{
+    // Close sensor and handle if needed
+    // TODO: Check if C++ nodes are constructed/destructed only once...
+    if (kinect.sensor)
+    {
+        kinect.sensor->NuiShutdown();
+    }
+
+    if (kinect.hNextSkeletonEvent && (kinect.hNextSkeletonEvent != INVALID_HANDLE_VALUE))
+    {
+        CloseHandle(kinect.hNextSkeletonEvent);
+    }
 }
 
 void godot::Kodot::_ready() {}
@@ -55,10 +67,10 @@ bool godot::Kodot::initialize()
         if (SUCCEEDED(hr))
         {
             // Create an event that will be signaled when skeleton data is available
-            m_hNextSkeletonEvent = CreateEventW(NULL, TRUE, FALSE, NULL);
+            kinect.hNextSkeletonEvent = CreateEventW(NULL, TRUE, FALSE, NULL);
 
             // Open a skeleton stream to receive skeleton data
-            hr = m_pNuiSensor->NuiSkeletonTrackingEnable(m_hNextSkeletonEvent, 0); 
+            hr = kinect.sensor->NuiSkeletonTrackingEnable(kinect.hNextSkeletonEvent, 0); 
         }
     }
 
