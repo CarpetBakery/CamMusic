@@ -61,9 +61,6 @@ void godot::Kodot::_exit_tree()
 INuiSensor* _sensor; // Not great
 bool godot::Kodot::initialize()
 {
-    godot::print_line("Initializing Kodot...");
-
-
     int sensorCount = 0;
     HRESULT hr = NuiGetSensorCount(&sensorCount);
     if (FAILED(hr))
@@ -109,8 +106,6 @@ bool godot::Kodot::initialize()
         }
     }
 
-    return false;
-
     if (NULL == kinect.sensor || FAILED(hr))
     {
         godot::print_error("Error: No ready Kinect found.");
@@ -131,8 +126,8 @@ void godot::Kodot::update(double delta)
 
 void godot::Kodot::processSkeleton(double delta)
 {
+    // Try to get the skeletons from our sensor
     NuiTypes::SkeletonFrame skeletonFrame = {0};
-
     HRESULT hr = kinect.sensor->NuiSkeletonGetNextFrame(0, &skeletonFrame);
     if (FAILED(hr))
     {
@@ -149,65 +144,66 @@ void godot::Kodot::processSkeleton(double delta)
         if (NUI_SKELETON_TRACKED == trackingState)
         {
             // We're tracking the skeleton
-            godot::print_line("TRACKING SKELETON!!");
+            trace("Tracking skeleton!!!");
             skeletonTest(skeletonFrame.SkeletonData[i]);
         }
         else if (NUI_SKELETON_POSITION_ONLY == trackingState)
         {
             // We've only received the center point of the skeleton
+            // NOTE: Not sure what to do with this yet
+            trace("Tracking skeleton!!! (center point)");
         }
     }
 }
-
 
 // CURRENTLY: Get the first skeleton that we see and return its joints
 // as a bunch of 2D positions
 godot::TypedDictionary<int, godot::Vector2> godot::Kodot::getSkeletonJoints(int skeletonId = 0)
 {
     godot::TypedDictionary<int, godot::Vector2> joints;
+    
+    // Don't try to get an invalid skeleton ID
+    if (skeletonId > NUI_SKELETON_COUNT - 1 || skeletonId < 0)
+    {
+        godot::print_error("Error: SkeletonId out of range. (" + godot::String(std::to_string(skeletonId).c_str()) + ")");
+        return joints;
+    }
+    
+    // Try to get the skeletons from our sensor
     NuiTypes::SkeletonFrame skeletonFrame;
-
     HRESULT hr = kinect.sensor->NuiSkeletonGetNextFrame(0, &skeletonFrame);
     if (FAILED(hr))
     {
-        // godot::print_error("Error: Failed to get the damn skeleton frame.");
         trace("Error: Failed to get the damn skeleton frame.");
         return joints;
     }
 
     // Smooth out skeleton data
     kinect.sensor->NuiTransformSmooth(&skeletonFrame, NULL);
-    if (skeletonId > NUI_SKELETON_COUNT - 1)
-    {
-        godot::print_error("Error: SkeletonId out of range.");
-    }
 
-    // I think this is why it's not working
+    // See if we can find a valid skeleton in this frame
     bool foundSkeleton = false;
     NUI_SKELETON_DATA skeletonData;
     for (int i = 0; i < NUI_SKELETON_COUNT; i++)
     {
-        NUI_SKELETON_TRACKING_STATE trackingState = skeletonFrame.SkeletonData[i].eTrackingState;
-        if (NUI_SKELETON_TRACKED == trackingState)
+        // OLD
+        // NUI_SKELETON_DATA &skeletonData = skeletonFrame.SkeletonData[skeletonId]; 
+
+        skeletonData = skeletonFrame.SkeletonData[i]; 
+        if (NUI_SKELETON_TRACKED == skeletonData.eTrackingState)
         {
             // We're tracking the skeleton
-            // NUI_SKELETON_DATA &skeletonData = skeletonFrame.SkeletonData[skeletonId]; 
-            skeletonData = skeletonFrame.SkeletonData[i]; 
-            NUI_SKELETON_TRACKING_STATE trackingState = skeletonData.eTrackingState;
-            if (NUI_SKELETON_TRACKED == trackingState)
-            {
-                foundSkeleton = true;
-                break;
-            }
+            foundSkeleton = true;
+            break;
         }
     }
-
     if (!foundSkeleton)
     {
         return joints;
     }
 
     // Put all joint positions into the array
+    // TODO: Remove these temp vars
     LONG x, y;
     USHORT depth;
     const int SCREEN_WIDTH = 4;
@@ -234,11 +230,12 @@ godot::TypedDictionary<int, godot::Vector2> godot::Kodot::getSkeletonJoints(int 
 
 void skeletonToString()
 {
-
+    // TODO:
 }
 
 void skeletonTest(const NuiTypes::SkeletonData &skel)
 {
+    // OLD
     // int i;
     // for (i = 0; i < NUI_SKELETON_POSITION_COUNT; i++)
     // {
