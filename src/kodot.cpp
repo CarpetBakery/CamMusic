@@ -3,6 +3,8 @@
 #include <godot_cpp/core/class_db.hpp>
 #include "NuiApi.h"
 #include "NuiSkeleton.h"
+#include "util.h"
+
 
 struct NuiTypes
 {
@@ -59,6 +61,9 @@ void godot::Kodot::_exit_tree()
 INuiSensor* _sensor; // Not great
 bool godot::Kodot::initialize()
 {
+    godot::print_line("Initializing Kodot...");
+
+
     int sensorCount = 0;
     HRESULT hr = NuiGetSensorCount(&sensorCount);
     if (FAILED(hr))
@@ -78,7 +83,7 @@ bool godot::Kodot::initialize()
             continue;
         }
 
-        // Get status of sensor, and if connected, we ccan initialize it
+        // Get status of sensor, and if connected, we can initialize it
         hr = _sensor->NuiStatus();
         if (S_OK == hr)
         {
@@ -103,6 +108,8 @@ bool godot::Kodot::initialize()
             hr = kinect.sensor->NuiSkeletonTrackingEnable(kinect.hNextSkeletonEvent, NUI_SKELETON_TRACKING_FLAG_ENABLE_SEATED_SUPPORT); 
         }
     }
+
+    return false;
 
     if (NULL == kinect.sensor || FAILED(hr))
     {
@@ -152,6 +159,9 @@ void godot::Kodot::processSkeleton(double delta)
     }
 }
 
+
+// CURRENTLY: Get the first skeleton that we see and return its joints
+// as a bunch of 2D positions
 godot::TypedDictionary<int, godot::Vector2> godot::Kodot::getSkeletonJoints(int skeletonId = 0)
 {
     godot::TypedDictionary<int, godot::Vector2> joints;
@@ -160,11 +170,10 @@ godot::TypedDictionary<int, godot::Vector2> godot::Kodot::getSkeletonJoints(int 
     HRESULT hr = kinect.sensor->NuiSkeletonGetNextFrame(0, &skeletonFrame);
     if (FAILED(hr))
     {
-        // godot::print_error("Failed to get next skeleton frame.");
+        // godot::print_error("Error: Failed to get the damn skeleton frame.");
+        trace("Error: Failed to get the damn skeleton frame.");
         return joints;
     }
-
-    godot::print_line("WORKING!!!");
 
     // Smooth out skeleton data
     kinect.sensor->NuiTransformSmooth(&skeletonFrame, NULL);
@@ -174,14 +183,28 @@ godot::TypedDictionary<int, godot::Vector2> godot::Kodot::getSkeletonJoints(int 
     }
 
     // I think this is why it's not working
-    NUI_SKELETON_DATA &skeletonData = skeletonFrame.SkeletonData[skeletonId]; 
+    bool foundSkeleton = false;
+    NUI_SKELETON_DATA skeletonData;
+    for (int i = 0; i < NUI_SKELETON_COUNT; i++)
     {
-        NUI_SKELETON_TRACKING_STATE trackingState = skeletonData.eTrackingState;
-        if (NUI_SKELETON_TRACKED != trackingState)
+        NUI_SKELETON_TRACKING_STATE trackingState = skeletonFrame.SkeletonData[i].eTrackingState;
+        if (NUI_SKELETON_TRACKED == trackingState)
         {
-            // godot::print_error("Error: Skeleton is not in a valid tracking state.");
-            return joints;
+            // We're tracking the skeleton
+            // NUI_SKELETON_DATA &skeletonData = skeletonFrame.SkeletonData[skeletonId]; 
+            skeletonData = skeletonFrame.SkeletonData[i]; 
+            NUI_SKELETON_TRACKING_STATE trackingState = skeletonData.eTrackingState;
+            if (NUI_SKELETON_TRACKED == trackingState)
+            {
+                foundSkeleton = true;
+                break;
+            }
         }
+    }
+
+    if (!foundSkeleton)
+    {
+        return joints;
     }
 
     // Put all joint positions into the array
@@ -201,7 +224,6 @@ godot::TypedDictionary<int, godot::Vector2> godot::Kodot::getSkeletonJoints(int 
 
         NuiTransformSkeletonToDepthImage(skeletonData.SkeletonPositions[i], &x, &y, &depth);
         godot::Vector2 jointPoint = godot::Vector2(static_cast<float>(x * SCREEN_WIDTH), static_cast<float>(y * SCREEN_HEIGHT));
-        // godot::Vector2 jointPoint = godot::Vector2(static_cast<float>(x), static_cast<float>(y));
         joints.get_or_add(i, jointPoint);
         jointCount += 1;
     }

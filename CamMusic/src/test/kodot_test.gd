@@ -31,6 +31,7 @@ enum SKELETON_POSITION_INDEX
 
 func _ready() -> void:
 	initialize()
+	pass
 
 
 func _process(delta: float) -> void:
@@ -40,10 +41,12 @@ func _process(delta: float) -> void:
 		return
 
 	updateHands(joints)
+	pass
 
 func updateHands(joints: Dictionary[int, Vector2]):
-	print(joints)
-	if joints.has(SKELETON_POSITION_INDEX.HAND_LEFT):
-		handLeft.position = joints.get(SKELETON_POSITION_INDEX.HAND_LEFT)
-	if joints.has(SKELETON_POSITION_INDEX.HAND_RIGHT):
-		handRight.position = joints.get(SKELETON_POSITION_INDEX.HAND_RIGHT)
+	#print(joints)
+	#if joints.has(SKELETON_POSITION_INDEX.HAND_LEFT):
+		#handLeft.position = joints.get(SKELETON_POSITION_INDEX.HAND_LEFT)
+	#if joints.has(SKELETON_POSITION_INDEX.HAND_RIGHT):
+		#handRight.position = joints.get(SKELETON_POSITION_INDEX.HAND_RIGHT)
+	pass
