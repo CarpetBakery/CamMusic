@@ -38,6 +38,7 @@ namespace godot
         bool initialize();
         void update(double delta);
         TypedDictionary<int, Vector2> getSkeletonJoints(int skeletonId);
+        TypedDictionary<int, Vector3> getSkeletonJoints3D();
 
         // -- Get/set --
         void set_sensorAngle(int p_sensorAngle);

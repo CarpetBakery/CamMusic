@@ -2,6 +2,7 @@
 
 #include <godot_cpp/core/class_db.hpp>
 #include "NuiApi.h"
+#include "NuiSensor.h"
 #include "NuiSkeleton.h"
 #include "util.h"
 
@@ -11,6 +12,41 @@ struct NuiTypes
     typedef NUI_SKELETON_FRAME SkeletonFrame;
     typedef NUI_SKELETON_DATA SkeletonData;
 };
+
+// Helpers
+
+// DEFAULT: get first valid skeleton
+NUI_SKELETON_DATA getSkeletonData(Kinect &kinect, bool &found, int skeletonId = -1)
+{
+    found = false;
+    NUI_SKELETON_DATA skeletonData;
+
+    // Try to get the skeletons from our sensor
+    NuiTypes::SkeletonFrame skeletonFrame;
+    HRESULT hr = kinect.sensor->NuiSkeletonGetNextFrame(0, &skeletonFrame);
+    if (FAILED(hr))
+    {
+        // trace("Error: Failed to get the damn skeleton frame.");
+        return skeletonData;
+    }
+
+    // Smooth out skeleton data
+    NUI_TRANSFORM_SMOOTH_PARAMETERS params = {0.5f, 0.5f, 0.5f, 0.05f, 0.04f};
+    kinect.sensor->NuiTransformSmooth(&skeletonFrame, NULL);
+
+    // Get the first valid skeleton in this SkeletonFrame
+    for (int i = 0; i < NUI_SKELETON_COUNT; i++)
+    {
+        skeletonData = skeletonFrame.SkeletonData[i]; 
+        if (NUI_SKELETON_TRACKED == skeletonData.eTrackingState)
+        {
+            // We're tracking the skeleton
+            found = true;
+            break;
+        }
+    }
+    return skeletonData;
+}
 
 
 void godot::Kodot::_bind_methods()
@@ -143,9 +179,6 @@ godot::TypedDictionary<int, godot::Vector2> godot::Kodot::getSkeletonJoints(int 
     NUI_SKELETON_DATA skeletonData;
     for (int i = 0; i < NUI_SKELETON_COUNT; i++)
     {
-        // OLD
-        // NUI_SKELETON_DATA &skeletonData = skeletonFrame.SkeletonData[skeletonId]; 
-
         skeletonData = skeletonFrame.SkeletonData[i]; 
         if (NUI_SKELETON_TRACKED == skeletonData.eTrackingState)
         {
@@ -160,12 +193,12 @@ godot::TypedDictionary<int, godot::Vector2> godot::Kodot::getSkeletonJoints(int 
     }
 
     // Put all joint positions into the array
-    // TODO: Remove these temp vars
-    LONG x, y;
-    USHORT depth;
     int jointCount = 0;
     for (int i = 0; i < NUI_SKELETON_POSITION_COUNT; i++)
     {
+        LONG x, y;
+        USHORT depth;
+
         // Check joint state
         NUI_SKELETON_POSITION_TRACKING_STATE jointState = skeletonData.eSkeletonPositionTrackingState[i];
         if (jointState != NUI_SKELETON_POSITION_TRACKED)
@@ -173,8 +206,18 @@ godot::TypedDictionary<int, godot::Vector2> godot::Kodot::getSkeletonJoints(int 
             continue;
         }
 
+        godot::Vector2 jointPoint;
+        // My assumption is that coordinates are mapped from -1 to 1
+        // THIS SEEMS TO BE WRONG??
+        // jointPoint = godot::Vector2(
+        //     static_cast<float>(skeletonData.SkeletonPositions[i].x * 0.5f + 0.5f),
+        //     // static_cast<float>(skeletonData.SkeletonPositions[i].y * 0.5f + 0.5f)
+        //     1.0f - static_cast<float>(skeletonData.SkeletonPositions[i].y * 0.5f + 0.5f) // Y is flipped
+        // );
+
+        // OLD COORD SYSTEM
         NuiTransformSkeletonToDepthImage(skeletonData.SkeletonPositions[i], &x, &y, &depth);
-        godot::Vector2 jointPoint = godot::Vector2(
+        jointPoint = godot::Vector2(
             static_cast<float>(x), 
             static_cast<float>(y)
         );
@@ -182,9 +225,49 @@ godot::TypedDictionary<int, godot::Vector2> godot::Kodot::getSkeletonJoints(int 
         joints.get_or_add(i, jointPoint);
         jointCount += 1;
     }
-    // godot::print_line("Getting " + godot::String(std::to_string(jointCount).c_str()) + " joints...");
     return joints;
 }
+
+godot::TypedDictionary<int, godot::Vector3> godot::Kodot::getSkeletonJoints3D()
+{
+    godot::TypedDictionary<int, godot::Vector3> joints;
+
+    // Get first available skeleton's data
+    bool foundSkeleton = false;
+    NUI_SKELETON_DATA skeletonData = getSkeletonData(kinect, foundSkeleton);
+    if (!foundSkeleton)
+    {
+        return joints;
+    }
+
+    // Put all joint positions into dictionary
+    int jointCount = 0;
+    for (int i = 0; i < NUI_SKELETON_POSITION_COUNT; i++)
+    {
+        LONG x, y;
+        USHORT depth;
+
+        // Check joint state
+        NUI_SKELETON_POSITION_TRACKING_STATE jointState = skeletonData.eSkeletonPositionTrackingState[i];
+        if (jointState != NUI_SKELETON_POSITION_TRACKED)
+        {
+            continue;
+        }
+
+        // My assumption is that coordinates are mapped from -1 to 1
+        // THIS SEEMS TO BE WRONG??
+        godot::Vector3 jointPoint = godot::Vector3(
+            static_cast<float>(skeletonData.SkeletonPositions[i].x),
+            static_cast<float>(skeletonData.SkeletonPositions[i].y),
+            static_cast<float>(skeletonData.SkeletonPositions[i].z)
+        );
+
+        joints.get_or_add(i, jointPoint);
+        jointCount += 1;
+    }
+    return joints;
+}
+
 
 
 // -- Get/set --

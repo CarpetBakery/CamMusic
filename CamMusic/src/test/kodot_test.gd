@@ -113,18 +113,6 @@ func _process(delta: float) -> void:
 
 
 func updateJoints(joints: Dictionary[int, Vector2]):
-	# print(joints)
-	if joints.has(JointIndex.HAND_LEFT):
-		#handLeft.position = joints.get(JointIndex.HAND_LEFT)
-		
-		# TODO: Do cursor movement by calculating distance from like shoulder or elbow
-		#cursor.position = joints.get(JointIndex.HAND_LEFT) * 10 - Vector2(400, 400)
-		pass
-	
-	#if joints.has(JointIndex.HAND_RIGHT):
-		##handRight.position = joints.get(JointIndex.HAND_RIGHT)
-		#cursor.position = joints.get(JointIndex.HAND_RIGHT) * 10 - Vector2(400, 400)
-		#pass
 	updateCursorPos(joints)
 	
 	for i in range(JointIndex.COUNT):
@@ -168,7 +156,7 @@ func updateCursorPos_OLD(joints: Dictionary[int, Vector2]):
 
 func updateCursorPos(joints: Dictionary[int, Vector2]): 
 	# TODO: Change for handedness
-
+	
 	if not joints.has(handIndex) or not joints.has(shoulderIndex) or not joints.has(elbowIndex):
 		return
 
@@ -180,4 +168,8 @@ func updateCursorPos(joints: Dictionary[int, Vector2]):
 	## The new cursor pos
 	var cPos := Vector2.ZERO
 
+	# Transform coords to screen space
+	#cPos = handPos * screenSize
 	
+	print(handPos)
+	cursor.position = handPos * screenSize
