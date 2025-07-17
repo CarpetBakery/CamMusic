@@ -24,7 +24,7 @@ NUI_SKELETON_DATA getSkeletonData(Kinect &kinect, bool &found, int skeletonId = 
     // Try to get the skeletons from our sensor
     NUI_SKELETON_FRAME skeletonFrame;
     HRESULT hr = kinect.sensor->NuiSkeletonGetNextFrame(0, &skeletonFrame);
-    
+
     // NOTE: This will fail until a valid skeleton is detected
     if (FAILED(hr))
     {
@@ -173,7 +173,7 @@ godot::TypedDictionary<int, godot::Vector2> godot::Kodot::getSkeletonJoints(int 
     // Smooth out skeleton data
     {
         NUI_TRANSFORM_SMOOTH_PARAMETERS params = {0.5f, 0.5f, 0.5f, 0.05f, 0.04f};
-        kinect.sensor->NuiTransformSmooth(&skeletonFrame, NULL);
+        kinect.sensor->NuiTransformSmooth(&skeletonFrame, &params);
     }
 
     // See if we can find a valid skeleton in this frame

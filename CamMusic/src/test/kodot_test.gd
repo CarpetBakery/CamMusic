@@ -170,11 +170,12 @@ func updateCursorPos(joints: Dictionary[int, Vector3]):
 	var elbowPos: Vector3 = joints.get(elbowIndex)
 
 	## The new cursor pos
-	var cPos := Vector3.ZERO
+	var cPos := Vector2(handPos.x, -handPos.y)
 
 	# Transform coords to screen space
-	#cPos = handPos * screenSize
+	#cPos = cPos * screenSize
 	
-	cursor.position = (Vector2(handPos.x, -handPos.y) * 0.5 + Vector2(0.5, 0.5)) * screenSize
-	#print(handPos)
-	print(cursor.position)
+	cursor.position = cPos * screenSize
+	print(cPos)
+	#cursor.position = (Vector2(handPos.x, handPos.y) * 0.5 + Vector2(0.5, 0.5)) * screenSize
+	#print(cursor.position)
