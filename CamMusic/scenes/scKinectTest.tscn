@@ -1,15 +1,24 @@
-[gd_scene load_steps=2 format=3 uid="uid://pacvi2pdfpdg"]
+[gd_scene load_steps=5 format=3 uid="uid://pacvi2pdfpdg"]
 
 [ext_resource type="Script" uid="uid://ct7orjr3264mp" path="res://src/test/kodot_test.gd" id="1_p5h2y"]
+[ext_resource type="Script" uid="uid://bec7opnicuh26" path="res://src/cursor.gd" id="2_g6t6r"]
+[ext_resource type="Texture2D" uid="uid://chykjr7e70qqa" path="res://assets/sprites/ui/cursor_1.png" id="2_sjasv"]
+
+[sub_resource type="Gradient" id="Gradient_g6t6r"]
+colors = PackedColorArray(1, 1, 1, 0.254902, 1, 1, 1, 0)
 
 [node name="scKinectTest" type="Node3D"]
 
-[node name="Kodot" type="Kodot" parent="." node_paths=PackedStringArray("handLeft", "handRight")]
+[node name="Kodot" type="Kodot" parent="." node_paths=PackedStringArray("cursor", "handLeft", "handRight", "squaresParent")]
+seatedMode = true
 script = ExtResource("1_p5h2y")
+cursor = NodePath("../Cursor")
 handLeft = NodePath("../HandLeft")
 handRight = NodePath("../HandRight")
+squaresParent = NodePath("../SquaresParent")
 
 [node name="HandLeft" type="Control" parent="."]
+visible = false
 layout_mode = 3
 anchors_preset = 0
 offset_right = 40.0
@@ -24,6 +33,7 @@ offset_bottom = 20.0
 color = Color(0.26172, 0.846222, 0.675048, 1)
 
 [node name="HandRight" type="Control" parent="."]
+visible = false
 layout_mode = 3
 anchors_preset = 0
 offset_right = 40.0
@@ -36,3 +46,26 @@ offset_top = -20.0
 offset_right = 20.0
 offset_bottom = 20.0
 color = Color(0.914108, 0.300751, 0.300751, 1)
+
+[node name="SquaresParent" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Cursor" type="Node2D" parent="." node_paths=PackedStringArray("sprite", "particles")]
+script = ExtResource("2_g6t6r")
+sprite = NodePath("Sprite2D")
+particles = NodePath("CPUParticles2D")
+
+[node name="CPUParticles2D" type="CPUParticles2D" parent="Cursor"]
+amount = 12
+texture = ExtResource("2_sjasv")
+lifetime = 0.14
+gravity = Vector2(0, 0)
+color_ramp = SubResource("Gradient_g6t6r")
+
+[node name="Sprite2D" type="Sprite2D" parent="Cursor"]
+texture = ExtResource("2_sjasv")

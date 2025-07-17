@@ -24,6 +24,9 @@ namespace godot
 
     private:
         Kinect kinect;
+
+        bool seatedMode = false;
+        Vector2 screenSize = Vector2(1920, 1080);
         
     protected:
         static void _bind_methods();
@@ -61,6 +64,14 @@ namespace godot
         void update(double delta);
         void processSkeleton(double delta);
         TypedDictionary<int, Vector2> getSkeletonJoints(int skeletonId);
+
+
+        // -- Get/set --
+        void set_seatedMode(bool const p_seatedMode);
+        bool get_seatedMode() const;
+
+        void set_screenSize(Vector2 const p_screenSize);
+        Vector2 get_screenSize() const;
     };
 }
 

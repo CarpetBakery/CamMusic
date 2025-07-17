@@ -18,10 +18,22 @@ void skeletonTest(const NuiTypes::SkeletonData &skel);
 
 void godot::Kodot::_bind_methods()
 {
+    // -- Functions --
     ClassDB::bind_method(D_METHOD("update", "delta"), &godot::Kodot::update);
     ClassDB::bind_method(D_METHOD("initialize"), &godot::Kodot::initialize);
     ClassDB::bind_method(D_METHOD("getSkeletonJoints", "skeletonId"), &godot::Kodot::getSkeletonJoints);
 
+    // -- Exported vars --
+    ClassDB::bind_method(D_METHOD("get_seatedMode"), &godot::Kodot::get_seatedMode);
+	ClassDB::bind_method(D_METHOD("set_seatedMode", "p_seatedMode"), &godot::Kodot::set_seatedMode);
+    ADD_PROPERTY(PropertyInfo(Variant::BOOL, "seatedMode"), "set_seatedMode", "get_seatedMode");
+
+    ClassDB::bind_method(D_METHOD("get_screenSize"), &godot::Kodot::get_screenSize);
+	ClassDB::bind_method(D_METHOD("set_screenSize", "p_screenSize"), &godot::Kodot::set_screenSize);
+    ADD_PROPERTY(PropertyInfo(Variant::VECTOR2, "screenSize"), "set_screenSize", "get_screenSize");
+
+
+    // OLD ENUM EXPORT
     // BIND_ENUM_CONSTANT(HIP_CENTER);
     // BIND_ENUM_CONSTANT(SPINE);
     // BIND_ENUM_CONSTANT(SHOULDER_CENTER);
@@ -102,7 +114,7 @@ bool godot::Kodot::initialize()
 
             // Open a skeleton stream to receive skeleton data
             // NOTE: Also enable seated mode
-            hr = kinect.sensor->NuiSkeletonTrackingEnable(kinect.hNextSkeletonEvent, NUI_SKELETON_TRACKING_FLAG_ENABLE_SEATED_SUPPORT); 
+            hr = kinect.sensor->NuiSkeletonTrackingEnable(kinect.hNextSkeletonEvent, seatedMode ? NUI_SKELETON_TRACKING_FLAG_ENABLE_SEATED_SUPPORT : NULL); 
         }
     }
 
@@ -174,7 +186,7 @@ godot::TypedDictionary<int, godot::Vector2> godot::Kodot::getSkeletonJoints(int 
     HRESULT hr = kinect.sensor->NuiSkeletonGetNextFrame(0, &skeletonFrame);
     if (FAILED(hr))
     {
-        trace("Error: Failed to get the damn skeleton frame.");
+        // trace("Error: Failed to get the damn skeleton frame.");
         return joints;
     }
 
@@ -206,8 +218,6 @@ godot::TypedDictionary<int, godot::Vector2> godot::Kodot::getSkeletonJoints(int 
     // TODO: Remove these temp vars
     LONG x, y;
     USHORT depth;
-    const int SCREEN_WIDTH = 4;
-    const int SCREEN_HEIGHT = 4;
     int jointCount = 0;
     for (int i = 0; i < NUI_SKELETON_POSITION_COUNT; i++)
     {
@@ -219,12 +229,15 @@ godot::TypedDictionary<int, godot::Vector2> godot::Kodot::getSkeletonJoints(int 
         }
 
         NuiTransformSkeletonToDepthImage(skeletonData.SkeletonPositions[i], &x, &y, &depth);
-        godot::Vector2 jointPoint = godot::Vector2(static_cast<float>(x * SCREEN_WIDTH), static_cast<float>(y * SCREEN_HEIGHT));
+        godot::Vector2 jointPoint = godot::Vector2(
+            static_cast<float>(x), 
+            static_cast<float>(y)
+        );
+
         joints.get_or_add(i, jointPoint);
         jointCount += 1;
     }
-
-    godot::print_line("Getting " + godot::String(std::to_string(jointCount).c_str()) + " joints...");
+    // godot::print_line("Getting " + godot::String(std::to_string(jointCount).c_str()) + " joints...");
     return joints;
 }
 
@@ -242,4 +255,25 @@ void skeletonTest(const NuiTypes::SkeletonData &skel)
 
     // }
     // // godot::print_line(i);
+}
+
+
+
+// -- Get/set --
+void godot::Kodot::set_seatedMode(bool const p_seatedMode)
+{
+    seatedMode = p_seatedMode;
+}
+bool godot::Kodot::get_seatedMode() const
+{
+    return seatedMode;
+}
+
+void godot::Kodot::set_screenSize(godot::Vector2 const p_screenSize)
+{
+    screenSize = p_screenSize;
+}
+godot::Vector2 godot::Kodot::get_screenSize() const
+{
+    return screenSize;
 }
