@@ -105,15 +105,19 @@ func _process(delta: float) -> void:
 		showJointNames = !showJointNames
 	
 	#update(delta)
-	var joints := getSkeletonJoints(0)
-	if joints.is_empty():
-		return
+	#var joints := getSkeletonJoints(0)
+	#if joints.is_empty():
+		#return
 	
-	updateJoints(joints)
+	#updateJoints(joints)
+	
+	# New system
+	var joints := getSkeletonJoints3D()
+	updateCursorPos(joints)
 
 
 func updateJoints(joints: Dictionary[int, Vector2]):
-	updateCursorPos(joints)
+	updateCursorPos_OLD(joints)
 	
 	for i in range(JointIndex.COUNT):
 		if not joints.has(i):
@@ -154,22 +158,23 @@ func updateCursorPos_OLD(joints: Dictionary[int, Vector2]):
 	#cursor.position = handPos
 
 
-func updateCursorPos(joints: Dictionary[int, Vector2]): 
+func updateCursorPos(joints: Dictionary[int, Vector3]): 
 	# TODO: Change for handedness
 	
 	if not joints.has(handIndex) or not joints.has(shoulderIndex) or not joints.has(elbowIndex):
 		return
 
 	var halfScreenSize := screenSize / 2
-	var handPos: Vector2 = joints.get(handIndex)
-	var shoulderPos: Vector2 = joints.get(shoulderIndex)
-	var elbowPos: Vector2 = joints.get(elbowIndex)
+	var handPos: Vector3 = joints.get(handIndex)
+	var shoulderPos: Vector3 = joints.get(shoulderIndex)
+	var elbowPos: Vector3 = joints.get(elbowIndex)
 
 	## The new cursor pos
-	var cPos := Vector2.ZERO
+	var cPos := Vector3.ZERO
 
 	# Transform coords to screen space
 	#cPos = handPos * screenSize
 	
-	print(handPos)
-	cursor.position = handPos * screenSize
+	cursor.position = (Vector2(handPos.x, -handPos.y) * 0.5 + Vector2(0.5, 0.5)) * screenSize
+	#print(handPos)
+	print(cursor.position)

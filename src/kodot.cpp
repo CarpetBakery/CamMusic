@@ -22,11 +22,12 @@ NUI_SKELETON_DATA getSkeletonData(Kinect &kinect, bool &found, int skeletonId = 
     NUI_SKELETON_DATA skeletonData;
 
     // Try to get the skeletons from our sensor
-    NuiTypes::SkeletonFrame skeletonFrame;
+    NUI_SKELETON_FRAME skeletonFrame;
     HRESULT hr = kinect.sensor->NuiSkeletonGetNextFrame(0, &skeletonFrame);
+    
+    // NOTE: This will fail until a valid skeleton is detected
     if (FAILED(hr))
     {
-        // trace("Error: Failed to get the damn skeleton frame.");
         return skeletonData;
     }
 
@@ -55,6 +56,7 @@ void godot::Kodot::_bind_methods()
     ClassDB::bind_method(D_METHOD("update", "delta"), &godot::Kodot::update);
     ClassDB::bind_method(D_METHOD("initialize"), &godot::Kodot::initialize);
     ClassDB::bind_method(D_METHOD("getSkeletonJoints", "skeletonId"), &godot::Kodot::getSkeletonJoints);
+    ClassDB::bind_method(D_METHOD("getSkeletonJoints3D"), &godot::Kodot::getSkeletonJoints3D);
 
     // -- Get/set --
     ClassDB::bind_method(D_METHOD("set_sensorAngle", "p_sensorAngle"), &godot::Kodot::set_sensorAngle);
@@ -267,7 +269,6 @@ godot::TypedDictionary<int, godot::Vector3> godot::Kodot::getSkeletonJoints3D()
     }
     return joints;
 }
-
 
 
 // -- Get/set --
