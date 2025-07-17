@@ -4,6 +4,7 @@
 #include "NuiApi.h"
 #include "NuiSensor.h"
 #include "NuiSkeleton.h"
+
 #include "util.h"
 
 
@@ -13,8 +14,7 @@ struct NuiTypes
     typedef NUI_SKELETON_DATA SkeletonData;
 };
 
-// Helpers
-
+// -- Helpers --
 // DEFAULT: get first valid skeleton
 NUI_SKELETON_DATA getSkeletonData(Kinect &kinect, bool &found, int skeletonId = -1)
 {
@@ -137,7 +137,7 @@ bool godot::Kodot::initialize()
         godot::print_error("Error: No ready Kinect found.");
         return true;
     }
-    
+
     godot::print_line("Initialized Kodot.");
     godot::print_line(sensorCount);
     return false;
