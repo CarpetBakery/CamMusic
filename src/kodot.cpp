@@ -12,9 +12,6 @@ struct NuiTypes
     typedef NUI_SKELETON_DATA SkeletonData;
 };
 
-// Forward decl
-void skeletonTest(const NuiTypes::SkeletonData &skel);
-
 
 void godot::Kodot::_bind_methods()
 {
@@ -23,6 +20,10 @@ void godot::Kodot::_bind_methods()
     ClassDB::bind_method(D_METHOD("initialize"), &godot::Kodot::initialize);
     ClassDB::bind_method(D_METHOD("getSkeletonJoints", "skeletonId"), &godot::Kodot::getSkeletonJoints);
 
+    // -- Get/set --
+    ClassDB::bind_method(D_METHOD("set_sensorAngle", "p_sensorAngle"), &godot::Kodot::set_sensorAngle);
+    ClassDB::bind_method(D_METHOD("get_sensorAngle"), &godot::Kodot::get_sensorAngle);
+    
     // -- Exported vars --
     ClassDB::bind_method(D_METHOD("get_seatedMode"), &godot::Kodot::get_seatedMode);
 	ClassDB::bind_method(D_METHOD("set_seatedMode", "p_seatedMode"), &godot::Kodot::set_seatedMode);
@@ -31,30 +32,6 @@ void godot::Kodot::_bind_methods()
     ClassDB::bind_method(D_METHOD("get_screenSize"), &godot::Kodot::get_screenSize);
 	ClassDB::bind_method(D_METHOD("set_screenSize", "p_screenSize"), &godot::Kodot::set_screenSize);
     ADD_PROPERTY(PropertyInfo(Variant::VECTOR2, "screenSize"), "set_screenSize", "get_screenSize");
-
-
-    // OLD ENUM EXPORT
-    // BIND_ENUM_CONSTANT(HIP_CENTER);
-    // BIND_ENUM_CONSTANT(SPINE);
-    // BIND_ENUM_CONSTANT(SHOULDER_CENTER);
-    // BIND_ENUM_CONSTANT(HEAD);
-    // BIND_ENUM_CONSTANT(SHOULDER_LEFT);
-    // BIND_ENUM_CONSTANT(ELBOW_LEFT);
-    // BIND_ENUM_CONSTANT(WRIST_LEFT);
-    // BIND_ENUM_CONSTANT(HAND_LEFT);
-    // BIND_ENUM_CONSTANT(SHOULDER_RIGHT);
-    // BIND_ENUM_CONSTANT(ELBOW_RIGHT);
-    // BIND_ENUM_CONSTANT(WRIST_RIGHT);
-    // BIND_ENUM_CONSTANT(HAND_RIGHT);
-    // BIND_ENUM_CONSTANT(HIP_LEFT);
-    // BIND_ENUM_CONSTANT(KNEE_LEFT);
-    // BIND_ENUM_CONSTANT(ANKLE_LEFT);
-    // BIND_ENUM_CONSTANT(FOOT_LEFT);
-    // BIND_ENUM_CONSTANT(HIP_RIGHT);
-    // BIND_ENUM_CONSTANT(KNEE_RIGHT);
-    // BIND_ENUM_CONSTANT(ANKLE_RIGHT);
-    // BIND_ENUM_CONSTANT(FOOT_RIGHT);
-    // BIND_ENUM_CONSTANT(COUNT);        
 }
 
 void godot::Kodot::_ready() {}
@@ -87,8 +64,7 @@ bool godot::Kodot::initialize()
         hr = NuiCreateSensorByIndex(i, &_sensor);
         if (FAILED(hr))
         {
-            // godot::print_line("Error: Failed to create new sensor.");
-            // return true;
+            godot::print_line("Error: Failed to create new sensor.");
             continue;
         }
 
@@ -126,46 +102,12 @@ bool godot::Kodot::initialize()
     
     godot::print_line("Initialized Kodot.");
     godot::print_line(sensorCount);
-
     return false;
 }
 
 void godot::Kodot::update(double delta)
 {
-    // Process Skeleton
-    processSkeleton(delta);
-}
-
-void godot::Kodot::processSkeleton(double delta)
-{
-    // Try to get the skeletons from our sensor
-    NuiTypes::SkeletonFrame skeletonFrame = {0};
-    HRESULT hr = kinect.sensor->NuiSkeletonGetNextFrame(0, &skeletonFrame);
-    if (FAILED(hr))
-    {
-        print_error("Failed to get next skeleton frame.");
-        return;
-    }
-
-    // Smooth out skeleton data
-    kinect.sensor->NuiTransformSmooth(&skeletonFrame, NULL);
-
-    for (int i = 0; i < NUI_SKELETON_COUNT; i++)
-    {
-        NUI_SKELETON_TRACKING_STATE trackingState = skeletonFrame.SkeletonData[i].eTrackingState;
-        if (NUI_SKELETON_TRACKED == trackingState)
-        {
-            // We're tracking the skeleton
-            trace("Tracking skeleton!!!");
-            skeletonTest(skeletonFrame.SkeletonData[i]);
-        }
-        else if (NUI_SKELETON_POSITION_ONLY == trackingState)
-        {
-            // We've only received the center point of the skeleton
-            // NOTE: Not sure what to do with this yet
-            trace("Tracking skeleton!!! (center point)");
-        }
-    }
+    
 }
 
 // CURRENTLY: Get the first skeleton that we see and return its joints
@@ -191,7 +133,10 @@ godot::TypedDictionary<int, godot::Vector2> godot::Kodot::getSkeletonJoints(int 
     }
 
     // Smooth out skeleton data
-    kinect.sensor->NuiTransformSmooth(&skeletonFrame, NULL);
+    {
+        NUI_TRANSFORM_SMOOTH_PARAMETERS params = {0.5f, 0.5f, 0.5f, 0.05f, 0.04f};
+        kinect.sensor->NuiTransformSmooth(&skeletonFrame, NULL);
+    }
 
     // See if we can find a valid skeleton in this frame
     bool foundSkeleton = false;
@@ -241,25 +186,29 @@ godot::TypedDictionary<int, godot::Vector2> godot::Kodot::getSkeletonJoints(int 
     return joints;
 }
 
-void skeletonToString()
-{
-    // TODO:
-}
-
-void skeletonTest(const NuiTypes::SkeletonData &skel)
-{
-    // OLD
-    // int i;
-    // for (i = 0; i < NUI_SKELETON_POSITION_COUNT; i++)
-    // {
-
-    // }
-    // // godot::print_line(i);
-}
-
-
 
 // -- Get/set --
+void godot::Kodot::set_sensorAngle(int p_sensorAngle)
+{
+    if (p_sensorAngle > 27 || p_sensorAngle < -27)
+    {
+        godot::print_error("Error: Trying to set Kinect angle out of range (+/-27).");
+        return;
+    }
+
+    godot::print_line_rich("[color=yellow]KINECT ANGLE CHANGE TO: " + godot::String(std::to_string(p_sensorAngle).c_str()) + " DEGREES.");
+    kinect.sensor->NuiCameraElevationSetAngle(p_sensorAngle);
+} 
+int godot::Kodot::get_sensorAngle()
+{
+    long angle;
+    kinect.sensor->NuiCameraElevationGetAngle(&angle);
+
+    return static_cast<int>(angle);
+}
+
+
+// -- Exports --
 void godot::Kodot::set_seatedMode(bool const p_seatedMode)
 {
     seatedMode = p_seatedMode;

@@ -21,8 +21,6 @@ void initialize_example_module(ModuleInitializationLevel p_level)
 	// -- Register classes here --
 	GDREGISTER_RUNTIME_CLASS(GDExample);
 	GDREGISTER_RUNTIME_CLASS(Kodot);
-	// GDREGISTER_RUNTIME_CLASS(BoidC);
-	// GDREGISTER_RUNTIME_CLASS(FlockC);
 }
 
 void uninitialize_example_module(ModuleInitializationLevel p_level) 

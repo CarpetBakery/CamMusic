@@ -24,6 +24,7 @@ func _ready() -> void:
 		np.noteVol = noteVol
 
 
+
 func setScaleType(newType: Scale.Type):
 	noteScale.setType(newType, instrument)
 	

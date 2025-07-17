@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="Instrument" load_steps=15 format=3 uid="uid://cb3kdhd1fkfwa"]
 
-[ext_resource type="Script" uid="uid://v30iy64a35j3" path="res://src/components/Instrument.gd" id="1_c0pxk"]
+[ext_resource type="Script" uid="uid://v30iy64a35j3" path="res://src/components/instrument.gd" id="1_c0pxk"]
 [ext_resource type="AudioStream" uid="uid://cgrxysekr6uto" path="res://assets/sfx/xylo/c.ogg" id="2_2cq8y"]
 [ext_resource type="AudioStream" uid="uid://ct0d5bnvvaihr" path="res://assets/sfx/xylo/c#.ogg" id="3_c0pxk"]
 [ext_resource type="AudioStream" uid="uid://d0e6cpduq1o7y" path="res://assets/sfx/xylo/d.ogg" id="4_l2hs2"]

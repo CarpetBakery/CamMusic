@@ -1,6 +1,6 @@
 class_name KodotTest extends Kodot
 
-enum SKELETON_POSITION_INDEX
+enum JointIndex
 {
 	HIP_CENTER = 0,
 	SPINE,
@@ -25,6 +25,7 @@ enum SKELETON_POSITION_INDEX
 	COUNT
 }
 
+# TEMP toString for JointIndex
 var POS_INDEX_NAME = [
 	"HIP_CENTER",
 	"SPINE",
@@ -49,13 +50,21 @@ var POS_INDEX_NAME = [
 	"COUNT",
 ]
 
+## The maximum range of position coords the Kinect can output.
+## (A guess for now. Can be changed later)
+@export var posCoordRange = Vector2(320.0, 320.0)
+
+@export_category("Cursor")
+@export var cursorSens := 4.5
+@export var handIndex := JointIndex.HAND_RIGHT
+@export var shoulderIndex := JointIndex.SHOULDER_CENTER
+@export var elbowIndex := JointIndex.ELBOW_RIGHT
+
+@export_group("Nodes")
 @export var cursor: Cursor
 @export var handLeft: Control
 @export var handRight: Control
 @export var squaresParent: Control
-## The maximum range of position coords the Kinect can output
-## (A guess for now. Can be changed later)
-@export var posCoordRange = Vector2(320.0, 320.0)
 
 var jointSquares: Dictionary[int, ColorRect]
 var jointLabels: Dictionary[int, Label]
@@ -70,7 +79,11 @@ var showJointNames := true:
 func _ready() -> void:
 	initialize()
 	
-	for i in range(SKELETON_POSITION_INDEX.COUNT):
+	# Set Kinect angle
+	set_sensorAngle(-4)
+	#set_sensorAngle(20)
+	
+	for i in range(JointIndex.COUNT):
 		var s := 20
 		var inst: ColorRect = ColorRect.new()
 		inst.color = Color(randf_range(0, 1), randf_range(0, 1), randf_range(0, 1))
@@ -96,35 +109,75 @@ func _process(delta: float) -> void:
 	if joints.is_empty():
 		return
 	
-	updateHands(joints)
+	updateJoints(joints)
 
 
-func updateHands(joints: Dictionary[int, Vector2]):
+func updateJoints(joints: Dictionary[int, Vector2]):
 	# print(joints)
-	if joints.has(SKELETON_POSITION_INDEX.HAND_LEFT):
-		#handLeft.position = joints.get(SKELETON_POSITION_INDEX.HAND_LEFT)
+	if joints.has(JointIndex.HAND_LEFT):
+		#handLeft.position = joints.get(JointIndex.HAND_LEFT)
 		
 		# TODO: Do cursor movement by calculating distance from like shoulder or elbow
-		#cursor.position = joints.get(SKELETON_POSITION_INDEX.HAND_LEFT) * 10 - Vector2(400, 400)
+		#cursor.position = joints.get(JointIndex.HAND_LEFT) * 10 - Vector2(400, 400)
 		pass
 	
-	if joints.has(SKELETON_POSITION_INDEX.HAND_RIGHT):
-		#handRight.position = joints.get(SKELETON_POSITION_INDEX.HAND_RIGHT)
-		cursor.position = joints.get(SKELETON_POSITION_INDEX.HAND_RIGHT) * 10 - Vector2(400, 400)
-		pass
+	#if joints.has(JointIndex.HAND_RIGHT):
+		##handRight.position = joints.get(JointIndex.HAND_RIGHT)
+		#cursor.position = joints.get(JointIndex.HAND_RIGHT) * 10 - Vector2(400, 400)
+		#pass
+	updateCursorPos(joints)
 	
-	for i in range(SKELETON_POSITION_INDEX.COUNT):
+	for i in range(JointIndex.COUNT):
 		if not joints.has(i):
 			continue
 		
-		var jointPos: Vector2 = joints.get(i)
-		
 		# Correct coords
-		#jointPos = jointPos / posCoordRange * screenSize
-		jointPos = jointPos * 4.5
+		var jointPos: Vector2 = joints.get(i)
+		jointPos = jointPos / posCoordRange * screenSize
+		#jointPos = jointPos * cursorSens
 		
-		if i == int(SKELETON_POSITION_INDEX.HAND_RIGHT):
-			print(jointPos)
 		var square: ColorRect = jointSquares.get(i)
 		square.position = jointPos
-		
+
+
+func updateCursorPos_OLD(joints: Dictionary[int, Vector2]): 
+	# TODO: Change for handedness
+
+	if not joints.has(handIndex) or not joints.has(shoulderIndex) or not joints.has(elbowIndex):
+		return
+
+	var halfScreenSize := screenSize / 2
+	var handPos: Vector2 = joints.get(handIndex)
+	var shoulderPos: Vector2 = joints.get(shoulderIndex)
+	var elbowPos: Vector2 = joints.get(elbowIndex)
+	
+	var armDist: float = handPos.distance_to(shoulderPos) 
+
+	handPos -= elbowPos
+	handPos = (handPos / armDist) * (screenSize / 2)
+	handPos += screenSize/2
+	
+	cursor.position = handPos
+	#print(armDist)
+	
+	#handPos -= shoulderPos
+	#handPos = (handPos / armDist) * halfScreenSize
+	#handPos += halfScreenSize
+	#cursor.position = handPos
+
+
+func updateCursorPos(joints: Dictionary[int, Vector2]): 
+	# TODO: Change for handedness
+
+	if not joints.has(handIndex) or not joints.has(shoulderIndex) or not joints.has(elbowIndex):
+		return
+
+	var halfScreenSize := screenSize / 2
+	var handPos: Vector2 = joints.get(handIndex)
+	var shoulderPos: Vector2 = joints.get(shoulderIndex)
+	var elbowPos: Vector2 = joints.get(elbowIndex)
+
+	## The new cursor pos
+	var cPos := Vector2.ZERO
+
+	
