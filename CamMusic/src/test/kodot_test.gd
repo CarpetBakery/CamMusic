@@ -80,7 +80,7 @@ func _ready() -> void:
 	initialize()
 	
 	# Set Kinect angle
-	set_sensorAngle(-4)
+	set_sensorAngle(2)
 	#set_sensorAngle(20)
 	
 	for i in range(JointIndex.COUNT):
@@ -104,31 +104,28 @@ func _process(delta: float) -> void:
 	if Input.is_action_just_pressed("ui_accept"):
 		showJointNames = !showJointNames
 	
-	var joints = getSkeletonJoints(0)
+	var joints = getSkeletonJoints3D()
 	if joints.is_empty():
 		return
 	updateJoints(joints)
 	
 	# New system
 	#joints = getSkeletonJoints3D()
-	#updateCursorPos(joints)
+	updateCursorPos(joints)
 	#updateCursorPos_OLD(joints)
 
 
-func updateJoints(joints: Dictionary[int, Vector2]):
-	#updateCursorPos_OLD(joints)
-	
+func updateJoints(joints: Dictionary[int, Vector3]):
 	for i in range(JointIndex.COUNT):
 		if not joints.has(i):
 			continue
 		
 		# Correct coords
-		var jointPos: Vector2 = joints.get(i)
-		jointPos = jointPos / posCoordRange * screenSize
-		#jointPos = jointPos * cursorSens
+		var jointPos3: Vector3 = joints.get(i)
+		var jointPos: Vector2 = Vector2(jointPos3.x + 1, -jointPos3.y + 1) * Vector2(0.5, 0.5)
 		
 		var square: ColorRect = jointSquares.get(i)
-		square.position = jointPos
+		square.position = Vector2(jointPos.x, jointPos.y) * screenSize
 
 
 func updateCursorPos_OLD(joints: Dictionary[int, Vector3]): 
@@ -157,36 +154,13 @@ func updateCursorPos_OLD(joints: Dictionary[int, Vector3]):
 
 func updateCursorPos(joints: Dictionary[int, Vector3]): 
 	# TODO: Change for handedness
-	
 	if not joints.has(handIndex) or not joints.has(JointIndex.SHOULDER_LEFT) or not joints.has(JointIndex.SHOULDER_RIGHT):
 		return
-
 	
 	var halfScreenSize := screenSize / 2
 	var handPos: Vector3 = joints.get(handIndex)
 	var shoulderCenterPos: Vector3 = joints.get(JointIndex.SHOULDER_CENTER)
 	
-	var cPos := Vector2(handPos.x, -handPos.y) - Vector2(shoulderCenterPos.x, -shoulderCenterPos.y)
+	var cPos := Vector2(handPos.x + 1, -handPos.y + 1) * Vector2(0.5, 0.5) # - Vector2(shoulderCenterPos.x, -shoulderCenterPos.y)
 	cursor.position = cPos * screenSize
 	
-	print(cPos)
-	
-	
-	#var shoulderPosCenter: Vector3 = joints.get(JointIndex.SHOULDER_CENTER)
-	#shoulderPosCenter.y *= -1
-	#var shoulderPosLeft: Vector3 = joints.get(JointIndex.SHOULDER_LEFT)
-	#shoulderPosLeft.y *= -1
-	#var shoulderPosRight: Vector3 = joints.get(JointIndex.SHOULDER_RIGHT)
-	#shoulderPosRight.y *= -1
-	#
-	#var shoulderDist = shoulderPosLeft.distance_to(shoulderPosRight)
-	#
-	#
-	### The new cursor pos
-	#var cPos := Vector2(handPos.x, -handPos.y)
-	#
-	#cPos -= Vector2(shoulderPosCenter.x, shoulderPosCenter.y)
-	#
-	#
-	#cursor.position = cPos
-	#print(cPos)

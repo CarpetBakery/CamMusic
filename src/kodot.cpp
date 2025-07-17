@@ -4,6 +4,7 @@
 #include "NuiApi.h"
 #include "NuiSensor.h"
 #include "NuiSkeleton.h"
+#include "KinectInteraction.h"
 
 #include "util.h"
 
@@ -49,7 +50,6 @@ NUI_SKELETON_DATA getSkeletonData(Kinect &kinect, bool &found, int skeletonId = 
     return skeletonData;
 }
 
-
 void godot::Kodot::_bind_methods()
 {
     // -- Functions --
@@ -76,6 +76,7 @@ void godot::Kodot::_ready() {}
 
 void godot::Kodot::_exit_tree()
 {
+    // Try to shut down the Kinect
     if (kinect.sensor)
     {
         godot::print_line("Shutting down kinect...");
@@ -85,7 +86,7 @@ void godot::Kodot::_exit_tree()
 }
 
 
-INuiSensor* _sensor; // Not great
+INuiSensor* _sensor;
 bool godot::Kodot::initialize()
 {
     int sensorCount = 0;
