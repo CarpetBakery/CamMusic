@@ -58,7 +58,7 @@ var POS_INDEX_NAME = [
 @export var cursorSens := 4.5
 @export var handIndex := JointIndex.HAND_RIGHT
 @export var shoulderIndex := JointIndex.SHOULDER_CENTER
-@export var elbowIndex := JointIndex.ELBOW_RIGHT
+@export var elbowIndex := JointIndex.SHOULDER_RIGHT
 
 @export_group("Nodes")
 @export var cursor: Cursor
@@ -104,20 +104,19 @@ func _process(delta: float) -> void:
 	if Input.is_action_just_pressed("ui_accept"):
 		showJointNames = !showJointNames
 	
-	#update(delta)
-	#var joints := getSkeletonJoints(0)
-	#if joints.is_empty():
-		#return
-	
-	#updateJoints(joints)
+	var joints = getSkeletonJoints(0)
+	if joints.is_empty():
+		return
+	updateJoints(joints)
 	
 	# New system
-	var joints := getSkeletonJoints3D()
-	updateCursorPos(joints)
+	#joints = getSkeletonJoints3D()
+	#updateCursorPos(joints)
+	#updateCursorPos_OLD(joints)
 
 
 func updateJoints(joints: Dictionary[int, Vector2]):
-	updateCursorPos_OLD(joints)
+	#updateCursorPos_OLD(joints)
 	
 	for i in range(JointIndex.COUNT):
 		if not joints.has(i):
@@ -132,50 +131,62 @@ func updateJoints(joints: Dictionary[int, Vector2]):
 		square.position = jointPos
 
 
-func updateCursorPos_OLD(joints: Dictionary[int, Vector2]): 
+func updateCursorPos_OLD(joints: Dictionary[int, Vector3]): 
 	# TODO: Change for handedness
 
 	if not joints.has(handIndex) or not joints.has(shoulderIndex) or not joints.has(elbowIndex):
 		return
 
 	var halfScreenSize := screenSize / 2
-	var handPos: Vector2 = joints.get(handIndex)
-	var shoulderPos: Vector2 = joints.get(shoulderIndex)
-	var elbowPos: Vector2 = joints.get(elbowIndex)
 	
-	var armDist: float = handPos.distance_to(shoulderPos) 
+	var handPos = joints.get(handIndex)
+	var shoulderPos = joints.get(shoulderIndex)
+	var elbowPos = joints.get(elbowIndex)
+	handPos = Vector2(handPos.x, -handPos.y)
+	shoulderPos = Vector2(shoulderPos.x, -shoulderPos.y)
+	elbowPos = Vector2(elbowPos.x, -elbowPos.y)
+	
+	var armDist: float = shoulderPos.distance_to(elbowPos) 
 
 	handPos -= elbowPos
 	handPos = (handPos / armDist) * (screenSize / 2)
 	handPos += screenSize/2
 	
 	cursor.position = handPos
-	#print(armDist)
-	
-	#handPos -= shoulderPos
-	#handPos = (handPos / armDist) * halfScreenSize
-	#handPos += halfScreenSize
-	#cursor.position = handPos
 
 
 func updateCursorPos(joints: Dictionary[int, Vector3]): 
 	# TODO: Change for handedness
 	
-	if not joints.has(handIndex) or not joints.has(shoulderIndex) or not joints.has(elbowIndex):
+	if not joints.has(handIndex) or not joints.has(JointIndex.SHOULDER_LEFT) or not joints.has(JointIndex.SHOULDER_RIGHT):
 		return
 
+	
 	var halfScreenSize := screenSize / 2
 	var handPos: Vector3 = joints.get(handIndex)
-	var shoulderPos: Vector3 = joints.get(shoulderIndex)
-	var elbowPos: Vector3 = joints.get(elbowIndex)
-
-	## The new cursor pos
-	var cPos := Vector2(handPos.x, -handPos.y)
-
-	# Transform coords to screen space
-	#cPos = cPos * screenSize
+	var shoulderCenterPos: Vector3 = joints.get(JointIndex.SHOULDER_CENTER)
 	
+	var cPos := Vector2(handPos.x, -handPos.y) - Vector2(shoulderCenterPos.x, -shoulderCenterPos.y)
 	cursor.position = cPos * screenSize
+	
 	print(cPos)
-	#cursor.position = (Vector2(handPos.x, handPos.y) * 0.5 + Vector2(0.5, 0.5)) * screenSize
-	#print(cursor.position)
+	
+	
+	#var shoulderPosCenter: Vector3 = joints.get(JointIndex.SHOULDER_CENTER)
+	#shoulderPosCenter.y *= -1
+	#var shoulderPosLeft: Vector3 = joints.get(JointIndex.SHOULDER_LEFT)
+	#shoulderPosLeft.y *= -1
+	#var shoulderPosRight: Vector3 = joints.get(JointIndex.SHOULDER_RIGHT)
+	#shoulderPosRight.y *= -1
+	#
+	#var shoulderDist = shoulderPosLeft.distance_to(shoulderPosRight)
+	#
+	#
+	### The new cursor pos
+	#var cPos := Vector2(handPos.x, -handPos.y)
+	#
+	#cPos -= Vector2(shoulderPosCenter.x, shoulderPosCenter.y)
+	#
+	#
+	#cursor.position = cPos
+	#print(cPos)

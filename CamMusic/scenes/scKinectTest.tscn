@@ -9,14 +9,6 @@ colors = PackedColorArray(1, 1, 1, 0.254902, 1, 1, 1, 0)
 
 [node name="scKinectTest" type="Node3D"]
 
-[node name="Kodot" type="Kodot" parent="." node_paths=PackedStringArray("cursor", "handLeft", "handRight", "squaresParent")]
-seatedMode = true
-script = ExtResource("1_p5h2y")
-cursor = NodePath("../Cursor")
-handLeft = NodePath("../HandLeft")
-handRight = NodePath("../HandRight")
-squaresParent = NodePath("../SquaresParent")
-
 [node name="HandLeft" type="Control" parent="."]
 visible = false
 layout_mode = 3
@@ -46,6 +38,14 @@ offset_top = -20.0
 offset_right = 20.0
 offset_bottom = 20.0
 color = Color(0.914108, 0.300751, 0.300751, 1)
+
+[node name="Kodot" type="Kodot" parent="HandRight" node_paths=PackedStringArray("cursor", "handLeft", "handRight", "squaresParent")]
+seatedMode = true
+script = ExtResource("1_p5h2y")
+cursor = NodePath("../../Cursor")
+handLeft = NodePath("../../HandLeft")
+handRight = NodePath("..")
+squaresParent = NodePath("../../SquaresParent")
 
 [node name="SquaresParent" type="Control" parent="."]
 layout_mode = 3
