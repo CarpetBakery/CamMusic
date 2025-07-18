@@ -1,0 +1,64 @@
+[gd_scene load_steps=8 format=3 uid="uid://de5ta8xcbroid"]
+
+[ext_resource type="Script" uid="uid://bqxjqdbnq1782" path="res://src/note_master.gd" id="1_utskk"]
+[ext_resource type="Resource" uid="uid://dp6wkail2otb" path="res://assets/instruments/instPiano.tres" id="2_iq7sh"]
+[ext_resource type="PackedScene" uid="uid://dcm1r8m7k8m1p" path="res://objects/NotePlayer.tscn" id="4_vbmvx"]
+[ext_resource type="FontFile" uid="uid://bsqsbdc7n77nc" path="res://assets/fonts/ARLRDBD.TTF" id="5_6o65p"]
+[ext_resource type="Texture2D" uid="uid://beiyag2p5qlqs" path="res://assets/sprites/guy.png" id="6_r1dfy"]
+[ext_resource type="Script" uid="uid://ch0noxpywl4dr" path="res://src/kodot.gd" id="6_yidds"]
+
+[sub_resource type="GDScript" id="GDScript_dwu3b"]
+resource_name = "Arm"
+script/source = "extends Line2D
+
+
+func _unhandled_input(event: InputEvent) -> void:
+	if event is InputEventMouse:
+		points[0] = event.position
+"
+
+[node name="ScTest" type="Node2D"]
+metadata/_edit_horizontal_guides_ = [-328.0]
+
+[node name="ColorRect" type="ColorRect" parent="."]
+offset_top = 896.0
+offset_right = 1341.0
+offset_bottom = 1076.0
+mouse_filter = 2
+color = Color(0, 0, 0, 0.666667)
+
+[node name="InstrumentLabel" type="RichTextLabel" parent="."]
+offset_left = 12.0
+offset_top = 922.0
+offset_right = 1910.0
+offset_bottom = 1150.0
+mouse_filter = 2
+theme_override_fonts/normal_font = ExtResource("5_6o65p")
+theme_override_font_sizes/normal_font_size = 42
+bbcode_enabled = true
+text = "Instrument: "
+
+[node name="NoteMaster" type="Node2D" parent="." node_paths=PackedStringArray("instLabel")]
+position = Vector2(954, 804)
+script = ExtResource("1_utskk")
+instrument = ExtResource("2_iq7sh")
+instLabel = NodePath("../InstrumentLabel")
+objNotePlayer = ExtResource("4_vbmvx")
+
+[node name="Guy" type="Node2D" parent="."]
+
+[node name="Sprite2D" type="Sprite2D" parent="Guy"]
+texture_filter = 1
+position = Vector2(966, 787)
+scale = Vector2(5.96479, 4.61702)
+texture = ExtResource("6_r1dfy")
+
+[node name="Arm" type="Line2D" parent="Guy"]
+points = PackedVector2Array(1207, 797, 965, 844)
+script = SubResource("GDScript_dwu3b")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+anchor_mode = 0
+
+[node name="Kodot" type="Kodot" parent="."]
+script = ExtResource("6_yidds")

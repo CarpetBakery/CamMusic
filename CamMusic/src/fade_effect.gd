@@ -12,3 +12,5 @@ func _ready() -> void:
 	tw.set_ease(Tween.EASE_OUT)
 	tw.tween_property(self, "modulate:a", 0, fadeSpd)
 	tw.parallel().tween_property(self, "scale", Vector2(finalScale, finalScale), fadeSpd)
+	
+	tw.finished.connect(queue_free)

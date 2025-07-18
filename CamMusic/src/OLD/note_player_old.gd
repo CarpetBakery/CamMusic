@@ -1,4 +1,4 @@
-class_name NotePlayer extends Node2D
+class_name NotePlayer_OLD extends Node2D
 
 ## Noteplayers have a scale and scale degree
 
@@ -9,9 +9,8 @@ class_name NotePlayer extends Node2D
 @export var spriteParent: Node2D
 @export var sprite: Sprite2D
 @export var noteSfx: AudioStreamPlayer
-
-@export var objFade: PackedScene
-@export var objBubbleParticles: PackedScene
+@export var bubbleParticles: CPUParticles2D
+@export var fadeObj: PackedScene
 
 var noteVol := 1.0
 var bounceTw: Tween
@@ -46,9 +45,8 @@ func mouseExit():
 
 ## Play sound, do bounce effect
 func hit():
-	# Create bubbles effect
-	var bubbles: BubbleParticles = objBubbleParticles.instantiate()
-	add_child(bubbles)
+	bubbleParticles.emitting = false
+	bubbleParticles.emitting = true
 	
 	Global.cancelTween(volTw)
 	noteSfx.volume_linear = noteVol
@@ -64,12 +62,8 @@ func hit():
 	bounceTw.set_ease(Tween.EASE_OUT)
 	bounceTw.tween_property(spriteParent, "scale", Vector2(1, 1), 0.5)
 	
-	bounceTw.parallel().set_trans(Tween.TRANS_LINEAR)
-	bounceTw.parallel().tween_method(setAlpha, 3.0, 1.0, 0.25)
-
-	
 	# Create fade effect
-	var inst: FadeEffect = objFade.instantiate()
+	var inst: FadeEffect = fadeObj.instantiate()
 	inst.position = position
 	inst.texture = sprite.texture
 	get_parent().add_child(inst)
@@ -92,8 +86,3 @@ func setTargetPos(newTargetPos: Vector2, _moveTime := moveTime):
 	moveTw.set_trans(Tween.TRANS_ELASTIC)
 	moveTw.set_ease(Tween.EASE_OUT)
 	moveTw.tween_property(self, "position", targetPos, moveTime)
-	
-
-func setAlpha(alpha: float):
-	var mat: ShaderMaterial = sprite.material
-	mat.set_shader_parameter("alpha", alpha)

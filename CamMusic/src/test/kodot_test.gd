@@ -128,6 +128,19 @@ func updateJoints(joints: Dictionary[int, Vector3]):
 		square.position = Vector2(jointPos.x, jointPos.y) * screenSize
 
 
+func updateCursorPos(joints: Dictionary[int, Vector3]): 
+	# TODO: Change for handedness
+	if not joints.has(handIndex) or not joints.has(JointIndex.SHOULDER_LEFT) or not joints.has(JointIndex.SHOULDER_RIGHT):
+		return
+	
+	var halfScreenSize := screenSize / 2
+	var handPos: Vector3 = joints.get(handIndex)
+	var shoulderCenterPos: Vector3 = joints.get(JointIndex.SHOULDER_CENTER)
+	
+	var cPos := Vector2(handPos.x + 1, -handPos.y + 1) * Vector2(0.5, 0.5) # - Vector2(shoulderCenterPos.x, -shoulderCenterPos.y)
+	cursor.position = cPos * screenSize
+
+
 func updateCursorPos_OLD(joints: Dictionary[int, Vector3]): 
 	# TODO: Change for handedness
 
@@ -150,17 +163,3 @@ func updateCursorPos_OLD(joints: Dictionary[int, Vector3]):
 	handPos += screenSize/2
 	
 	cursor.position = handPos
-
-
-func updateCursorPos(joints: Dictionary[int, Vector3]): 
-	# TODO: Change for handedness
-	if not joints.has(handIndex) or not joints.has(JointIndex.SHOULDER_LEFT) or not joints.has(JointIndex.SHOULDER_RIGHT):
-		return
-	
-	var halfScreenSize := screenSize / 2
-	var handPos: Vector3 = joints.get(handIndex)
-	var shoulderCenterPos: Vector3 = joints.get(JointIndex.SHOULDER_CENTER)
-	
-	var cPos := Vector2(handPos.x + 1, -handPos.y + 1) * Vector2(0.5, 0.5) # - Vector2(shoulderCenterPos.x, -shoulderCenterPos.y)
-	cursor.position = cPos * screenSize
-	
