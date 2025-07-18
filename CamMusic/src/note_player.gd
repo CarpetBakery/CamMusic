@@ -27,6 +27,7 @@ func _ready() -> void:
 	# -- Connections --
 	colArea.mouse_entered.connect(hit)
 	colArea.mouse_exited.connect(mouseExit)
+	colArea.area_entered.connect(onAreaEntered)
 
 
 func _process(delta: float) -> void:
@@ -105,3 +106,9 @@ func setTargetPos(newTargetPos: Vector2, _moveTime := moveTime):
 func setAlpha(alpha: float):
 	var mat: ShaderMaterial = sprite.material
 	mat.set_shader_parameter("alpha", alpha)
+
+
+func onAreaEntered(area: Area2D):
+	if area.get_parent() is Hand:
+		#print("It's a hand")
+		hit()
