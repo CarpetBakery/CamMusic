@@ -9,6 +9,7 @@ class_name NotePlayer extends Node2D
 @export var spriteParent: Node2D
 @export var sprite: Sprite2D
 @export var noteSfx: AudioStreamPlayer
+@export var noteLabel: RichTextLabel
 
 @export var objFade: PackedScene
 @export var objBubbleParticles: PackedScene
@@ -34,6 +35,13 @@ func _process(delta: float) -> void:
 
 func setStream(stream: AudioStream):
 	noteSfx.stream = stream
+
+
+func setScaleDegree(_degree: int, noteScale: Scale):
+	scaleDegree = _degree
+
+	# Get the note from the scale
+	noteLabel.text = Scale.noteToString(noteScale.notes.get(scaleDegree))
 
 
 func mouseEnter(): 

@@ -1,9 +1,10 @@
 class_name NoteMaster extends Node2D
 
 @export var instrument: Instrument
-@export var noteScale: Scale.Type
+@export var noteScaleType: Scale.Type
 @export var noteVol := 1.0
 var notePlayers: Array[NotePlayer]
+var noteScale: Scale
 
 @export_group("Nodes")
 @export var instLabel: RichTextLabel
@@ -12,6 +13,11 @@ var notePlayers: Array[NotePlayer]
 var noteCount := 8
 
 func _ready() -> void:
+	# Setup scale
+	noteScale = Scale.new()
+	noteScale.setType(noteScaleType, instrument)
+
+	# Setup note players
 	createNotePlayers(8)
 
 
@@ -27,11 +33,11 @@ func createNotePlayers(amount: int):
 		np.queue_free()
 	notePlayers.clear()
 	
-	#var angleInc = 180.0 / float(amount)
+	#var angleInc: float = 180 / float(amount)
 	var angleInc := 26.0
 	var angleTotal := angleInc * amount
 	var dist := 500.0 ## Distance from center
-	var moveTime := 0.7
+	var moveTime := 1.4
 	var moveTimeInc = 0.08
 	
 	var spawnPos := Vector2.UP * dist
@@ -47,6 +53,13 @@ func createNotePlayers(amount: int):
 		
 		spawnPos = spawnPos.rotated(deg_to_rad(angleInc))
 		moveTime += moveTimeInc
+
+		# Setup sound
+		inst.setScaleDegree(clamp(i, 0, Scale.SCALE_SIZE), noteScale)
+
+		var stream := noteScale.streams[inst.scaleDegree]
+		inst.setStream(stream)
+		inst.noteVol = noteVol
 
 
 

@@ -30,6 +30,7 @@ const SCALE_SIZE := 8
 
 @export var type: Type
 var streams: Array[AudioStream]
+var notes: Array[Note]
 
 
 func _init() -> void:
@@ -38,45 +39,50 @@ func _init() -> void:
 
 func setType(newType: Type, instrument: Instrument):
 	type = newType
+	notes.clear()
 	streams.clear()
 	
 	# Setup new streams
 	match type:
 		Type.MAJOR:
-			streams = [
-				instrument.streams[Note.C],
-				instrument.streams[Note.D],
-				instrument.streams[Note.E],
-				instrument.streams[Note.F],
-				instrument.streams[Note.G],
-				instrument.streams[Note.A],
-				instrument.streams[Note.B],
-				instrument.streams[Note.C_HIGH],
+			notes = [
+				Note.C,
+				Note.D,
+				Note.E,
+				Note.F,
+				Note.G,
+				Note.A,
+				Note.B,
+				Note.C_HIGH,
 			]
 		
 		Type.MINOR:
-			streams = [
-				instrument.streams[Note.C],
-				instrument.streams[Note.D],
-				instrument.streams[Note.D_SHARP],
-				instrument.streams[Note.F],
-				instrument.streams[Note.G],
-				instrument.streams[Note.G_SHARP],
-				instrument.streams[Note.A_SHARP],
-				instrument.streams[Note.C_HIGH],
+			notes = [
+				Note.C,
+				Note.D,
+				Note.D_SHARP,
+				Note.F,
+				Note.G,
+				Note.G_SHARP,
+				Note.A_SHARP,
+				Note.C_HIGH,
 			]
 		
 		Type.BLUES:
-			streams = [
-				instrument.streams[Note.C],
-				instrument.streams[Note.D],
-				instrument.streams[Note.D_SHARP],
-				instrument.streams[Note.F],
-				instrument.streams[Note.F_SHARP],
-				instrument.streams[Note.G],
-				instrument.streams[Note.A_SHARP],
-				instrument.streams[Note.C_HIGH],
+			notes = [
+				Note.C,
+				Note.D,
+				Note.D_SHARP,
+				Note.F,
+				Note.F_SHARP,
+				Note.G,
+				Note.A_SHARP,
+				Note.C_HIGH,
 			]
+	
+	# Add streams to array
+	for note in notes:
+		streams.push_back(instrument.streams[note])
 
 
 func _to_string() -> String:
@@ -88,3 +94,22 @@ func _to_string() -> String:
 		Type.BLUES:
 			return "Blues"
 	return ""
+
+
+static func noteToString(note: Note) -> String:
+	var map := {
+		Note.C: "C",
+		Note.C_SHARP: "C#",
+		Note.D: "D",
+		Note.D_SHARP: "D#",
+		Note.E: "E",
+		Note.F: "F",
+		Note.F_SHARP: "F#",
+		Note.G: "G",
+		Note.G_SHARP: "G#",
+		Note.A: "A",
+		Note.A_SHARP: "A#",
+		Note.B: "B",
+		Note.C_HIGH: "C2"
+	}
+	return map.get(note as int)
