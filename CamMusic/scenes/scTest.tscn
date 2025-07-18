@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://de5ta8xcbroid"]
+[gd_scene load_steps=10 format=3 uid="uid://de5ta8xcbroid"]
 
 [ext_resource type="Script" uid="uid://bqxjqdbnq1782" path="res://src/note_master.gd" id="1_utskk"]
 [ext_resource type="Resource" uid="uid://dp6wkail2otb" path="res://assets/instruments/instPiano.tres" id="2_iq7sh"]
@@ -7,6 +7,7 @@
 [ext_resource type="Texture2D" uid="uid://beiyag2p5qlqs" path="res://assets/sprites/guy.png" id="6_r1dfy"]
 [ext_resource type="Script" uid="uid://ch0noxpywl4dr" path="res://src/kodot.gd" id="6_yidds"]
 [ext_resource type="PackedScene" uid="uid://cq5se65kh2kty" path="res://objects/Hand.tscn" id="7_aku0y"]
+[ext_resource type="Texture2D" uid="uid://sevonurtk7wj" path="res://assets/sprites/ui/button.png" id="8_ct8vh"]
 
 [sub_resource type="GDScript" id="GDScript_dwu3b"]
 resource_name = "Arm"
@@ -25,6 +26,7 @@ metadata/_edit_horizontal_guides_ = [-328.0]
 position = Vector2(954, 804)
 script = ExtResource("1_utskk")
 instrument = ExtResource("2_iq7sh")
+noteScaleType = 1
 instLabel = NodePath("../InstrumentLabel")
 objNotePlayer = ExtResource("4_vbmvx")
 
@@ -64,13 +66,56 @@ script = SubResource("GDScript_dwu3b")
 [node name="Camera2D" type="Camera2D" parent="."]
 anchor_mode = 0
 
-[node name="Kodot" type="Kodot" parent="." node_paths=PackedStringArray("handLeft", "handRight")]
-seatedMode = true
+[node name="Kodot" type="Kodot" parent="." node_paths=PackedStringArray("noteMaster", "handLeft", "handRight", "shoulderCenter", "head")]
+screenSize = Vector2(1440, 1080)
 script = ExtResource("6_yidds")
+sensorAngle = 2
+noteMaster = NodePath("../NoteMaster")
 handLeft = NodePath("LeftHand")
 handRight = NodePath("RightHand")
+shoulderCenter = NodePath("ShoulderCenter")
+head = NodePath("Head")
 
 [node name="LeftHand" parent="Kodot" instance=ExtResource("7_aku0y")]
 isRightHand = false
+handColor = Color(0.352077, 0.798701, 0.539477, 1)
 
 [node name="RightHand" parent="Kodot" instance=ExtResource("7_aku0y")]
+handColor = Color(0.771546, 0.350255, 0.363124, 1)
+
+[node name="ShoulderCenter" type="Node2D" parent="Kodot"]
+
+[node name="ColorRect" type="ColorRect" parent="Kodot/ShoulderCenter"]
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+
+[node name="Head" type="Node2D" parent="Kodot"]
+
+[node name="ColorRect" type="ColorRect" parent="Kodot/Head"]
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+color = Color(0.36847, 0.475611, 1, 1)
+
+[node name="NinePatchRect" type="NinePatchRect" parent="."]
+visible = false
+offset_right = 40.0
+offset_bottom = 40.0
+texture = ExtResource("8_ct8vh")
+region_rect = Rect2(0, 0, 567, 567)
+axis_stretch_horizontal = 2
+axis_stretch_vertical = 2
+
+[node name="NinePatchRect2" type="NinePatchRect" parent="."]
+visible = false
+offset_left = 186.0
+offset_top = 82.0
+offset_right = 747.0
+offset_bottom = 462.0
+texture = ExtResource("8_ct8vh")
+region_rect = Rect2(77.0878, 67.3691, 419.86, 437.576)
+axis_stretch_horizontal = 1
+axis_stretch_vertical = 2

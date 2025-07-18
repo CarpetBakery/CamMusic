@@ -125,8 +125,8 @@ fov = 38.0
 layer = 0
 
 [node name="VisParent" type="Node2D" parent="2D Background"]
-position = Vector2(956, 621)
-scale = Vector2(1.50569, 1.50569)
+position = Vector2(956, 606)
+scale = Vector2(1.82569, 1.50569)
 
 [node name="Visualizer" type="Node2D" parent="2D Background/VisParent"]
 position = Vector2(-407, -251)
@@ -136,6 +136,7 @@ alpha = 0.575
 
 [node name="MeltyTest" type="Node" parent="2D Background" node_paths=PackedStringArray("player")]
 script = ExtResource("7_e6pv5")
+play = false
 player = NodePath("AudioStreamPlayer")
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="2D Background/MeltyTest"]

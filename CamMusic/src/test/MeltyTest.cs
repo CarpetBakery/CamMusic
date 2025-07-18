@@ -5,6 +5,8 @@ using System.IO;
 
 public partial class MeltyTest : Node
 {
+	[Export] bool play = true;
+
 	[ExportGroup("Nodes")]
 	[Export] AudioStreamPlayer player;
 	AudioStreamGeneratorPlayback playback;
@@ -39,7 +41,10 @@ public partial class MeltyTest : Node
 		midiFile = new MidiFile(midiPath);
 		sequencer = new MidiFileSequencer(synth);
 
-		PlayMidi();
+		if (play)
+		{
+			PlayMidi();
+		}
 	}
 
 	public override void _Process(double delta)

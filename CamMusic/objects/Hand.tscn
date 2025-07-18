@@ -5,8 +5,9 @@
 [sub_resource type="CircleShape2D" id="CircleShape2D_liloi"]
 radius = 32.2
 
-[node name="Hand" type="Node2D"]
+[node name="Hand" type="Node2D" node_paths=PackedStringArray("sprite")]
 script = ExtResource("1_liloi")
+sprite = NodePath("ColorRect")
 
 [node name="ColorRect" type="ColorRect" parent="."]
 offset_left = -20.0

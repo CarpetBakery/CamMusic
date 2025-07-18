@@ -1,0 +1,12 @@
+[gd_resource type="StandardMaterial3D" load_steps=2 format=3 uid="uid://dd5jkxu6xbel8"]
+
+[ext_resource type="Texture2D" uid="uid://cr3xnbkniu2b7" path="res://assets/textures/prim_mouth_closed.png" id="1_ky3ov"]
+
+[resource]
+transparency = 2
+alpha_scissor_threshold = 0.5
+alpha_antialiasing_mode = 0
+cull_mode = 2
+shading_mode = 0
+disable_fog = true
+albedo_texture = ExtResource("1_ky3ov")

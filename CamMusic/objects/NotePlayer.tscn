@@ -44,7 +44,7 @@ theme_override_constants/shadow_outline_size = 42
 theme_override_fonts/normal_font = ExtResource("5_iphl0")
 theme_override_font_sizes/normal_font_size = 116
 bbcode_enabled = true
-text = "[tornado freq=3 radius=2]C#"
+text = "[tornado freq=3 radius=5]C"
 horizontal_alignment = 1
 vertical_alignment = 1
 

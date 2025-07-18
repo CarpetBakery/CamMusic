@@ -5,14 +5,18 @@ class_name NoteMaster extends Node2D
 @export var noteVol := 1.0
 var notePlayers: Array[NotePlayer]
 var noteScale: Scale
+var noteCount := 8
+
+var targetPos: Vector2
 
 @export_group("Nodes")
 @export var instLabel: RichTextLabel
 @export var objNotePlayer: PackedScene
 
-var noteCount := 8
 
 func _ready() -> void:
+	targetPos = position
+	
 	# Setup scale
 	noteScale = Scale.new()
 	noteScale.setType(noteScaleType, instrument)
@@ -25,7 +29,8 @@ func _process(delta: float) -> void:
 	if Input.is_action_just_pressed("ui_accept"):
 		createNotePlayers(noteCount)
 		#noteCount += 1
-	pass
+	
+	position = lerp(position, targetPos, 0.4)
 
 
 func createNotePlayers(amount: int):
