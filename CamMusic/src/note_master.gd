@@ -24,7 +24,8 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	if Input.is_action_just_pressed("ui_accept"):
 		createNotePlayers(noteCount)
-		noteCount += 1
+		#noteCount += 1
+	pass
 
 
 func createNotePlayers(amount: int):
@@ -55,7 +56,7 @@ func createNotePlayers(amount: int):
 		moveTime += moveTimeInc
 
 		# Setup sound
-		inst.setScaleDegree(clamp(i, 0, Scale.SCALE_SIZE), noteScale)
+		inst.setScaleDegree(clamp(i, 0, Scale.SCALE_SIZE - 1), noteScale)
 
 		var stream := noteScale.streams[inst.scaleDegree]
 		inst.setStream(stream)

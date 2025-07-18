@@ -3,7 +3,7 @@
 [ext_resource type="Shader" uid="uid://lrery4a0pywy" path="res://shaders/shSky.gdshader" id="1_axlu0"]
 [ext_resource type="Texture2D" uid="uid://igklnod5pqhy" path="res://assets/textures/sky.png" id="2_sbqeo"]
 [ext_resource type="Texture2D" uid="uid://b27b27bv02vku" path="res://assets/textures/floor.png" id="3_fvpbn"]
-[ext_resource type="PackedScene" uid="uid://buxn1xvymrjak" path="res://scenes/scTest.tscn" id="4_r5s3b"]
+[ext_resource type="PackedScene" uid="uid://buxn1xvymrjak" path="res://scenes/scTest_OLD.tscn" id="4_r5s3b"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_r5s3b"]
 shader = ExtResource("1_axlu0")

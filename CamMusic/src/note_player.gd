@@ -10,9 +10,13 @@ class_name NotePlayer extends Node2D
 @export var sprite: Sprite2D
 @export var noteSfx: AudioStreamPlayer
 @export var noteLabel: RichTextLabel
+@export var alphaOffset := 0.4
+
 
 @export var objFade: PackedScene
 @export var objBubbleParticles: PackedScene
+
+var active := true
 
 var noteVol := 1.0
 var bounceTw: Tween
@@ -55,6 +59,9 @@ func mouseExit():
 
 ## Play sound, do bounce effect
 func hit():
+	if not active:
+		return
+	
 	# Create bubbles effect
 	var bubbles: BubbleParticles = objBubbleParticles.instantiate()
 	add_child(bubbles)
@@ -93,6 +100,9 @@ func noteOff():
 
 
 func setTargetPos(newTargetPos: Vector2, _moveTime := moveTime):
+	# So we don't accidentally hit anything on our path
+	deactivate()
+	
 	moveTime = _moveTime
 	targetPos = newTargetPos
 	
@@ -102,6 +112,18 @@ func setTargetPos(newTargetPos: Vector2, _moveTime := moveTime):
 	moveTw.set_ease(Tween.EASE_OUT)
 	moveTw.tween_property(self, "position", targetPos, moveTime)
 	
+	# Activate again once we've finished moving
+	moveTw.finished.connect(activate)
+	
+
+
+func activate():
+	active = true
+
+
+func deactivate():
+	active = false
+
 
 func setAlpha(alpha: float):
 	var mat: ShaderMaterial = sprite.material
@@ -110,5 +132,4 @@ func setAlpha(alpha: float):
 
 func onAreaEntered(area: Area2D):
 	if area.get_parent() is Hand:
-		#print("It's a hand")
 		hit()

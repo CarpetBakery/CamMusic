@@ -9,6 +9,8 @@
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_wcxir"]
 shader = ExtResource("4_ejdes")
+shader_parameter/alpha = 1.0
+shader_parameter/alphaOffset = 1.0
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_bh6jd"]
 radius = 107.378

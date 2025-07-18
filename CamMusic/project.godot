@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="CamMusic"
-run/main_scene="uid://buxn1xvymrjak"
+run/main_scene="uid://crmajnmoal4mo"
 config/features=PackedStringArray("4.4", "C#", "Forward Plus")
 boot_splash/show_image=false
 config/icon="uid://egppiwpa1guo"
