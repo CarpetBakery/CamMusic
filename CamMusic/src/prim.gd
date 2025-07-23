@@ -9,3 +9,8 @@ func _ready() -> void:
 		if child is AnimationPlayer:
 			animPlayer = child
 			break
+	
+	assert(animPlayer, "Error: could not find Prim's animation player.")
+	
+	animPlayer.play("talk")
+	

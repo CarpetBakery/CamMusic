@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://de5ta8xcbroid"]
+[gd_scene load_steps=13 format=3 uid="uid://de5ta8xcbroid"]
 
 [ext_resource type="Script" uid="uid://bqxjqdbnq1782" path="res://src/note_master.gd" id="1_utskk"]
 [ext_resource type="Resource" uid="uid://dp6wkail2otb" path="res://assets/instruments/instPiano.tres" id="2_iq7sh"]
@@ -8,6 +8,8 @@
 [ext_resource type="Script" uid="uid://ch0noxpywl4dr" path="res://src/kodot.gd" id="6_yidds"]
 [ext_resource type="PackedScene" uid="uid://cq5se65kh2kty" path="res://objects/Hand.tscn" id="7_aku0y"]
 [ext_resource type="Texture2D" uid="uid://sevonurtk7wj" path="res://assets/sprites/ui/button.png" id="8_ct8vh"]
+[ext_resource type="Script" uid="uid://bec7opnicuh26" path="res://src/cursor.gd" id="8_y8sj7"]
+[ext_resource type="Texture2D" uid="uid://chykjr7e70qqa" path="res://assets/sprites/ui/cursor_1.png" id="9_38vg5"]
 
 [sub_resource type="GDScript" id="GDScript_dwu3b"]
 resource_name = "Arm"
@@ -18,6 +20,9 @@ func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventMouse:
 		points[0] = event.position
 "
+
+[sub_resource type="Gradient" id="Gradient_tg3ge"]
+colors = PackedColorArray(1, 1, 1, 0.254902, 1, 1, 1, 0)
 
 [node name="ScTest" type="Node2D"]
 metadata/_edit_horizontal_guides_ = [-328.0]
@@ -80,8 +85,40 @@ head = NodePath("Head")
 isRightHand = false
 handColor = Color(0.352077, 0.798701, 0.539477, 1)
 
+[node name="Cursor" type="Node2D" parent="Kodot/LeftHand" node_paths=PackedStringArray("sprite", "particles")]
+script = ExtResource("8_y8sj7")
+sprite = NodePath("Sprite2D")
+particles = NodePath("CPUParticles2D")
+
+[node name="CPUParticles2D" type="CPUParticles2D" parent="Kodot/LeftHand/Cursor"]
+amount = 12
+texture = ExtResource("9_38vg5")
+lifetime = 0.14
+gravity = Vector2(0, 0)
+color_ramp = SubResource("Gradient_tg3ge")
+
+[node name="Sprite2D" type="Sprite2D" parent="Kodot/LeftHand/Cursor"]
+texture = ExtResource("9_38vg5")
+flip_h = true
+
 [node name="RightHand" parent="Kodot" instance=ExtResource("7_aku0y")]
+visible = false
 handColor = Color(0.771546, 0.350255, 0.363124, 1)
+
+[node name="Cursor" type="Node2D" parent="Kodot/RightHand" node_paths=PackedStringArray("sprite", "particles")]
+script = ExtResource("8_y8sj7")
+sprite = NodePath("Sprite2D")
+particles = NodePath("CPUParticles2D")
+
+[node name="CPUParticles2D" type="CPUParticles2D" parent="Kodot/RightHand/Cursor"]
+amount = 12
+texture = ExtResource("9_38vg5")
+lifetime = 0.14
+gravity = Vector2(0, 0)
+color_ramp = SubResource("Gradient_tg3ge")
+
+[node name="Sprite2D" type="Sprite2D" parent="Kodot/RightHand/Cursor"]
+texture = ExtResource("9_38vg5")
 
 [node name="ShoulderCenter" type="Node2D" parent="Kodot"]
 

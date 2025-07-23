@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=3 uid="uid://crmajnmoal4mo"]
+[gd_scene load_steps=18 format=3 uid="uid://crmajnmoal4mo"]
 
 [ext_resource type="Shader" uid="uid://lrery4a0pywy" path="res://shaders/shSky.gdshader" id="1_axlu0"]
 [ext_resource type="Material" uid="uid://c8r3skhyn0j0m" path="res://assets/materials/floor.tres" id="1_mooqf"]
@@ -6,6 +6,7 @@
 [ext_resource type="Texture2D" uid="uid://dqsgu1hjtpugp" path="res://assets/textures/floor_new.png" id="4_5177l"]
 [ext_resource type="Texture2D" uid="uid://egppiwpa1guo" path="res://assets/sprites/objBubble.png" id="5_2737y"]
 [ext_resource type="PackedScene" uid="uid://de5ta8xcbroid" path="res://scenes/scTest.tscn" id="5_5177l"]
+[ext_resource type="PackedScene" uid="uid://rqdtnwf1wtb8" path="res://objects/Prim.tscn" id="6_uquk0"]
 [ext_resource type="Script" uid="uid://pamjchcrdg2u" path="res://src/test/MeltyTest.cs" id="7_e6pv5"]
 [ext_resource type="Script" uid="uid://btek54be5cctf" path="res://src/audio_visualizer.gd" id="7_upe25"]
 
@@ -120,6 +121,9 @@ draw_pass_1 = SubResource("QuadMesh_2737y")
 [node name="Camera3D" type="Camera3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 0.998209, 0.059829, 0, -0.059829, 0.998209, 0, 0.1964, 3.45188)
 fov = 38.0
+
+[node name="Prim" parent="." instance=ExtResource("6_uquk0")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.20528, 0, 3.44945)
 
 [node name="2D Background" type="CanvasLayer" parent="."]
 layer = 0

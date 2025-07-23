@@ -42,6 +42,7 @@ var skeletonTimeout := 4.0
 
 
 func _ready() -> void:
+	return
 	initialize()
 	set_sensorAngle(sensorAngle)
 	
@@ -53,6 +54,7 @@ func _ready() -> void:
 
 
 func _process(delta: float) -> void:
+	return
 	var joints: Dictionary[int, Vector3] = getSkeletonJoints3D()
 	if joints.is_empty():
 		return
@@ -91,7 +93,6 @@ func updateHands(joints: Dictionary[int, Vector3]):
 	
 	hl += shoulderCenter.position
 	hr += shoulderCenter.position
-	
 	
 	handLeft.position = hl
 	handRight.position = hr

@@ -1,0 +1,59 @@
+[gd_scene load_steps=10 format=3 uid="uid://v6feqvnfy10s"]
+
+[ext_resource type="Script" uid="uid://1r5tih6pju5f" path="res://src/button_bubble.gd" id="1_4r5xf"]
+[ext_resource type="PackedScene" uid="uid://dmvgtdsrjv4da" path="res://objects/FadeEffect.tscn" id="2_0wxgk"]
+[ext_resource type="PackedScene" uid="uid://3x32hucut58d" path="res://objects/BubbleParticles.tscn" id="3_1vnpo"]
+[ext_resource type="Script" uid="uid://0b1gplfnhnti" path="res://src/bubble_sprite.gd" id="4_w4se1"]
+[ext_resource type="FontFile" uid="uid://bsqsbdc7n77nc" path="res://assets/fonts/ARLRDBD.TTF" id="5_8r7mo"]
+[ext_resource type="Shader" uid="uid://dd6od8qwewmh5" path="res://shaders/Bubble.gdshader" id="6_dw3a3"]
+[ext_resource type="Texture2D" uid="uid://egppiwpa1guo" path="res://assets/sprites/objBubble.png" id="7_8j7if"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_wcxir"]
+resource_local_to_scene = true
+shader = ExtResource("6_dw3a3")
+shader_parameter/alpha = 1.0
+shader_parameter/alphaOffset = 0.25
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_bh6jd"]
+radius = 107.378
+
+[node name="ButtonBubble" type="Node2D" node_paths=PackedStringArray("colArea", "spriteParent", "sprite", "noteLabel")]
+script = ExtResource("1_4r5xf")
+colArea = NodePath("CollisionArea")
+spriteParent = NodePath("Sprite")
+sprite = NodePath("Sprite/Sprite2D")
+noteLabel = NodePath("Sprite/NoteLabel")
+objFade = ExtResource("2_0wxgk")
+objBubbleParticles = ExtResource("3_1vnpo")
+
+[node name="Sprite" type="Node2D" parent="." node_paths=PackedStringArray("sprite")]
+script = ExtResource("4_w4se1")
+sprite = NodePath("Sprite2D")
+
+[node name="NoteLabel" type="RichTextLabel" parent="Sprite"]
+offset_left = -176.0
+offset_top = -172.0
+offset_right = 178.0
+offset_bottom = 160.0
+mouse_filter = 2
+theme_override_colors/font_shadow_color = Color(0, 0.101961, 0.192157, 0.635294)
+theme_override_constants/shadow_offset_y = 6
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_outline_size = 42
+theme_override_fonts/normal_font = ExtResource("5_8r7mo")
+theme_override_font_sizes/normal_font_size = 116
+bbcode_enabled = true
+text = "[tornado freq=3 radius=5]Inst"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Sprite2D" type="Sprite2D" parent="Sprite"]
+material = SubResource("ShaderMaterial_wcxir")
+texture = ExtResource("7_8j7if")
+
+[node name="CollisionArea" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CollisionArea"]
+shape = SubResource("CircleShape2D_bh6jd")
+
+[node name="noteSfx" type="AudioStreamPlayer" parent="."]

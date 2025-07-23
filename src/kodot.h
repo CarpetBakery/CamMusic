@@ -16,6 +16,7 @@ public:
     HANDLE hNextSkeletonEvent;
 };
 
+
 namespace godot
 {
     class Kodot : public Node3D

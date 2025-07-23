@@ -4,6 +4,7 @@
 
 #include "gdexample.h"
 #include "kodot.h"
+#include "kodot2.h"
 
 #include <gdextension_interface.h>
 #include <godot_cpp/core/defs.hpp>
@@ -21,6 +22,7 @@ void initialize_example_module(ModuleInitializationLevel p_level)
 	// -- Register classes here --
 	GDREGISTER_RUNTIME_CLASS(GDExample);
 	GDREGISTER_RUNTIME_CLASS(Kodot);
+	GDREGISTER_RUNTIME_CLASS(Kodot2);
 }
 
 void uninitialize_example_module(ModuleInitializationLevel p_level) 
