@@ -137,7 +137,7 @@ void godot::Kodot2::processBody(uint64_t nTime, int bodyCount, IBody** bodies)
     }
 }
 
-bool godot::Kodot2::getJoints(int bodyId, Joint joints[])
+bool godot::Kodot2::getJoints(int bodyId, _Joint* joints)
 {
     if (bodyId < 0 || bodyId >= bodyCount)
     {
@@ -168,14 +168,15 @@ bool godot::Kodot2::getJoints(int bodyId, Joint joints[])
 
 godot::TypedArray<godot::Vector2> godot::Kodot2::getBodyJointPositions2D(int bodyId)
 {
-   Joint joints[JointType_Count];
+    TypedArray<Vector3> jointPoints;
+    Joint joints[JointType_Count];
+
     if (getJoints(bodyId, joints))
     {
         // Failed to get joints
-        return;
+        return jointPoints;
     }
 
-    TypedArray<Vector3> jointPoints;
     for (int i = 0; i < _countof(joints); i++)
     {
         // Convert points to screen-space
@@ -188,14 +189,15 @@ godot::TypedArray<godot::Vector2> godot::Kodot2::getBodyJointPositions2D(int bod
 
 godot::TypedArray<godot::Vector3> godot::Kodot2::getBodyJointPositions3D(int bodyId)
 {
+    TypedArray<Vector2> jointPoints;
     Joint joints[JointType_Count];
+    
     if (getJoints(bodyId, joints))
     {
         // Failed to get joints
-        return;
+        return jointPoints;
     }
 
-    TypedArray<Vector2> jointPoints;
     for (int i = 0; i < _countof(joints); i++)
     {
         CameraSpacePoint jPos = joints->Position;

@@ -10,6 +10,8 @@ class ICoordinateMapper;
 class IBodyFrameReader;
 class IBody;
 
+struct _Joint;
+
 
 namespace godot
 {
@@ -31,13 +33,13 @@ namespace godot
         // Number of currently detected bodies
         int bodyCount = 0;
 
-         // TODO: Maybe remove this later it's kind of ambiguous
+        // TODO: Maybe remove this later it's kind of ambiguous
         bool printVerboseErrors = false;
 
 
         // Acquire the next body frame
         void processBody(uint64_t nTime, int bodyCount, IBody** bodies);
-        bool getJoints(int bodyId, Joint joints[]);
+        bool getJoints(int bodyId, _Joint* joints);
 
         // Convert world coord to screen
         Vector2 bodyToScreen(float x, float y, float z);
@@ -51,7 +53,7 @@ namespace godot
         static void _bind_methods();
 
     public:
-        // Current Kinet
+        // Current Kinect
         IKinectSensor* kinectSensor;
         ICoordinateMapper* coordMapper;
 
