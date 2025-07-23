@@ -10,6 +10,7 @@ class ICoordinateMapper;
 class IBodyFrameReader;
 class IBody;
 
+
 namespace godot
 {
     class Kodot2 : public Node
@@ -20,14 +21,27 @@ namespace godot
         static const int DEPTH_WIDTH = 512;
         static const int DEPTH_HEIGHT = 424;
 
-        // TODO: Maybe remove this later it's kind of ambiguous
-        bool printVerboseErrors = false;
+        // The dimensions of the screen
+        Vector2 screenSize = Vector2(1920, 1080);
+
+        // Array of currently tracked bodies
+        // NOTE: BODY_COUNT is defined as 6 in Kinect.h
+        IBody* bodies[6] = {0};
 
         // Number of currently detected bodies
         int bodyCount = 0;
 
+         // TODO: Maybe remove this later it's kind of ambiguous
+        bool printVerboseErrors = false;
+
+
         // Acquire the next body frame
         void processBody(uint64_t nTime, int bodyCount, IBody** bodies);
+        bool getJoints(int bodyId, Joint joints[]);
+
+        // Convert world coord to screen
+        Vector2 bodyToScreen(float x, float y, float z);
+        Vector2 bodyToScreen(Vector3 bodyPoint);
         
 
         // -- Debug --
@@ -47,13 +61,14 @@ namespace godot
         // Initialize Kinect sensor
         bool initialize();
 
-        // NOTE: Not sure if I'll use this one
+        // Call at the beginning of the frame to update bodies and their joints
         void update(double delta);
 
         // Get an array of joint positions based on bodyId
-        void getBodyJoints(int bodyId);
+        TypedArray<Vector3> getBodyJointPositions3D(int bodyId);
+        TypedArray<Vector2> getBodyJointPositions2D(int bodyId);
 
-        
+
         // -- Exports --
         void set_printVerboseErrors(bool const p_printVerboseErrors);
         bool get_printVerboseErrors() const;

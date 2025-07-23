@@ -79,7 +79,7 @@ void godot::Kodot2::update(double delta)
         INT64 nTime = 0;
         hr = bodyFrame->get_RelativeTime(&nTime);
 
-        IBody* bodies[BODY_COUNT] = {0};
+        // IBody* bodies[BODY_COUNT] = {0};
 
         if (SUCCEEDED(hr))
         {
@@ -89,12 +89,12 @@ void godot::Kodot2::update(double delta)
         if (SUCCEEDED(hr))
         {
             // Update skeleton
-            processBody(nTime, BODY_COUNT, bodies);
+            // processBody(nTime, BODY_COUNT, bodies);
         }
     }
 
     SafeRelease(bodyFrame);
-    print_line("Updated"); 
+    print_line("Updated bodies"); 
 }
 
 void godot::Kodot2::processBody(uint64_t nTime, int bodyCount, IBody** bodies)
@@ -137,12 +137,91 @@ void godot::Kodot2::processBody(uint64_t nTime, int bodyCount, IBody** bodies)
     }
 }
 
-// TODO: Add position type (2D/3D) OH i need two functions
-void godot::Kodot2::getBodyJoints(int bodyId)
+bool godot::Kodot2::getJoints(int bodyId, Joint joints[])
 {
+    if (bodyId < 0 || bodyId >= bodyCount)
+    {
+        print_error("Error: bodyId is out of range");
+        return true;
+    }
 
+    IBody* body = bodies[bodyId];
+    if (!body)
+    {
+        print_error("Error: Body at index '" + godot::String(std::to_string(bodyId).c_str()) +"' is invalid.");
+        return true;
+    }
+
+    BOOLEAN tracked = false;
+    HRESULT hr = body->get_IsTracked(&tracked);
+
+    if (!(SUCCEEDED(hr) && tracked))
+    {
+        print_error("Error: Body is not tracked.");
+        return true;
+    }
+
+    // hr = body->GetJoints(_countof(joints), joints);
+    hr = body->GetJoints(JointType_Count, joints);
+    return false;
 }
 
+godot::TypedArray<godot::Vector2> godot::Kodot2::getBodyJointPositions2D(int bodyId)
+{
+   Joint joints[JointType_Count];
+    if (getJoints(bodyId, joints))
+    {
+        // Failed to get joints
+        return;
+    }
+
+    TypedArray<Vector3> jointPoints;
+    for (int i = 0; i < _countof(joints); i++)
+    {
+        // Convert points to screen-space
+        CameraSpacePoint jPos = joints->Position;
+        jointPoints.push_back(bodyToScreen(jPos.X, jPos.Y, jPos.Z));
+    }
+
+    return jointPoints;
+}
+
+godot::TypedArray<godot::Vector3> godot::Kodot2::getBodyJointPositions3D(int bodyId)
+{
+    Joint joints[JointType_Count];
+    if (getJoints(bodyId, joints))
+    {
+        // Failed to get joints
+        return;
+    }
+
+    TypedArray<Vector2> jointPoints;
+    for (int i = 0; i < _countof(joints); i++)
+    {
+        CameraSpacePoint jPos = joints->Position;
+        jointPoints.push_back(Vector3(jPos.X, jPos.Y, jPos.Z));
+    }
+
+    return jointPoints;
+}
+
+godot::Vector2 godot::Kodot2::bodyToScreen(float x, float y, float z)
+{
+    CameraSpacePoint bodyPoint = {x, y, z};
+    DepthSpacePoint depthPoint = {0};
+
+    coordMapper->MapCameraPointToDepthSpace(bodyPoint, &depthPoint);
+
+    return Vector2(
+        static_cast<float>(depthPoint.X * screenSize.width) / DEPTH_WIDTH,
+        static_cast<float>(depthPoint.Y * screenSize.height) / DEPTH_HEIGHT
+    );
+}
+
+godot::Vector2 godot::Kodot2::bodyToScreen(godot::Vector3 bodyPoint)
+{
+    return bodyToScreen(bodyPoint.x, bodyPoint.y, bodyPoint.z);
+}
 
 
 // -- Exports --
