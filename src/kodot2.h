@@ -2,6 +2,7 @@
 #define KODOT2_H
 
 #include <godot_cpp/classes/node.hpp>
+#include <godot_cpp/variant/typed_dictionary.hpp>
 
 // Forward declare Kinect types
 // TODO: Do this for Kodot 1
@@ -31,14 +32,16 @@ namespace godot
         IBody* bodies[6] = {0};
 
         // Number of currently detected bodies
-        int bodyCount = 0;
+        // TODO: currently doesn't track properly. Always set to 6
+        int bodyCount = 6;
 
         // TODO: Maybe remove this later it's kind of ambiguous
         bool printVerboseErrors = false;
 
+        // UNUSED
+        void processBody(uint64_t nTime, int _bodyCount, IBody** bodies);
 
-        // Acquire the next body frame
-        void processBody(uint64_t nTime, int bodyCount, IBody** bodies);
+        // Get a body's joints
         bool getJoints(int bodyId, _Joint* joints);
 
         // Convert world coord to screen
@@ -62,12 +65,14 @@ namespace godot
 
         // Initialize Kinect sensor
         bool initialize();
+        
+        void _exit_tree() override;
 
         // Call at the beginning of the frame to update bodies and their joints
         void update(double delta);
 
         // Get an array of joint positions based on bodyId
-        TypedArray<Vector3> getBodyJointPositions3D(int bodyId);
+        TypedDictionary<int, Vector3> getBodyJointPositions3D(int bodyId);
         TypedArray<Vector2> getBodyJointPositions2D(int bodyId);
 
 

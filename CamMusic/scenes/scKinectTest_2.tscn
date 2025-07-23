@@ -9,8 +9,10 @@ colors = PackedColorArray(1, 1, 1, 0.254902, 1, 1, 1, 0)
 
 [node name="scKinectTest" type="Node3D"]
 
-[node name="Kodot2" type="Kodot2" parent="."]
+[node name="Kodot2" type="Kodot2" parent="." node_paths=PackedStringArray("handLeft", "handRight")]
 script = ExtResource("3_pcuuj")
+handLeft = NodePath("../HandLeft")
+handRight = NodePath("../HandRight")
 
 [node name="HandLeft" type="Control" parent="."]
 visible = false
