@@ -1,0 +1,66 @@
+[gd_scene load_steps=5 format=3 uid="uid://dphxkkvrax1cd"]
+
+[ext_resource type="Script" uid="uid://bec7opnicuh26" path="res://src/cursor.gd" id="2_edv5a"]
+[ext_resource type="Texture2D" uid="uid://chykjr7e70qqa" path="res://assets/sprites/ui/cursor_1.png" id="3_oq6l7"]
+[ext_resource type="Script" uid="uid://d0fxbuao43h0a" path="res://src/test/kodot2_test.gd" id="3_pcuuj"]
+
+[sub_resource type="Gradient" id="Gradient_g6t6r"]
+colors = PackedColorArray(1, 1, 1, 0.254902, 1, 1, 1, 0)
+
+[node name="scKinectTest" type="Node3D"]
+
+[node name="Kodot2" type="Kodot2" parent="."]
+script = ExtResource("3_pcuuj")
+
+[node name="HandLeft" type="Control" parent="."]
+visible = false
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="HandLeft" type="ColorRect" parent="HandLeft"]
+layout_mode = 0
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+color = Color(0.26172, 0.846222, 0.675048, 1)
+
+[node name="HandRight" type="Control" parent="."]
+visible = false
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="HandRight" type="ColorRect" parent="HandRight"]
+layout_mode = 0
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+color = Color(0.914108, 0.300751, 0.300751, 1)
+
+[node name="SquaresParent" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Cursor" type="Node2D" parent="." node_paths=PackedStringArray("sprite", "particles")]
+script = ExtResource("2_edv5a")
+sprite = NodePath("Sprite2D")
+particles = NodePath("CPUParticles2D")
+
+[node name="CPUParticles2D" type="CPUParticles2D" parent="Cursor"]
+amount = 12
+texture = ExtResource("3_oq6l7")
+lifetime = 0.14
+gravity = Vector2(0, 0)
+color_ramp = SubResource("Gradient_g6t6r")
+
+[node name="Sprite2D" type="Sprite2D" parent="Cursor"]
+texture = ExtResource("3_oq6l7")
