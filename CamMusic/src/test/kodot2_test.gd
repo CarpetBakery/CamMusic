@@ -43,14 +43,13 @@ func _process(delta: float) -> void:
 	update(delta)
 	#print(getBodyCount())
 	
-	var joints: Dictionary[int, Vector3] = getBodyJointPositions3D(0)
-	print(joints)
-	if joints.is_empty():
-		return
-	
-	# Update hands
-	if joints.has(JointType.HandLeft):
-		handLeft.position = joints.get(JointType.HandLeft)
-	
-	if joints.has(JointType.HandRight):
-		handRight.position = joints.get(JointType.HandRight)
+	#var joints: Dictionary[int, Vector3] = getBodyJointPositions3D(0)
+	#if joints.is_empty():
+		#return
+	#
+	## Update hands
+	#if joints.has(JointType.HandLeft):
+		#handLeft.position = joints.get(JointType.HandLeft)
+	#
+	#if joints.has(JointType.HandRight):
+		#handRight.position = joints.get(JointType.HandRight)

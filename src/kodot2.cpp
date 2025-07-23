@@ -26,20 +26,62 @@ void godot::Kodot2::_bind_methods()
 
 bool godot::Kodot2::initialize()
 {
-    print_line("Initializing Kodot 2");
+    // print_line("Initializing Kodot 2");
+
+    // HRESULT hr;
+    // hr = GetDefaultKinectSensor(&kinectSensor);
+    // if (FAILED(hr))
+    // {
+    //     godot::print_error("Error: Failed to get default sensor.");
+    //     return true;
+    // }
+
+    // if (kinectSensor)
+    // {
+    //     // Initialize Kinect and get coordinate mapper and the body reader
+    //     IBodyFrameSource* bodyFrameSource = NULL;
+
+    //     hr = kinectSensor->Open();
+
+    //     if (SUCCEEDED(hr))
+    //     {
+    //         hr = kinectSensor->get_CoordinateMapper(&coordMapper);
+    //     }
+
+    //     if (SUCCEEDED(hr))
+    //     {
+    //         hr = kinectSensor->get_BodyFrameSource(&bodyFrameSource);
+    //     }
+
+    //     if (SUCCEEDED(hr))
+    //     {
+    //         hr = bodyFrameSource->OpenReader(&bodyFrameReader);
+    //     }
+
+    //     SafeRelease(bodyFrameSource);
+    // }
+
+    // if (!kinectSensor || FAILED(hr))
+    // {
+    //     godot::print_error("Error: No ready Kinect found.");
+    //     return true;
+    // }
+
+    // print_line("Kodot 2 initialized.");
+    // return false;
 
     HRESULT hr;
+
     hr = GetDefaultKinectSensor(&kinectSensor);
     if (FAILED(hr))
     {
-        godot::print_error("Error: Failed to get default sensor.");
         return true;
     }
 
     if (kinectSensor)
     {
-        // Initialize Kinect and get coordinate mapper and the body reader
-        IBodyFrameSource* bodyFrameSource = NULL;
+        // Initialize the Kinect and get coordinate mapper and the body reader
+        IBodyFrameSource* pBodyFrameSource = NULL;
 
         hr = kinectSensor->Open();
 
@@ -50,24 +92,26 @@ bool godot::Kodot2::initialize()
 
         if (SUCCEEDED(hr))
         {
-            hr = kinectSensor->get_BodyFrameSource(&bodyFrameSource);
+            hr = kinectSensor->get_BodyFrameSource(&pBodyFrameSource);
         }
 
         if (SUCCEEDED(hr))
         {
-            hr = bodyFrameSource->OpenReader(&bodyFrameReader);
+            hr = pBodyFrameSource->OpenReader(&bodyFrameReader);
         }
 
-        SafeRelease(bodyFrameSource);
+        SafeRelease(pBodyFrameSource);
     }
 
     if (!kinectSensor || FAILED(hr))
     {
-        godot::print_error("Error: No ready Kinect found.");
+        // SetStatusMessage(L"No ready Kinect found!", 10000, true);
+        // return E_FAIL;
         return true;
     }
 
-    print_line("Kodot 2 initialized.");
+    print_line("Kinect initialized");
+
     return false;
 }
 
@@ -87,37 +131,95 @@ void godot::Kodot2::_exit_tree()
 
 void godot::Kodot2::update(double delta)
 {
-    if (!bodyFrameReader)
-    {
-        print_error("No body frame reader");
-        return; 
-    }
+    // if (!bodyFrameReader)
+    // {
+    //     print_error("No body frame reader");
+    //     return; 
+    // }
 
-    IBodyFrame* bodyFrame = NULL;
-    HRESULT hr = bodyFrameReader->AcquireLatestFrame(&bodyFrame);
+    // IBodyFrame* bodyFrame = NULL;
+    // HRESULT hr = bodyFrameReader->AcquireLatestFrame(&bodyFrame);
+
+    // if (SUCCEEDED(hr))
+    // {
+    //     INT64 nTime = 0;
+    //     hr = bodyFrame->get_RelativeTime(&nTime);
+
+    //     // IBody* bodies[BODY_COUNT] = {0};
+
+    //     if (SUCCEEDED(hr))
+    //     {
+    //         hr = bodyFrame->GetAndRefreshBodyData(_countof(bodies), bodies);
+    //     }
+
+    //     if (SUCCEEDED(hr))
+    //     {
+    //         // Update skeleton
+    //         processBody(nTime, BODY_COUNT, bodies);
+    //     }
+    // }
+    // SafeRelease(bodyFrame);
+
+    // // Figure out how many bodies are in this frame
+
+    IBodyFrame* pBodyFrame = NULL;
+
+    HRESULT hr = bodyFrameReader->AcquireLatestFrame(&pBodyFrame);
 
     if (SUCCEEDED(hr))
     {
         INT64 nTime = 0;
-        hr = bodyFrame->get_RelativeTime(&nTime);
 
-        // IBody* bodies[BODY_COUNT] = {0};
+        hr = pBodyFrame->get_RelativeTime(&nTime);
+
+        IBody* ppBodies[BODY_COUNT] = {0};
 
         if (SUCCEEDED(hr))
         {
-            hr = bodyFrame->GetAndRefreshBodyData(_countof(bodies), bodies);
+            hr = pBodyFrame->GetAndRefreshBodyData(_countof(ppBodies), ppBodies);
         }
 
         if (SUCCEEDED(hr))
         {
-            // Update skeleton
-            processBody(nTime, BODY_COUNT, bodies);
+            HRESULT hr;
+            TypedArray<Vector3> jointPoints;
+            for (int i = 0; i < BODY_COUNT; ++i)
+            {
+                IBody* pBody = bodies[i];
+                if (pBody)
+                {
+                    BOOLEAN bTracked = false;
+                    hr = pBody->get_IsTracked(&bTracked);
+
+                    if (SUCCEEDED(hr) && bTracked)
+                    {
+                        Joint joints[JointType_Count]; 
+                        hr = pBody->GetJoints(JointType_Count, joints);
+                        if (SUCCEEDED(hr))
+                        {
+                            for (int j = 0; j < JointType_Count; ++j)
+                            {
+                                CameraSpacePoint jPos = joints[j].Position;
+                                jointPoints.push_back(Vector3(jPos.X, jPos.Y, jPos.Z));
+
+                                // print_line(Vector3(jPos.X, jPos.Y, jPos.Z));
+
+                                // jointPoints.push_back(bodyToScreen(jPos.X, jPos.Y, jPos.Z));
+                            }
+                        }
+                        print_line(jointPoints);
+                        break;
+                    }
+                }
+            }
+        }
+
+        for (int i = 0; i < _countof(ppBodies); ++i)
+        {
+            SafeRelease(ppBodies[i]);
         }
     }
-    SafeRelease(bodyFrame);
-
-    // Figure out how many bodies are in this frame
-    // TODO:
+    SafeRelease(pBodyFrame);
 }
 
 void godot::Kodot2::processBody(uint64_t nTime, int _bodyCount, IBody** bodies)
