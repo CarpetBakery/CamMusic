@@ -9,7 +9,6 @@
 
 struct Kinect
 {
-public:
     // Current connected Kinect sensor
     class INuiSensor* sensor;
     HANDLE hNextSkeletonEvent;

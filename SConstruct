@@ -16,11 +16,12 @@ env = SConscript("godot-cpp/SConstruct")
 env.Append(CPPPATH=[
     "src/",
 
-
     "C:/Program Files/Microsoft SDKs/Kinect/v1.8/inc/", 
 
     # For Kinect 1.8 interactions
     # "C:/Program Files/Microsoft SDKs/Kinect/Developer Toolkit v1.8.0/inc", 
+
+    "C:/Program Files/Microsoft SDKs/Kinect/v2.0_1409/inc/",
 ])
 sources = Glob("src/*.cpp")
 
@@ -30,14 +31,16 @@ env.Append(LIBPATH = [
 
     # For Kinect 1.8 interactions
     # "C:/Program Files/Microsoft SDKs/Kinect/Developer Toolkit v1.8.0/Lib/amd64",
+
+    "C:/Program Files/Microsoft SDKs/Kinect/v2.0_1409/Lib/x64/",
 ])
 env.Append(LIBS = [
     "Kinect10",
 
-    
-
     # For Kinect 1.8 interactions
     # "KinectInteraction180_64",
+
+    "Kinect20",
 ])
 
 
