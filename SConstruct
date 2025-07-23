@@ -14,20 +14,30 @@ env = SConscript("godot-cpp/SConstruct")
 
 # tweak this if you want to use different folders, or more folders, to store your source code in.
 env.Append(CPPPATH=[
-    "C:/Program Files/Microsoft SDKs/Kinect/v1.8/inc/", 
-    "C:/Program Files/Microsoft SDKs/Kinect/Developer Toolkit v1.8.0/inc", 
     "src/",
+
+
+    "C:/Program Files/Microsoft SDKs/Kinect/v1.8/inc/", 
+
+    # For Kinect 1.8 interactions
+    # "C:/Program Files/Microsoft SDKs/Kinect/Developer Toolkit v1.8.0/inc", 
 ])
 sources = Glob("src/*.cpp")
 
 # Add libraries
 env.Append(LIBPATH = [
     "C:/Program Files/Microsoft SDKs/Kinect/v1.8/lib/amd64/",
-    "C:/Program Files/Microsoft SDKs/Kinect/Developer Toolkit v1.8.0/Lib/amd64",
+
+    # For Kinect 1.8 interactions
+    # "C:/Program Files/Microsoft SDKs/Kinect/Developer Toolkit v1.8.0/Lib/amd64",
 ])
 env.Append(LIBS = [
     "Kinect10",
-    "KinectInteraction180_64",
+
+    
+
+    # For Kinect 1.8 interactions
+    # "KinectInteraction180_64",
 ])
 
 

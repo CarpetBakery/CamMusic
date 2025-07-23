@@ -4,7 +4,6 @@
 #include "NuiApi.h"
 #include "NuiSensor.h"
 #include "NuiSkeleton.h"
-#include "KinectInteraction.h"
 
 #include "util.h"
 

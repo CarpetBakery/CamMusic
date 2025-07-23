@@ -1,11 +1,15 @@
 #ifndef KODOT_H
 #define KODOT_H
 
+#ifndef WIN32_LEAN_AND_MEAN
+#define WIN32_LEAN_AND_MEAN
+#endif
+
+#include <windows.h>
+#include <ShlObj.h>
+
 #include <godot_cpp/classes/node3d.hpp>
 #include <godot_cpp/variant/typed_dictionary.hpp>
-#include <windows.h>
-
-#define WIN32_LEAN_AND_MEAN
 
 
 struct Kinect
