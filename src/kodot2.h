@@ -1,6 +1,8 @@
 #ifndef KODOT2_H
 #define KODOT2_H
 
+#include "windowsdef.h"
+
 #include <godot_cpp/classes/node.hpp>
 
 namespace godot
