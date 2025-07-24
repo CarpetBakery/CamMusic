@@ -13,6 +13,17 @@
                 "kind": "build",
                 "isDefault": true
             }
+        },
+        {
+            "label": "build_debug",
+            "type": "shell",
+            // "command": "scons -j12 target=template_debug debug_symbols=yes",
+            "command": "scons target=template_debug debug_symbols=yes",
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
         }
     ]
 }
