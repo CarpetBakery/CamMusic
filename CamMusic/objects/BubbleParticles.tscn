@@ -6,6 +6,8 @@
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_ejdes"]
 shader = ExtResource("1_a3ola")
+shader_parameter/alpha = 1.0
+shader_parameter/alphaOffset = 1.0
 
 [sub_resource type="Gradient" id="Gradient_fo6o1"]
 colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)

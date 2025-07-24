@@ -62,7 +62,7 @@ namespace godot
         Vector2 screenSize = Vector2(1920, 1080);
 
         // Array of bodies that we can track
-        TypedArray<Kodot2Body> bodies;
+        TypedArray<Kodot2Body> kodotBodies;
 
         // TODO: Maybe remove this later it's kind of ambiguous
         bool printVerboseErrors = false;
@@ -109,7 +109,9 @@ namespace godot
 
         void set_screenSize(Vector2 const p_screenSize);
         Vector2 get_screenSize() const;
-
+        
+        void set_kodotBodies(TypedArray<Kodot2Body> const p_kodotBodies);
+        TypedArray<Kodot2Body> get_kodotBodies() const;
 
         // -- Get/set --
         // Get the number of currently detected bodies

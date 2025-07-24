@@ -26,6 +26,11 @@ void godot::Kodot2::_bind_methods()
     ClassDB::bind_method(D_METHOD("get_screenSize"), &godot::Kodot2::get_screenSize);
 	ClassDB::bind_method(D_METHOD("set_screenSize", "p_screenSize"), &godot::Kodot2::set_screenSize);
     ADD_PROPERTY(PropertyInfo(Variant::VECTOR2, "screenSize"), "set_screenSize", "get_screenSize");
+    
+    ClassDB::bind_method(D_METHOD("get_kodotBodies"), &godot::Kodot2::get_kodotBodies);
+	ClassDB::bind_method(D_METHOD("set_kodotBodies", "p_kodotBodies"), &godot::Kodot2::set_kodotBodies);
+    ADD_PROPERTY(PropertyInfo(Variant::ARRAY, "kodotBodies"), "set_kodotBodies", "get_kodotBodies");
+
 
     // Joints enum
     BIND_ENUM_CONSTANT(SpineBase);
@@ -62,7 +67,6 @@ bool godot::Kodot2::initialize()
     print_line("Initializing Kinect 2");
 
     HRESULT hr;
-    
     hr = GetDefaultKinectSensor(&kinectSensor);
     if (FAILED(hr))
     {
@@ -100,8 +104,11 @@ bool godot::Kodot2::initialize()
         return true;
     }
 
-    // Setup bodies
-
+    // Fill kodotBodies with new body objects
+    for (int i = 0; i < BODY_COUNT; i++)
+    {
+        kodotBodies.push_back(memnew(Kodot2Body));
+    }
 
     print_line("Kinect 2 initialized");
     return false;
@@ -351,6 +358,15 @@ void godot::Kodot2::set_screenSize(Vector2 const p_screenSize)
 godot::Vector2 godot::Kodot2::get_screenSize() const
 {
     return screenSize;
+}
+
+void godot::Kodot2::set_kodotBodies(TypedArray<Kodot2Body> const p_kodotBodies)
+{
+    kodotBodies = p_kodotBodies;
+}
+godot::TypedArray<godot::Kodot2Body> godot::Kodot2::get_kodotBodies() const
+{
+    return kodotBodies;
 }
 
 
