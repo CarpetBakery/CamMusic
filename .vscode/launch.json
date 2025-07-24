@@ -1,0 +1,17 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "lldb",
+            "request": "attach",
+            "preLaunchTask": "build",
+            "name": "Debug",
+            "program": "C:/Users/Matt/Documents/Godot/Engine/Godot_v4.4.1-stable_mono_win64/Godot_v4.4.1-stable_mono_win64.exe",
+            // "args": ["--path", "C:/Users/Matt/Documents/Godot/2025/CamMusic/CamMusic"],
+            "cwd": "${workspaceFolder}",
+        },
+    ]
+}

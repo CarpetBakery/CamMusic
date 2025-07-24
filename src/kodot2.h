@@ -4,6 +4,8 @@
 #include <godot_cpp/classes/node.hpp>
 #include <godot_cpp/variant/typed_dictionary.hpp>
 
+#include "kodot2_body.h"
+
 // Forward declare Kinect types
 // TODO: Do this for Kodot 1
 class IKinectSensor;
@@ -49,7 +51,7 @@ namespace godot
     {
         GDCLASS(Kodot2, Node);
 
-   protected:
+    protected:
         static void _bind_methods();
 
     private:
@@ -58,10 +60,6 @@ namespace godot
 
         // The dimensions of the screen
         Vector2 screenSize = Vector2(1920, 1080);
-
-        // Array of currently tracked bodies
-        // NOTE: BODY_COUNT is defined as 6 in Kinect.h
-        IBody* bodies[6] = {0};
 
         // TODO: Maybe remove this later it's kind of ambiguous
         bool printVerboseErrors = false;
@@ -88,10 +86,10 @@ namespace godot
         // Body reader
         IBodyFrameReader* bodyFrameReader;
 
+        void _exit_tree() override;
+        
         // Initialize Kinect sensor
         bool initialize();
-        
-        void _exit_tree() override;
 
         // Call at the beginning of the frame to update bodies and their joints
         TypedArray<Vector2> update(double delta);

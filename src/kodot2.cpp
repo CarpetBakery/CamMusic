@@ -5,6 +5,7 @@
 #include <Kinect.h>
 
 #include <godot_cpp/core/class_db.hpp>
+#include <godot_cpp/variant/utility_functions.hpp>
 
 
 void godot::Kodot2::_bind_methods()
@@ -123,7 +124,7 @@ godot::TypedArray<godot::Vector2> godot::Kodot2::update(double delta)
     if (!bodyFrameReader)
     {
         return jointPoints;
-    }    
+    }
 
     IBodyFrame* bodyFrame = NULL;
     HRESULT hr = bodyFrameReader->AcquireLatestFrame(&bodyFrame);
@@ -207,58 +208,57 @@ godot::TypedArray<godot::Vector2> godot::Kodot2::processBody(uint64_t nTime, int
 
 bool godot::Kodot2::getJoints(int bodyId, _Joint* joints)
 {
-    if (bodyId < 0 || bodyId >= BODY_COUNT)
-    {
-        print_error("Error: bodyId is out of range");
-        return true;
-    }
-
-    // IBody* body = bodies[bodyId];
-    IBody* body;
-    bool bodyFound = false;
-    for (int i = 0; i < BODY_COUNT; i++)
-    {
-        body = bodies[i];
-        if (body)
-        {
-            bodyFound = true;
-            break;
-        }
-    }
-
-    if (!bodyFound)
-    {
-        print_error("Error: No valid body found.");
-        return true;
-    }
-
-    BOOLEAN tracked = false;
-    HRESULT hr = body->get_IsTracked(&tracked);
-
-    // if (!(SUCCEEDED(hr) && tracked))
+    // if (bodyId < 0 || bodyId >= BODY_COUNT)
     // {
-    //     print_error("Error: Body is not tracked.");
+    //     print_error("Error: bodyId is out of range");
     //     return true;
     // }
 
-    if (!SUCCEEDED(hr))
-    {
-        print_error("Body didn't succeed");
-        return true;
-    }
+    // IBody* body;
+    // bool bodyFound = false;
+    // for (int i = 0; i < BODY_COUNT; i++)
+    // {
+    //     body = bodies[i];
+    //     if (body)
+    //     {
+    //         bodyFound = true;
+    //         break;
+    //     }
+    // }
 
-    if (!tracked)
-    {
-        // print_error("Body isn't tracked");
-        return true;
-    }
+    // if (!bodyFound)
+    // {
+    //     print_error("Error: No valid body found.");
+    //     return true;
+    // }
 
-    hr = body->GetJoints(JointType_Count, joints);
-    if (!SUCCEEDED(hr))
-    {
-        print_error("Error: Unable to get joints");
-        return true;
-    }
+    // BOOLEAN tracked = false;
+    // HRESULT hr = body->get_IsTracked(&tracked);
+
+    // // if (!(SUCCEEDED(hr) && tracked))
+    // // {
+    // //     print_error("Error: Body is not tracked.");
+    // //     return true;
+    // // }
+
+    // if (!SUCCEEDED(hr))
+    // {
+    //     print_error("Body didn't succeed");
+    //     return true;
+    // }
+
+    // if (!tracked)
+    // {
+    //     // print_error("Body isn't tracked");
+    //     return true;
+    // }
+
+    // hr = body->GetJoints(JointType_Count, joints);
+    // if (!SUCCEEDED(hr))
+    // {
+    //     print_error("Error: Unable to get joints");
+    //     return true;
+    // }
 
     return false;
 }
