@@ -9,6 +9,11 @@
             "request": "attach",
             // "preLaunchTask": "build",
             "name": "Debug",
+
+            // "program": "C:/Users/matt/Documents/Godot/Editor/Godot_v4.4.1_mono/Godot_v4.4.1-stable_mono_win64.exe",
+            "pid": "${command:pickMyProcess}",
+
+
             // "program": "C:/Users/Matt/Documents/Godot/Engine/Godot_v4.4.1-stable_mono_win64/Godot_v4.4.1-stable_mono_win64.exe",
             // "args": ["--path", "C:/Users/Matt/Documents/Godot/2025/CamMusic/CamMusic"],
             // "cwd": "${workspaceFolder}",

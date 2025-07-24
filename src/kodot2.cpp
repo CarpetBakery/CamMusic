@@ -6,6 +6,16 @@
 
 #include <godot_cpp/core/class_db.hpp>
 #include <godot_cpp/variant/utility_functions.hpp>
+#include <godot_cpp/classes/time.hpp>
+
+godot::String getMsec()
+{
+    using namespace godot;
+
+    Time* time = Time::get_singleton();
+
+    return godot::String(std::to_string(time->get_ticks_msec()).c_str());
+}
 
 
 void godot::Kodot2::_bind_methods()
@@ -105,7 +115,7 @@ bool godot::Kodot2::initialize()
         return true;
     }
 
-    // Fill kodotBodies with new body objects
+    // Setup kodotBodies
     for (int i = 0; i < BODY_COUNT; i++)
     {
         kodotBodies.push_back(memnew(Kodot2Body));
@@ -131,7 +141,6 @@ void godot::Kodot2::_exit_tree()
 godot::TypedArray<godot::Vector2> godot::Kodot2::update(double delta)
 {
     TypedArray<Vector2> jointPoints;
-
     if (!bodyFrameReader)
     {
         return jointPoints;
@@ -142,7 +151,7 @@ godot::TypedArray<godot::Vector2> godot::Kodot2::update(double delta)
 
     if (SUCCEEDED(hr))
     {
-        // NOTE: I'm not sure if we really need the timestamp stuff
+        // NOTE: We don't really need the timestamp stuff
         // might remove this later
         INT64 time = 0;
         hr = bodyFrame->get_RelativeTime(&time);
@@ -154,12 +163,13 @@ godot::TypedArray<godot::Vector2> godot::Kodot2::update(double delta)
         {
             // Seems like _countof is just a constant value...'
             // Might just replace with BODY_COUNT later
+            // UPDATE: I'm not so sure of this now
             hr = bodyFrame->GetAndRefreshBodyData(_countof(iBodies), iBodies);
         }
 
         if (SUCCEEDED(hr))
         {
-            jointPoints = processBody(time, BODY_COUNT, iBodies);
+            jointPoints = processBodies(time, _countof(iBodies), iBodies);
         }
 
         // Make sure to free the iBodies
@@ -172,48 +182,79 @@ godot::TypedArray<godot::Vector2> godot::Kodot2::update(double delta)
     return jointPoints;
 }
 
-godot::TypedArray<godot::Vector2> godot::Kodot2::processBody(uint64_t nTime, int bodyCount, IBody** iBodies)
+godot::TypedArray<godot::Vector2> godot::Kodot2::processBodies(uint64_t nTime, int bodyCount, IBody** iBodies)
 {
+    // Reset tracking flags on kodot bodies
+    for (int i = 0; i < bodyCount; i++)
+    {
+        Kodot2Body* body = cast_to<Kodot2Body>(kodotBodies.get(i));
+        body->isTracked = false;
+    }    
+
     HRESULT hr;
     TypedArray<Vector2> jointPoints;
     for (int i = 0; i < bodyCount; i++)
-    {
-        IBody* body = iBodies[i];
-        if (body)
+    {        
+        IBody* iBody = iBodies[i];
+        if (!iBody)
         {
-            BOOLEAN tracked = false;
-            hr = body->get_IsTracked(&tracked);
-            
-            if (SUCCEEDED(hr) && tracked)
+            continue;
+        }
+
+        BOOLEAN tracked = false;
+        hr = iBody->get_IsTracked(&tracked);
+
+        if (!(SUCCEEDED(hr) && tracked))
+        {
+            continue;
+        }
+        
+        Joint joints[JointType_Count];
+        HandState leftHandState = HandState_Unknown;
+        HandState rightHandState = HandState_Unknown;
+        
+        iBody->get_HandLeftState(&leftHandState);
+        iBody->get_HandRightState(&rightHandState);
+
+        hr = iBody->GetJoints(_countof(joints), joints);
+        if (SUCCEEDED(hr))
+        {
+            Kodot2Body* body = cast_to<Kodot2Body>(kodotBodies.get(i));
+            body->isTracked = true;
+            body->joints.clear();
+
+            // Add joint positions to this body's joints
+            for (int k = 0; k < JointType_Count; k++)
             {
-                Joint joints[JointType_Count];
-                HandState leftHandState = HandState_Unknown;
-                HandState rightHandState = HandState_Unknown;
-
-                body->get_HandLeftState(&leftHandState);
-                body->get_HandRightState(&rightHandState);
-
-                hr = body->GetJoints(_countof(joints), joints);
-                if (SUCCEEDED(hr))
-                {
-                    for (int j = 0; j < _countof(joints); j++)
-                    {
-                        // Currently: Stop at the first body that we find
-                        CameraSpacePoint jPos = joints[j].Position;
-                        jointPoints.push_back(bodyToScreen(Vector3(
-                            jPos.X, jPos.Y, jPos.Z
-                        )));
-
-                        // jointPoints.push_back(Vector3(
-                        //     jPos.X, jPos.Y, jPos.Z
-                        // ));
-                    }
-                    return jointPoints;
-                }
+                CameraSpacePoint jPos = joints[k].Position;
+                // body->joints.set(j, Vector3(
+                //     jPos.X,
+                //     jPos.Y,
+                //     jPos.Z
+                // ));
+                body->joints.push_back(Vector3(
+                    jPos.X,
+                    jPos.Y,
+                    jPos.Z
+                ));
             }
         }
     }
-    print_line("Searching for bodies...");
+
+    // Return the joints of the first body we see
+    for (int k = 0; k < kodotBodies.size(); k++)
+    {
+        Kodot2Body* body = cast_to<Kodot2Body>(kodotBodies.get(k));
+        if (body->isTracked)
+        {
+            TypedArray<Vector3> joints = body->joints;
+            for (int i = 0; i < joints.size(); i++)
+            {
+                jointPoints.push_back(bodyToScreen(joints.get(i)));
+            }
+            break;
+        }
+    }
     return jointPoints;
 }
 

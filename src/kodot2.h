@@ -68,7 +68,7 @@ namespace godot
         bool printVerboseErrors = false;
 
         // UNUSED
-        TypedArray<Vector2> processBody(uint64_t nTime, int bodyCount, IBody** bodies);
+        TypedArray<Vector2> processBodies(uint64_t nTime, int bodyCount, IBody** bodies);
 
         // Get a body's joints
         bool getJoints(int bodyId, _Joint* joints);

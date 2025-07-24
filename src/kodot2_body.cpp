@@ -1,5 +1,7 @@
 #include "kodot2_body.h"
 
+#include "kodot2.h"
+
 using namespace godot;
 
 void Kodot2Body::_bind_methods() 
@@ -18,11 +20,24 @@ void Kodot2Body::_bind_methods()
 Kodot2Body::Kodot2Body() 
 {
     print_line("Kodot Body Created");
+    
+    // Allocate joints array
+    joints.resize(JointType::Count);
 }
 
 Kodot2Body::~Kodot2Body() 
 {
     print_line("Kodot Body Destroyed");
+}
+
+
+String Kodot2Body::toString()
+{
+    if (isTracked)
+    {
+        return "true";
+    }
+    return "false";
 }
 
 

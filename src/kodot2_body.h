@@ -16,15 +16,16 @@ namespace godot
     private:
         
     public:
-        Kodot2Body();
-        ~Kodot2Body();
-
         // Is this body currently being tracked?
         bool isTracked = false;
 
         // Joint positions in 3D Space
         TypedArray<Vector3> joints;
 
+        Kodot2Body();
+        ~Kodot2Body();
+
+        String toString();
 
         // -- Exports --
         void set_isTracked(bool const p_isTracked);
