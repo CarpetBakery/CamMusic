@@ -123,7 +123,7 @@ transform = Transform3D(1, 0, 0, 0, 0.998209, 0.059829, 0, -0.059829, 0.998209, 
 fov = 38.0
 
 [node name="Prim" parent="." instance=ExtResource("6_uquk0")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.20528, 0, 3.44945)
+transform = Transform3D(0.291814, 0, 0, 0, 0.291814, 0, 0, 0, 0.291814, -0.686668, -0.308603, 2.17699)
 
 [node name="2D Background" type="CanvasLayer" parent="."]
 layer = 0
@@ -148,3 +148,4 @@ player = NodePath("AudioStreamPlayer")
 [node name="Main2D" type="CanvasLayer" parent="."]
 
 [node name="ScTest" parent="Main2D" instance=ExtResource("5_5177l")]
+position = Vector2(46, 0)

@@ -101,9 +101,8 @@ namespace godot
         void update(double delta);
 
         // Get an array of joint positions based on bodyId
-        // TODO: Make these work
-        TypedDictionary<int, Vector3> getBodyJointPositions3D(int bodyId);
-        TypedArray<Vector2> getBodyJointPositions2D(int bodyId);
+        TypedArray<Vector2> getBodyJointPositions2D();
+        TypedArray<Vector3> getBodyJointPositions3D();
 
 
         // -- Exports --

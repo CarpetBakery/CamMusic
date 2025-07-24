@@ -58,7 +58,7 @@ func _process(delta: float) -> void:
 	
 	update(delta)
 	
-	var jointPoints := getBodyJointPositions2D(0)
+	var jointPoints := getBodyJointPositions2D()
 	if jointPoints.is_empty():
 		return
 	

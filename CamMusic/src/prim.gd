@@ -13,4 +13,8 @@ func _ready() -> void:
 	assert(animPlayer, "Error: could not find Prim's animation player.")
 	
 	animPlayer.play("talk")
-	
+	animPlayer.animation_finished.connect(animFinished)
+
+
+func animFinished(name: String):
+	animPlayer.play(name)

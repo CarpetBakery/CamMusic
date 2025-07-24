@@ -14,8 +14,8 @@ void godot::Kodot2::_bind_methods()
     // Expose methods to GDScript
     ClassDB::bind_method(D_METHOD("initialize"), &godot::Kodot2::initialize);
     ClassDB::bind_method(D_METHOD("update", "delta"), &godot::Kodot2::update);
-    ClassDB::bind_method(D_METHOD("getBodyJointPositions3D", "bodyId"), &godot::Kodot2::getBodyJointPositions3D);
-    ClassDB::bind_method(D_METHOD("getBodyJointPositions2D", "bodyId"), &godot::Kodot2::getBodyJointPositions2D);
+    ClassDB::bind_method(D_METHOD("getBodyJointPositions3D"), &godot::Kodot2::getBodyJointPositions3D);
+    ClassDB::bind_method(D_METHOD("getBodyJointPositions2D"), &godot::Kodot2::getBodyJointPositions2D);
 
     // -- Get/set --
     ClassDB::bind_method(D_METHOD("getBodyCount"), &godot::Kodot2::getBodyCount);
@@ -247,7 +247,7 @@ bool godot::Kodot2::getJoints(int bodyId, _Joint* joints)
     return false;
 }
 
-godot::TypedArray<godot::Vector2> godot::Kodot2::getBodyJointPositions2D(int bodyId)
+godot::TypedArray<godot::Vector2> godot::Kodot2::getBodyJointPositions2D()
 {
     Kodot2Body* body = getFirstValidBody();
     TypedArray<Vector2> jointPoints;
@@ -267,10 +267,15 @@ godot::TypedArray<godot::Vector2> godot::Kodot2::getBodyJointPositions2D(int bod
     return jointPoints;
 }
 
-godot::TypedDictionary<int, godot::Vector3> godot::Kodot2::getBodyJointPositions3D(int bodyId)
+godot::TypedArray<godot::Vector3> godot::Kodot2::getBodyJointPositions3D()
 {
-    TypedArray<Vector3> jointPoints;
-    return jointPoints;
+    Kodot2Body* body = getFirstValidBody();
+    if (body == nullptr)
+    {
+        return TypedArray<Vector3>();
+    }
+
+    return body->joints;
 }
 
 godot::Vector2 godot::Kodot2::bodyToScreen(float x, float y, float z)
