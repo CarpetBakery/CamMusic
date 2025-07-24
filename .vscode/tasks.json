@@ -6,7 +6,8 @@
         {
             "label": "build",
             "type": "shell",
-            "command": "scons -j12 target=template_debug debug_symbols=yes",
+            // "command": "scons -j12 target=template_debug debug_symbols=yes",
+            "command": "./build.bat",
             "problemMatcher": [],
             "group": {
                 "kind": "build",

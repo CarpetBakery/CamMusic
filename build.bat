@@ -1,1 +1,1 @@
-scons platform=windows -j12
+scons platform=windows
