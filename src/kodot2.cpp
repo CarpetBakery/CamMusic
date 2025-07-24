@@ -10,6 +10,7 @@
 
 void godot::Kodot2::_bind_methods()
 {
+    // Expose methods to GDScript
     ClassDB::bind_method(D_METHOD("initialize"), &godot::Kodot2::initialize);
     ClassDB::bind_method(D_METHOD("update", "delta"), &godot::Kodot2::update);
     ClassDB::bind_method(D_METHOD("getBodyJointPositions3D", "bodyId"), &godot::Kodot2::getBodyJointPositions3D);
@@ -218,100 +219,18 @@ godot::TypedArray<godot::Vector2> godot::Kodot2::processBody(uint64_t nTime, int
 
 bool godot::Kodot2::getJoints(int bodyId, _Joint* joints)
 {
-    // if (bodyId < 0 || bodyId >= BODY_COUNT)
-    // {
-    //     print_error("Error: bodyId is out of range");
-    //     return true;
-    // }
-
-    // IBody* body;
-    // bool bodyFound = false;
-    // for (int i = 0; i < BODY_COUNT; i++)
-    // {
-    //     body = bodies[i];
-    //     if (body)
-    //     {
-    //         bodyFound = true;
-    //         break;
-    //     }
-    // }
-
-    // if (!bodyFound)
-    // {
-    //     print_error("Error: No valid body found.");
-    //     return true;
-    // }
-
-    // BOOLEAN tracked = false;
-    // HRESULT hr = body->get_IsTracked(&tracked);
-
-    // // if (!(SUCCEEDED(hr) && tracked))
-    // // {
-    // //     print_error("Error: Body is not tracked.");
-    // //     return true;
-    // // }
-
-    // if (!SUCCEEDED(hr))
-    // {
-    //     print_error("Body didn't succeed");
-    //     return true;
-    // }
-
-    // if (!tracked)
-    // {
-    //     // print_error("Body isn't tracked");
-    //     return true;
-    // }
-
-    // hr = body->GetJoints(JointType_Count, joints);
-    // if (!SUCCEEDED(hr))
-    // {
-    //     print_error("Error: Unable to get joints");
-    //     return true;
-    // }
-
     return false;
 }
 
 godot::TypedArray<godot::Vector2> godot::Kodot2::getBodyJointPositions2D(int bodyId)
 {
     TypedArray<Vector2> jointPoints;
-    Joint joints[JointType_Count];
-
-    if (getJoints(bodyId, joints))
-    {
-        // Failed to get joints
-        return jointPoints;
-    }
-
-    for (int i = 0; i < _countof(joints); i++)
-    {
-        // Convert points to screen-space
-        CameraSpacePoint jPos = joints[i].Position;
-        jointPoints.push_back(bodyToScreen(jPos.X, jPos.Y, jPos.Z));
-    }
-
     return jointPoints;
 }
 
 godot::TypedDictionary<int, godot::Vector3> godot::Kodot2::getBodyJointPositions3D(int bodyId)
 {
-    TypedDictionary<int, Vector3> jointPoints;
-    Joint joints[JointType_Count];
-
-    if (getJoints(bodyId, joints))
-    {
-        // Failed to get joints
-        return jointPoints;
-    }
-
-    for (int i = 0; i < JointType_Count; i++)
-    {
-        CameraSpacePoint jPos = joints[i].Position;
-        // jointPoints.push_back(Vector3(jPos.X, jPos.Y, jPos.Z));
-        jointPoints.get_or_add(i, Vector3(jPos.X, jPos.Y, jPos.Z));
-    }
-
+    TypedArray<Vector3> jointPoints;
     return jointPoints;
 }
 
