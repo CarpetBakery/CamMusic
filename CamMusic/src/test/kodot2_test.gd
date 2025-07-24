@@ -1,55 +1,90 @@
 class_name Kodot2Test extends Kodot2
 
-enum JointType
-{
-	SpineBase		= 0,
-	SpineMid		= 1,
-	Neck			= 2,
-	Head			= 3,
-	ShoulderLeft	= 4,
-	ElbowLeft		= 5,
-	WristLeft		= 6,
-	HandLeft		= 7,
-	ShoulderRight	= 8,
-	ElbowRight		= 9,
-	WristRight		= 10,
-	HandRight		= 11,
-	HipLeft			= 12,
-	KneeLeft		= 13,
-	AnkleLeft		= 14,
-	FootLeft		= 15,
-	HipRight		= 16,
-	KneeRight		= 17,
-	AnkleRight		= 18,
-	FootRight		= 19,
-	SpineShoulder	= 20,
-	HandTipLeft		= 21,
-	ThumbLeft		= 22,
-	HandTipRight	= 23,
-	ThumbRight		= 24,
-	Count			= ( ThumbRight + 1 ) 
-}
+# TEMP
+var POS_INDEX_NAME := [
+	"SpineBase",
+	"SpineMid",
+	"Neck",
+	"Head",
+	"ShoulderLeft",
+	"ElbowLeft",
+	"WristLeft",
+	"HandLeft",
+	"ShoulderRight",
+	"ElbowRight",
+	"WristRight",
+	"HandRight",
+	"HipLeft",
+	"KneeLeft",
+	"AnkleLeft",
+	"FootLeft",
+	"HipRight",
+	"KneeRight",
+	"AnkleRight",
+	"FootRight",
+	"SpineShoulder",
+	"HandTipLeft",
+	"ThumbLeft",
+	"HandTipRight",
+	"ThumbRight",
+	"Count",
+]
 
 @export_group("Nodes")
 @export var handLeft: Control
 @export var handRight: Control
 
+@export var squaresParent: Control
+
+var jointSquares: Dictionary[int, ColorRect]
+var jointLabels: Dictionary[int, Label]
+
+var showJointNames := true:
+	set(_showJointNames):
+		showJointNames = _showJointNames
+		for key in jointLabels.keys():
+			var label = jointLabels.get(key)
+			label.visible = showJointNames
+
 
 func _ready() -> void:
 	initialize()
-	
+	initVisuals()
+
 
 func _process(delta: float) -> void:
-	update(delta)
-	#print(getBodyCount())
+	if Input.is_action_just_pressed("ui_accept"):
+		showJointNames = !showJointNames
 	
-	#var joints: Dictionary[int, Vector3] = getBodyJointPositions3D(0)
-	#if joints.is_empty():
-		#return
-	#
-	## Update hands
-	#if joints.has(JointType.HandLeft):
-		#handLeft.position = joints.get(JointType.HandLeft)
-	#
-	#if joints.has(JointType.HandRight):
-		#handRight.position = joints.get(JointType.HandRight)
+	var jointPoints := update(delta)
+	if jointPoints.is_empty():
+		return
+	
+	# NOTE: This only happens 30ish times a second, which seems to be the polling rate of the Kinect2
+	# Whenever we call "update", there's a very good chance there won't be any data
+	updateJoints(jointPoints)
+
+
+func initVisuals():
+	for i in range(JointType.Count):
+		var s := 20
+		var inst: ColorRect = ColorRect.new()
+		inst.color = Color(randf_range(0, 1), randf_range(0, 1), randf_range(0, 1))
+		inst.size = Vector2(s, s)
+		squaresParent.add_child(inst)
+		jointSquares.get_or_add(i, inst)
+		
+		# Create label
+		var label := Label.new()
+		label.text = POS_INDEX_NAME[i]
+		label.add_theme_font_size_override("font_size", 20)
+		inst.add_child(label)
+		label.position.y -= 30
+		jointLabels.get_or_add(i, label)
+
+
+func updateJoints(jointPoints):
+	for i in range(JointType.Count):
+		# NOTE: Coords are already corrected for now
+		var square: ColorRect = jointSquares.get(i)
+		square.position = jointPoints.get(i)

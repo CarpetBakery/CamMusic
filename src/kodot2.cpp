@@ -21,57 +21,47 @@ void godot::Kodot2::_bind_methods()
     ClassDB::bind_method(D_METHOD("get_printVerboseErrors"), &godot::Kodot2::get_printVerboseErrors);
 	ClassDB::bind_method(D_METHOD("set_printVerboseErrors", "p_printVerboseErrors"), &godot::Kodot2::set_printVerboseErrors);
     ADD_PROPERTY(PropertyInfo(Variant::BOOL, "printVerboseErrors"), "set_printVerboseErrors", "get_printVerboseErrors");
+
+    ClassDB::bind_method(D_METHOD("get_screenSize"), &godot::Kodot2::get_screenSize);
+	ClassDB::bind_method(D_METHOD("set_screenSize", "p_screenSize"), &godot::Kodot2::set_screenSize);
+    ADD_PROPERTY(PropertyInfo(Variant::VECTOR2, "screenSize"), "set_screenSize", "get_screenSize");
+
+    // Joints enum
+    BIND_ENUM_CONSTANT(SpineBase);
+    BIND_ENUM_CONSTANT(SpineMid);
+    BIND_ENUM_CONSTANT(Neck);
+    BIND_ENUM_CONSTANT(Head);
+    BIND_ENUM_CONSTANT(ShoulderLeft);
+    BIND_ENUM_CONSTANT(ElbowLeft);
+    BIND_ENUM_CONSTANT(WristLeft);
+    BIND_ENUM_CONSTANT(HandLeft);
+    BIND_ENUM_CONSTANT(ShoulderRight);
+    BIND_ENUM_CONSTANT(ElbowRight);
+    BIND_ENUM_CONSTANT(WristRight);
+    BIND_ENUM_CONSTANT(HandRight);
+    BIND_ENUM_CONSTANT(HipLeft);
+    BIND_ENUM_CONSTANT(KneeLeft);
+    BIND_ENUM_CONSTANT(AnkleLeft);
+    BIND_ENUM_CONSTANT(FootLeft);
+    BIND_ENUM_CONSTANT(HipRight);
+    BIND_ENUM_CONSTANT(KneeRight);
+    BIND_ENUM_CONSTANT(AnkleRight);
+    BIND_ENUM_CONSTANT(FootRight);
+    BIND_ENUM_CONSTANT(SpineShoulder);
+    BIND_ENUM_CONSTANT(HandTipLeft);
+    BIND_ENUM_CONSTANT(ThumbLeft);
+    BIND_ENUM_CONSTANT(HandTipRight);
+    BIND_ENUM_CONSTANT(ThumbRight);
+    BIND_ENUM_CONSTANT(Count);
 }
 
 
 bool godot::Kodot2::initialize()
 {
-    // print_line("Initializing Kodot 2");
-
-    // HRESULT hr;
-    // hr = GetDefaultKinectSensor(&kinectSensor);
-    // if (FAILED(hr))
-    // {
-    //     godot::print_error("Error: Failed to get default sensor.");
-    //     return true;
-    // }
-
-    // if (kinectSensor)
-    // {
-    //     // Initialize Kinect and get coordinate mapper and the body reader
-    //     IBodyFrameSource* bodyFrameSource = NULL;
-
-    //     hr = kinectSensor->Open();
-
-    //     if (SUCCEEDED(hr))
-    //     {
-    //         hr = kinectSensor->get_CoordinateMapper(&coordMapper);
-    //     }
-
-    //     if (SUCCEEDED(hr))
-    //     {
-    //         hr = kinectSensor->get_BodyFrameSource(&bodyFrameSource);
-    //     }
-
-    //     if (SUCCEEDED(hr))
-    //     {
-    //         hr = bodyFrameSource->OpenReader(&bodyFrameReader);
-    //     }
-
-    //     SafeRelease(bodyFrameSource);
-    // }
-
-    // if (!kinectSensor || FAILED(hr))
-    // {
-    //     godot::print_error("Error: No ready Kinect found.");
-    //     return true;
-    // }
-
-    // print_line("Kodot 2 initialized.");
-    // return false;
+    print_line("Initializing Kinect 2");
 
     HRESULT hr;
-
+    
     hr = GetDefaultKinectSensor(&kinectSensor);
     if (FAILED(hr))
     {
@@ -105,23 +95,20 @@ bool godot::Kodot2::initialize()
 
     if (!kinectSensor || FAILED(hr))
     {
-        // SetStatusMessage(L"No ready Kinect found!", 10000, true);
-        // return E_FAIL;
+        print_error("No ready Kinect found!");
         return true;
     }
 
-    print_line("Kinect initialized");
-
+    print_line("Kinect 2 initialized");
     return false;
 }
 
 void godot::Kodot2::_exit_tree()
 {
-    // Shutdown stuff here
-    // TODO: 
     SafeRelease(bodyFrameReader);
     SafeRelease(coordMapper);
 
+    // Close Kinect sensor
     if (kinectSensor)
     {
         kinectSensor->Close();
@@ -129,148 +116,98 @@ void godot::Kodot2::_exit_tree()
     SafeRelease(kinectSensor);
 }
 
-void godot::Kodot2::update(double delta)
+godot::TypedArray<godot::Vector2> godot::Kodot2::update(double delta)
 {
-    // if (!bodyFrameReader)
-    // {
-    //     print_error("No body frame reader");
-    //     return; 
-    // }
+    TypedArray<Vector2> jointPoints;
 
-    // IBodyFrame* bodyFrame = NULL;
-    // HRESULT hr = bodyFrameReader->AcquireLatestFrame(&bodyFrame);
+    if (!bodyFrameReader)
+    {
+        return jointPoints;
+    }    
 
-    // if (SUCCEEDED(hr))
-    // {
-    //     INT64 nTime = 0;
-    //     hr = bodyFrame->get_RelativeTime(&nTime);
-
-    //     // IBody* bodies[BODY_COUNT] = {0};
-
-    //     if (SUCCEEDED(hr))
-    //     {
-    //         hr = bodyFrame->GetAndRefreshBodyData(_countof(bodies), bodies);
-    //     }
-
-    //     if (SUCCEEDED(hr))
-    //     {
-    //         // Update skeleton
-    //         processBody(nTime, BODY_COUNT, bodies);
-    //     }
-    // }
-    // SafeRelease(bodyFrame);
-
-    // // Figure out how many bodies are in this frame
-
-    IBodyFrame* pBodyFrame = NULL;
-
-    HRESULT hr = bodyFrameReader->AcquireLatestFrame(&pBodyFrame);
+    IBodyFrame* bodyFrame = NULL;
+    HRESULT hr = bodyFrameReader->AcquireLatestFrame(&bodyFrame);
 
     if (SUCCEEDED(hr))
     {
-        INT64 nTime = 0;
+        // NOTE: I'm not sure if we really need the timestamp stuff
+        // might remove this later
+        INT64 time = 0;
+        hr = bodyFrame->get_RelativeTime(&time);
 
-        hr = pBodyFrame->get_RelativeTime(&nTime);
-
-        IBody* ppBodies[BODY_COUNT] = {0};
+        // Make sure to initialize memory with default value
+        IBody* bodies[BODY_COUNT] = {0};
 
         if (SUCCEEDED(hr))
         {
-            hr = pBodyFrame->GetAndRefreshBodyData(_countof(ppBodies), ppBodies);
+            // Seems like _countof is just a constant value...'
+            // Might just replace with BODY_COUNT later
+            hr = bodyFrame->GetAndRefreshBodyData(_countof(bodies), bodies);
         }
 
         if (SUCCEEDED(hr))
         {
-            HRESULT hr;
-            TypedArray<Vector3> jointPoints;
-            for (int i = 0; i < BODY_COUNT; ++i)
+            jointPoints = processBody(time, BODY_COUNT, bodies);
+        }
+
+        // Make sure to free the bodies
+        for (int i = 0; i < _countof(bodies); i++)
+        {
+            SafeRelease(bodies[i]);
+        }
+    }
+    SafeRelease(bodyFrame);
+    return jointPoints;
+}
+
+godot::TypedArray<godot::Vector2> godot::Kodot2::processBody(uint64_t nTime, int bodyCount, IBody** bodies)
+{
+    HRESULT hr;
+    TypedArray<Vector2> jointPoints;
+    for (int i = 0; i < bodyCount; i++)
+    {
+        IBody* body = bodies[i];
+        if (body)
+        {
+            BOOLEAN tracked = false;
+            hr = body->get_IsTracked(&tracked);
+            
+            if (SUCCEEDED(hr) && tracked)
             {
-                IBody* pBody = bodies[i];
-                if (pBody)
+                Joint joints[JointType_Count];
+                HandState leftHandState = HandState_Unknown;
+                HandState rightHandState = HandState_Unknown;
+
+                body->get_HandLeftState(&leftHandState);
+                body->get_HandRightState(&rightHandState);
+
+                hr = body->GetJoints(_countof(joints), joints);
+                if (SUCCEEDED(hr))
                 {
-                    BOOLEAN bTracked = false;
-                    hr = pBody->get_IsTracked(&bTracked);
-
-                    if (SUCCEEDED(hr) && bTracked)
+                    for (int j = 0; j < _countof(joints); j++)
                     {
-                        Joint joints[JointType_Count]; 
-                        hr = pBody->GetJoints(JointType_Count, joints);
-                        if (SUCCEEDED(hr))
-                        {
-                            for (int j = 0; j < JointType_Count; ++j)
-                            {
-                                CameraSpacePoint jPos = joints[j].Position;
-                                jointPoints.push_back(Vector3(jPos.X, jPos.Y, jPos.Z));
+                        CameraSpacePoint jPos = joints[j].Position;
 
-                                // print_line(Vector3(jPos.X, jPos.Y, jPos.Z));
+                        jointPoints.push_back(bodyToScreen(Vector3(
+                            jPos.X, jPos.Y, jPos.Z
+                        )));
 
-                                // jointPoints.push_back(bodyToScreen(jPos.X, jPos.Y, jPos.Z));
-                            }
-                        }
-                        print_line(jointPoints);
-                        break;
+                        // jointPoints.push_back(Vector3(
+                        //     jPos.X, jPos.Y, jPos.Z
+                        // ));
                     }
+                    return jointPoints;
                 }
             }
         }
-
-        for (int i = 0; i < _countof(ppBodies); ++i)
-        {
-            SafeRelease(ppBodies[i]);
-        }
     }
-    SafeRelease(pBodyFrame);
-}
-
-void godot::Kodot2::processBody(uint64_t nTime, int _bodyCount, IBody** bodies)
-{
-    HRESULT hr;
-    for (int i = 0; i < _bodyCount; i++)
-    {
-        IBody* body = bodies[i];
-        if (!body)
-        {
-            continue;
-        }
-
-        BOOLEAN tracked = false;
-        hr = body->get_IsTracked(&tracked);
-
-        if (!(SUCCEEDED(hr) && tracked))
-        {
-            continue;
-        }
-
-        Joint joints[JointType_Count];
-        Vector3 jointPoints[JointType_Count];
-        HandState leftHandState = HandState_Unknown;
-        HandState rightHandState = HandState_Unknown;
-
-        body->get_HandLeftState(&leftHandState);
-        body->get_HandRightState(&rightHandState);
-
-        // hr = body->GetJoints(_countof(joints), joints);
-        hr = body->GetJoints(JointType_Count, joints);
-        if (!SUCCEEDED(hr))
-        {
-            continue;
-        }
-
-        // TypedArray<Vector2> test;
-        // // for (int j = 0; j < _countof(joints); j++)
-        // for (int j = 0; j < JointType_Count; j++)
-        // {
-        //     // jointPoints[j] = BodyToScreen(joints[j].Position, width, height);
-        //     CameraSpacePoint jPos = joints[j].Position;
-        //     test.push_back(bodyToScreen(jPos.X, jPos.Y ,jPos.Z));
-        //     // test.push_back(Vector2(2, 2));
-        // }
-    }
+    print_line("Searching for bodies...");
+    return jointPoints;
 }
 
 bool godot::Kodot2::getJoints(int bodyId, _Joint* joints)
 {
-    if (bodyId < 0 || bodyId >= bodyCount)
+    if (bodyId < 0 || bodyId >= BODY_COUNT)
     {
         print_error("Error: bodyId is out of range");
         return true;
@@ -279,7 +216,7 @@ bool godot::Kodot2::getJoints(int bodyId, _Joint* joints)
     // IBody* body = bodies[bodyId];
     IBody* body;
     bool bodyFound = false;
-    for (int i = 0; i < bodyCount; i++)
+    for (int i = 0; i < BODY_COUNT; i++)
     {
         body = bodies[i];
         if (body)
@@ -387,6 +324,13 @@ godot::Vector2 godot::Kodot2::bodyToScreen(godot::Vector3 bodyPoint)
 }
 
 
+// -- Get/set --
+int godot::Kodot2::getBodyCount()
+{
+    return BODY_COUNT;
+}        
+
+
 // -- Exports --
 void godot::Kodot2::set_printVerboseErrors(bool const p_printVerboseErrors)
 {
@@ -397,12 +341,14 @@ bool godot::Kodot2::get_printVerboseErrors() const
     return printVerboseErrors;
 }
 
-
-// -- Get/set --
-int godot::Kodot2::getBodyCount()
+void godot::Kodot2::set_screenSize(Vector2 const p_screenSize)
 {
-    return bodyCount;
-}        
+    screenSize = p_screenSize;
+}
+godot::Vector2 godot::Kodot2::get_screenSize() const
+{
+    return screenSize;
+}
 
 
 // -- Debug --
