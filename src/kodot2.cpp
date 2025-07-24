@@ -100,6 +100,9 @@ bool godot::Kodot2::initialize()
         return true;
     }
 
+    // Setup bodies
+
+
     print_line("Kinect 2 initialized");
     return false;
 }
@@ -137,37 +140,37 @@ godot::TypedArray<godot::Vector2> godot::Kodot2::update(double delta)
         hr = bodyFrame->get_RelativeTime(&time);
 
         // Make sure to initialize memory with default value
-        IBody* bodies[BODY_COUNT] = {0};
+        IBody* iBodies[BODY_COUNT] = {0};
 
         if (SUCCEEDED(hr))
         {
             // Seems like _countof is just a constant value...'
             // Might just replace with BODY_COUNT later
-            hr = bodyFrame->GetAndRefreshBodyData(_countof(bodies), bodies);
+            hr = bodyFrame->GetAndRefreshBodyData(_countof(iBodies), iBodies);
         }
 
         if (SUCCEEDED(hr))
         {
-            jointPoints = processBody(time, BODY_COUNT, bodies);
+            jointPoints = processBody(time, BODY_COUNT, iBodies);
         }
 
-        // Make sure to free the bodies
-        for (int i = 0; i < _countof(bodies); i++)
+        // Make sure to free the iBodies
+        for (int i = 0; i < _countof(iBodies); i++)
         {
-            SafeRelease(bodies[i]);
+            SafeRelease(iBodies[i]);
         }
     }
     SafeRelease(bodyFrame);
     return jointPoints;
 }
 
-godot::TypedArray<godot::Vector2> godot::Kodot2::processBody(uint64_t nTime, int bodyCount, IBody** bodies)
+godot::TypedArray<godot::Vector2> godot::Kodot2::processBody(uint64_t nTime, int bodyCount, IBody** iBodies)
 {
     HRESULT hr;
     TypedArray<Vector2> jointPoints;
     for (int i = 0; i < bodyCount; i++)
     {
-        IBody* body = bodies[i];
+        IBody* body = iBodies[i];
         if (body)
         {
             BOOLEAN tracked = false;
@@ -187,8 +190,8 @@ godot::TypedArray<godot::Vector2> godot::Kodot2::processBody(uint64_t nTime, int
                 {
                     for (int j = 0; j < _countof(joints); j++)
                     {
+                        // Currently: Stop at the first body that we find
                         CameraSpacePoint jPos = joints[j].Position;
-
                         jointPoints.push_back(bodyToScreen(Vector3(
                             jPos.X, jPos.Y, jPos.Z
                         )));

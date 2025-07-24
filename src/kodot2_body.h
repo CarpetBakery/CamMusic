@@ -17,7 +17,11 @@ namespace godot
     private:
         
     public:
-        
+        // Is this body currently being tracked?
+        bool isTracked = false;
+
+        // Joint positions in 3D Space
+        TypedArray<Vector3> joints;
     };
 }
 

@@ -61,6 +61,9 @@ namespace godot
         // The dimensions of the screen
         Vector2 screenSize = Vector2(1920, 1080);
 
+        // Array of bodies that we can track
+        TypedArray<Kodot2Body> bodies;
+
         // TODO: Maybe remove this later it's kind of ambiguous
         bool printVerboseErrors = false;
 
