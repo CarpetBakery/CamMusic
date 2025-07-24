@@ -56,7 +56,9 @@ func _process(delta: float) -> void:
 	if Input.is_action_just_pressed("ui_accept"):
 		showJointNames = !showJointNames
 	
-	var jointPoints := update(delta)
+	update(delta)
+	
+	var jointPoints := getBodyJointPositions2D(0)
 	if jointPoints.is_empty():
 		return
 	

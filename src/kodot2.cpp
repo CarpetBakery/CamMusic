@@ -8,15 +8,6 @@
 #include <godot_cpp/variant/utility_functions.hpp>
 #include <godot_cpp/classes/time.hpp>
 
-godot::String getMsec()
-{
-    using namespace godot;
-
-    Time* time = Time::get_singleton();
-
-    return godot::String(std::to_string(time->get_ticks_msec()).c_str());
-}
-
 
 void godot::Kodot2::_bind_methods()
 {
@@ -71,7 +62,6 @@ void godot::Kodot2::_bind_methods()
     BIND_ENUM_CONSTANT(ThumbRight);
     BIND_ENUM_CONSTANT(Count);
 }
-
 
 bool godot::Kodot2::initialize()
 {
@@ -138,12 +128,11 @@ void godot::Kodot2::_exit_tree()
     SafeRelease(kinectSensor);
 }
 
-godot::TypedArray<godot::Vector2> godot::Kodot2::update(double delta)
+void godot::Kodot2::update(double delta)
 {
-    TypedArray<Vector2> jointPoints;
     if (!bodyFrameReader)
     {
-        return jointPoints;
+        return;
     }
 
     IBodyFrame* bodyFrame = NULL;
@@ -169,7 +158,7 @@ godot::TypedArray<godot::Vector2> godot::Kodot2::update(double delta)
 
         if (SUCCEEDED(hr))
         {
-            jointPoints = processBodies(time, _countof(iBodies), iBodies);
+            processBodies(time, _countof(iBodies), iBodies);
         }
 
         // Make sure to free the iBodies
@@ -178,11 +167,11 @@ godot::TypedArray<godot::Vector2> godot::Kodot2::update(double delta)
             SafeRelease(iBodies[i]);
         }
     }
+
     SafeRelease(bodyFrame);
-    return jointPoints;
 }
 
-godot::TypedArray<godot::Vector2> godot::Kodot2::processBodies(uint64_t nTime, int bodyCount, IBody** iBodies)
+void godot::Kodot2::processBodies(uint64_t nTime, int bodyCount, IBody** iBodies)
 {
     // Reset tracking flags on kodot bodies
     for (int i = 0; i < bodyCount; i++)
@@ -203,59 +192,54 @@ godot::TypedArray<godot::Vector2> godot::Kodot2::processBodies(uint64_t nTime, i
 
         BOOLEAN tracked = false;
         hr = iBody->get_IsTracked(&tracked);
-
         if (!(SUCCEEDED(hr) && tracked))
         {
             continue;
         }
         
+        // Body is valid and tracked - get joints + hand states
         Joint joints[JointType_Count];
         HandState leftHandState = HandState_Unknown;
         HandState rightHandState = HandState_Unknown;
         
+        // TODO: Do something with this information
         iBody->get_HandLeftState(&leftHandState);
         iBody->get_HandRightState(&rightHandState);
 
         hr = iBody->GetJoints(_countof(joints), joints);
-        if (SUCCEEDED(hr))
+        if (!SUCCEEDED(hr))
         {
-            Kodot2Body* body = cast_to<Kodot2Body>(kodotBodies.get(i));
-            body->isTracked = true;
-            body->joints.clear();
+            continue;
+        }
 
-            // Add joint positions to this body's joints
-            for (int k = 0; k < JointType_Count; k++)
-            {
-                CameraSpacePoint jPos = joints[k].Position;
-                // body->joints.set(j, Vector3(
-                //     jPos.X,
-                //     jPos.Y,
-                //     jPos.Z
-                // ));
-                body->joints.push_back(Vector3(
-                    jPos.X,
-                    jPos.Y,
-                    jPos.Z
-                ));
-            }
+        // We were able to get this body's joints; set this body as tracked
+        Kodot2Body* body = cast_to<Kodot2Body>(kodotBodies.get(i));
+        body->isTracked = true;
+
+        // Add joint positions to this body's joints
+        for (int k = 0; k < JointType_Count; k++)
+        {
+            CameraSpacePoint jPos = joints[k].Position;
+            body->joints.set(k, Vector3(
+                jPos.X,
+                jPos.Y,
+                jPos.Z
+            ));
         }
     }
+}
 
-    // Return the joints of the first body we see
+godot::Kodot2Body* godot::Kodot2::getFirstValidBody()
+{
     for (int k = 0; k < kodotBodies.size(); k++)
     {
         Kodot2Body* body = cast_to<Kodot2Body>(kodotBodies.get(k));
         if (body->isTracked)
         {
-            TypedArray<Vector3> joints = body->joints;
-            for (int i = 0; i < joints.size(); i++)
-            {
-                jointPoints.push_back(bodyToScreen(joints.get(i)));
-            }
-            break;
+            return body;
         }
     }
-    return jointPoints;
+    return nullptr;
 }
 
 bool godot::Kodot2::getJoints(int bodyId, _Joint* joints)
@@ -265,7 +249,37 @@ bool godot::Kodot2::getJoints(int bodyId, _Joint* joints)
 
 godot::TypedArray<godot::Vector2> godot::Kodot2::getBodyJointPositions2D(int bodyId)
 {
+    // for (int k = 0; k < kodotBodies.size(); k++)
+    // {
+    //     Kodot2Body* body = cast_to<Kodot2Body>(kodotBodies.get(k));
+    //     if (!body->isTracked)
+    //     {
+    //         continue;
+    //     }
+
+    //     TypedArray<Vector3> joints = body->joints;
+    //     for (int i = 0; i < joints.size(); i++)
+    //     {
+    //         jointPoints.push_back(bodyToScreen(joints.get(i)));
+    //     }
+    //     break;
+    // }
+    
+    Kodot2Body* body = getFirstValidBody();
     TypedArray<Vector2> jointPoints;
+
+    if (body == nullptr)
+    {
+        // print_error("No valid bodies found.");
+        return jointPoints;
+    }
+
+    TypedArray<Vector3> joints = body->joints;
+    for (int i = 0; i < joints.size(); i++)
+    {
+        jointPoints.push_back(bodyToScreen(joints.get(i)));
+    }
+
     return jointPoints;
 }
 

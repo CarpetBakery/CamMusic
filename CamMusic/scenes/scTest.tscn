@@ -5,7 +5,7 @@
 [ext_resource type="PackedScene" uid="uid://dcm1r8m7k8m1p" path="res://objects/NotePlayer.tscn" id="4_vbmvx"]
 [ext_resource type="FontFile" uid="uid://bsqsbdc7n77nc" path="res://assets/fonts/ARLRDBD.TTF" id="5_6o65p"]
 [ext_resource type="Texture2D" uid="uid://beiyag2p5qlqs" path="res://assets/sprites/guy.png" id="6_r1dfy"]
-[ext_resource type="Script" uid="uid://ch0noxpywl4dr" path="res://src/kodot.gd" id="6_yidds"]
+[ext_resource type="Script" uid="uid://bfa8eohcarlp8" path="res://src/kodot2.gd" id="6_y8sj7"]
 [ext_resource type="PackedScene" uid="uid://cq5se65kh2kty" path="res://objects/Hand.tscn" id="7_aku0y"]
 [ext_resource type="Texture2D" uid="uid://sevonurtk7wj" path="res://assets/sprites/ui/button.png" id="8_ct8vh"]
 [ext_resource type="Script" uid="uid://bec7opnicuh26" path="res://src/cursor.gd" id="8_y8sj7"]
@@ -71,66 +71,65 @@ script = SubResource("GDScript_dwu3b")
 [node name="Camera2D" type="Camera2D" parent="."]
 anchor_mode = 0
 
-[node name="Kodot" type="Kodot" parent="." node_paths=PackedStringArray("noteMaster", "handLeft", "handRight", "shoulderCenter", "head")]
-screenSize = Vector2(1440, 1080)
-script = ExtResource("6_yidds")
-sensorAngle = 2
+[node name="Kodot2" type="Kodot2" parent="." node_paths=PackedStringArray("noteMaster", "handLeft", "handRight", "shoulderCenter", "head")]
+script = ExtResource("6_y8sj7")
 noteMaster = NodePath("../NoteMaster")
 handLeft = NodePath("LeftHand")
 handRight = NodePath("RightHand")
 shoulderCenter = NodePath("ShoulderCenter")
 head = NodePath("Head")
 
-[node name="LeftHand" parent="Kodot" instance=ExtResource("7_aku0y")]
+[node name="LeftHand" parent="Kodot2" instance=ExtResource("7_aku0y")]
 isRightHand = false
 handColor = Color(0.352077, 0.798701, 0.539477, 1)
 
-[node name="Cursor" type="Node2D" parent="Kodot/LeftHand" node_paths=PackedStringArray("sprite", "particles")]
+[node name="Cursor" type="Node2D" parent="Kodot2/LeftHand" node_paths=PackedStringArray("sprite", "particles")]
 script = ExtResource("8_y8sj7")
 sprite = NodePath("Sprite2D")
 particles = NodePath("CPUParticles2D")
 
-[node name="CPUParticles2D" type="CPUParticles2D" parent="Kodot/LeftHand/Cursor"]
+[node name="CPUParticles2D" type="CPUParticles2D" parent="Kodot2/LeftHand/Cursor"]
 amount = 12
 texture = ExtResource("9_38vg5")
 lifetime = 0.14
 gravity = Vector2(0, 0)
 color_ramp = SubResource("Gradient_tg3ge")
 
-[node name="Sprite2D" type="Sprite2D" parent="Kodot/LeftHand/Cursor"]
+[node name="Sprite2D" type="Sprite2D" parent="Kodot2/LeftHand/Cursor"]
 texture = ExtResource("9_38vg5")
 flip_h = true
 
-[node name="RightHand" parent="Kodot" instance=ExtResource("7_aku0y")]
-visible = false
+[node name="RightHand" parent="Kodot2" instance=ExtResource("7_aku0y")]
 handColor = Color(0.771546, 0.350255, 0.363124, 1)
 
-[node name="Cursor" type="Node2D" parent="Kodot/RightHand" node_paths=PackedStringArray("sprite", "particles")]
+[node name="Cursor" type="Node2D" parent="Kodot2/RightHand" node_paths=PackedStringArray("sprite", "particles")]
 script = ExtResource("8_y8sj7")
 sprite = NodePath("Sprite2D")
 particles = NodePath("CPUParticles2D")
 
-[node name="CPUParticles2D" type="CPUParticles2D" parent="Kodot/RightHand/Cursor"]
+[node name="CPUParticles2D" type="CPUParticles2D" parent="Kodot2/RightHand/Cursor"]
 amount = 12
 texture = ExtResource("9_38vg5")
 lifetime = 0.14
 gravity = Vector2(0, 0)
 color_ramp = SubResource("Gradient_tg3ge")
 
-[node name="Sprite2D" type="Sprite2D" parent="Kodot/RightHand/Cursor"]
+[node name="Sprite2D" type="Sprite2D" parent="Kodot2/RightHand/Cursor"]
 texture = ExtResource("9_38vg5")
 
-[node name="ShoulderCenter" type="Node2D" parent="Kodot"]
+[node name="ShoulderCenter" type="Node2D" parent="Kodot2"]
+visible = false
 
-[node name="ColorRect" type="ColorRect" parent="Kodot/ShoulderCenter"]
+[node name="ColorRect" type="ColorRect" parent="Kodot2/ShoulderCenter"]
 offset_left = -20.0
 offset_top = -20.0
 offset_right = 20.0
 offset_bottom = 20.0
 
-[node name="Head" type="Node2D" parent="Kodot"]
+[node name="Head" type="Node2D" parent="Kodot2"]
+visible = false
 
-[node name="ColorRect" type="ColorRect" parent="Kodot/Head"]
+[node name="ColorRect" type="ColorRect" parent="Kodot2/Head"]
 offset_left = -20.0
 offset_top = -20.0
 offset_right = 20.0

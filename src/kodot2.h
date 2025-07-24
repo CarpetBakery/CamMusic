@@ -67,11 +67,14 @@ namespace godot
         // TODO: Maybe remove this later it's kind of ambiguous
         bool printVerboseErrors = false;
 
-        // UNUSED
-        TypedArray<Vector2> processBodies(uint64_t nTime, int bodyCount, IBody** bodies);
+        // Process all bodies in the current frame
+        void processBodies(uint64_t nTime, int bodyCount, IBody** bodies);
 
         // Get a body's joints
         bool getJoints(int bodyId, _Joint* joints);
+
+        // Get first valid body in our bodies list
+        Kodot2Body* getFirstValidBody();
 
         // Convert world coord to screen
         Vector2 bodyToScreen(float x, float y, float z);
@@ -95,7 +98,7 @@ namespace godot
         bool initialize();
 
         // Call at the beginning of the frame to update bodies and their joints
-        TypedArray<Vector2> update(double delta);
+        void update(double delta);
 
         // Get an array of joint positions based on bodyId
         // TODO: Make these work

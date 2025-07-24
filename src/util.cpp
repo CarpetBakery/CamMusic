@@ -24,3 +24,12 @@ void trace(std::string str, bool includeTimestamp)
 	}
 	godot::print_line(godot::String(str.c_str()) + " - AT: " + timeStr + "ms");
 }
+
+godot::String getMsec()
+{
+    using namespace godot;
+
+    Time* time = Time::get_singleton();
+
+    return godot::String(std::to_string(time->get_ticks_msec()).c_str());
+}
