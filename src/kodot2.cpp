@@ -249,22 +249,6 @@ bool godot::Kodot2::getJoints(int bodyId, _Joint* joints)
 
 godot::TypedArray<godot::Vector2> godot::Kodot2::getBodyJointPositions2D(int bodyId)
 {
-    // for (int k = 0; k < kodotBodies.size(); k++)
-    // {
-    //     Kodot2Body* body = cast_to<Kodot2Body>(kodotBodies.get(k));
-    //     if (!body->isTracked)
-    //     {
-    //         continue;
-    //     }
-
-    //     TypedArray<Vector3> joints = body->joints;
-    //     for (int i = 0; i < joints.size(); i++)
-    //     {
-    //         jointPoints.push_back(bodyToScreen(joints.get(i)));
-    //     }
-    //     break;
-    // }
-    
     Kodot2Body* body = getFirstValidBody();
     TypedArray<Vector2> jointPoints;
 
