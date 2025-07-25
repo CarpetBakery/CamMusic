@@ -5,7 +5,7 @@ class_name KodotGD2 extends Kodot2
 
 var trackingSkeleton := false
 var skeletonLostTimer: Timer
-var skeletonTimeout := 4.0
+var skeletonTimeout := 2.0
 
 @export_group("Nodes")
 @export var noteMaster: NoteMaster
@@ -14,6 +14,8 @@ var skeletonTimeout := 4.0
 
 @export var shoulderCenter: Node2D
 @export var head: Node2D
+
+@export var animSprite: AnimatedSprite2D
 
 
 func _ready() -> void:
@@ -25,6 +27,8 @@ func _ready() -> void:
 	add_child(skeletonLostTimer)
 	
 	skeletonLostTimer.timeout.connect(lostSkeleton)
+	
+	animSprite.play("idle")
 
 
 func _process(delta: float) -> void:
@@ -35,6 +39,7 @@ func _process(delta: float) -> void:
 		return
 	
 	skeletonLostTimer.start(skeletonTimeout)
+	animSprite.play("look")
 	
 	if not trackingSkeleton:
 		trackingSkeleton = true
@@ -76,3 +81,4 @@ func toVec2(vec: Vector3) -> Vector2:
 func lostSkeleton():
 	trackingSkeleton = false
 	print_rich("[color=red]Skeleton was lost...")
+	animSprite.play("idle")

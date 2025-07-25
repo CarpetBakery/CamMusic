@@ -1,7 +1,7 @@
-[gd_scene load_steps=13 format=3 uid="uid://de5ta8xcbroid"]
+[gd_scene load_steps=16 format=3 uid="uid://de5ta8xcbroid"]
 
 [ext_resource type="Script" uid="uid://bqxjqdbnq1782" path="res://src/note_master.gd" id="1_utskk"]
-[ext_resource type="Resource" uid="uid://dp6wkail2otb" path="res://assets/instruments/instPiano.tres" id="2_iq7sh"]
+[ext_resource type="Resource" uid="uid://cb3kdhd1fkfwa" path="res://assets/instruments/instXylo.tres" id="2_tg3ge"]
 [ext_resource type="PackedScene" uid="uid://dcm1r8m7k8m1p" path="res://objects/NotePlayer.tscn" id="4_vbmvx"]
 [ext_resource type="FontFile" uid="uid://bsqsbdc7n77nc" path="res://assets/fonts/ARLRDBD.TTF" id="5_6o65p"]
 [ext_resource type="Texture2D" uid="uid://beiyag2p5qlqs" path="res://assets/sprites/guy.png" id="6_r1dfy"]
@@ -10,6 +10,8 @@
 [ext_resource type="Texture2D" uid="uid://sevonurtk7wj" path="res://assets/sprites/ui/button.png" id="8_ct8vh"]
 [ext_resource type="Script" uid="uid://bec7opnicuh26" path="res://src/cursor.gd" id="8_y8sj7"]
 [ext_resource type="Texture2D" uid="uid://chykjr7e70qqa" path="res://assets/sprites/ui/cursor_1.png" id="9_38vg5"]
+[ext_resource type="Texture2D" uid="uid://dsb1grvo0y83a" path="res://assets/sprites/Storyteller_rough_anim_01.png" id="11_tg3ge"]
+[ext_resource type="Texture2D" uid="uid://ca6gmrktesmk0" path="res://assets/sprites/Storyteller_rough_anim_02.png" id="12_gf67e"]
 
 [sub_resource type="GDScript" id="GDScript_dwu3b"]
 resource_name = "Arm"
@@ -24,14 +26,33 @@ func _unhandled_input(event: InputEvent) -> void:
 [sub_resource type="Gradient" id="Gradient_tg3ge"]
 colors = PackedColorArray(1, 1, 1, 0.254902, 1, 1, 1, 0)
 
+[sub_resource type="SpriteFrames" id="SpriteFrames_y8sj7"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("11_tg3ge")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("12_gf67e")
+}],
+"loop": true,
+"name": &"look",
+"speed": 0.01
+}]
+
 [node name="ScTest" type="Node2D"]
 metadata/_edit_horizontal_guides_ = [-328.0]
 
 [node name="NoteMaster" type="Node2D" parent="." node_paths=PackedStringArray("instLabel")]
 position = Vector2(954, 804)
 script = ExtResource("1_utskk")
-instrument = ExtResource("2_iq7sh")
-noteScaleType = 1
+instrument = ExtResource("2_tg3ge")
+noteScaleType = 2
 instLabel = NodePath("../InstrumentLabel")
 objNotePlayer = ExtResource("4_vbmvx")
 
@@ -71,13 +92,14 @@ script = SubResource("GDScript_dwu3b")
 [node name="Camera2D" type="Camera2D" parent="."]
 anchor_mode = 0
 
-[node name="Kodot2" type="Kodot2" parent="." node_paths=PackedStringArray("noteMaster", "handLeft", "handRight", "shoulderCenter", "head")]
+[node name="Kodot2" type="Kodot2" parent="." node_paths=PackedStringArray("noteMaster", "handLeft", "handRight", "shoulderCenter", "head", "animSprite")]
 script = ExtResource("6_y8sj7")
 noteMaster = NodePath("../NoteMaster")
 handLeft = NodePath("LeftHand")
 handRight = NodePath("RightHand")
 shoulderCenter = NodePath("ShoulderCenter")
 head = NodePath("Head")
+animSprite = NodePath("../AnimatedSprite2D")
 
 [node name="LeftHand" parent="Kodot2" instance=ExtResource("7_aku0y")]
 isRightHand = false
@@ -155,3 +177,10 @@ texture = ExtResource("8_ct8vh")
 region_rect = Rect2(77.0878, 67.3691, 419.86, 437.576)
 axis_stretch_horizontal = 1
 axis_stretch_vertical = 2
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+visible = false
+position = Vector2(981, 545)
+scale = Vector2(0.280556, 0.280556)
+sprite_frames = SubResource("SpriteFrames_y8sj7")
+animation = &"look"
