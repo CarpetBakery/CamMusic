@@ -46,7 +46,7 @@ func setScaleDegree(_degree: int, noteScale: Scale):
 	scaleDegree = _degree
 
 	# Get the note from the scale
-	noteLabel.text = Scale.noteToString(noteScale.notes.get(scaleDegree))
+	noteLabel.text = "[tornado freq=3 radius=5]" + Scale.noteToString(noteScale.notes.get(scaleDegree))
 
 
 func mouseEnter(): 
