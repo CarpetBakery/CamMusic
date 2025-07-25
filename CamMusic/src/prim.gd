@@ -12,7 +12,7 @@ func _ready() -> void:
 	
 	assert(animPlayer, "Error: could not find Prim's animation player.")
 	
-	animPlayer.play("talk")
+	animPlayer.play("rest")
 	animPlayer.animation_finished.connect(animFinished)
 
 
