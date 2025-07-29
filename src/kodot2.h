@@ -105,6 +105,10 @@ namespace godot
         TypedArray<Vector3> getBodyJointPositions3D();
 
 
+        // -- Get/set --
+        // Get the number of currently detected bodies
+        int getTrackedBodyCount();        
+
         // -- Exports --
         void set_printVerboseErrors(bool const p_printVerboseErrors);
         bool get_printVerboseErrors() const;
@@ -114,11 +118,6 @@ namespace godot
         
         void set_kodotBodies(TypedArray<Kodot2Body> const p_kodotBodies);
         TypedArray<Kodot2Body> get_kodotBodies() const;
-
-        // -- Get/set --
-        // Get the number of currently detected bodies
-        int getTrackedBodyCount();        
-
     };
 }
 

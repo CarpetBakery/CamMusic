@@ -78,7 +78,6 @@ bool godot::Kodot2::initialize()
     {
         // Initialize the Kinect and get coordinate mapper and the body reader
         IBodyFrameSource* pBodyFrameSource = NULL;
-
         hr = kinectSensor->Open();
 
         if (SUCCEEDED(hr))

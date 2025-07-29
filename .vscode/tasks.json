@@ -15,7 +15,7 @@
         {
             "label": "build_debug",
             "type": "shell",
-            "command": "scons target=template_debug debug_symbols=yes",
+            "command": "scons target=template_debug debug_symbols=yes -j12",
             "problemMatcher": [],
             "group": {
                 "kind": "build",
