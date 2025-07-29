@@ -1,105 +1,115 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <class name="Kodot2" inherits="Node" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/godot/master/doc/class.xsd">
-	<brief_description>
-		Node for communication with a Microsoft Kinect v2.
-	</brief_description>
-	<description>
-		A node that can communicate with the Kinect v2, allowing for skeletal tracking of up to 6 people simultaneously.
-	</description>
-	<tutorials>
-	</tutorials>
-	<methods>
-		<method name="getBodyJointPositions2D">
-			<return type="Vector2[]" />
-			<description>
-			</description>
-		</method>
-		<method name="getBodyJointPositions3D">
-			<return type="Vector3[]" />
-			<description>
-			</description>
-		</method>
-		<method name="getTrackedBodyCount">
-			<return type="int" />
-			<description>
-				Returns the current number of tracked bodies.
-				[b]NOTE[/b]: This is only the AMOUNT of bodies tracked, meaning that a count of [code]3[/code] does not necessarily mean that body indices [code]0, 1, [/code] and [code]2[/code] are tracked.
-			</description>
-		</method>
-		<method name="initialize">
-			<return type="bool" />
-			<description>
-				Initializes the Kinect sensor. [b]Returns [code]false[/code] if successful; [code]true[/code] if it failed.[/b]
-			</description>
-		</method>
-		<method name="update">
-			<return type="void" />
-			<param index="0" name="delta" type="float" />
-			<description>
-				Polls the Kinect for updates on number of bodies tracked, new joint positions, etc. Should be called only once per frame before accessing any Kinect properties to ensure access to the latest data.
-			</description>
-		</method>
-	</methods>
-	<members>
-		<member name="kodotBodies" type="Kodot2Body[]" setter="set_kodotBodies" getter="get_kodotBodies" default="[]">
-		</member>
-		<member name="printVerboseErrors" type="bool" setter="set_printVerboseErrors" getter="get_printVerboseErrors" default="false">
-		</member>
-		<member name="screenSize" type="Vector2" setter="set_screenSize" getter="get_screenSize" default="Vector2(1920, 1080)">
-		</member>
-	</members>
-	<constants>
-		<constant name="SpineBase" value="0" enum="JointType">
-		</constant>
-		<constant name="SpineMid" value="1" enum="JointType">
-		</constant>
-		<constant name="Neck" value="2" enum="JointType">
-		</constant>
-		<constant name="Head" value="3" enum="JointType">
-		</constant>
-		<constant name="ShoulderLeft" value="4" enum="JointType">
-		</constant>
-		<constant name="ElbowLeft" value="5" enum="JointType">
-		</constant>
-		<constant name="WristLeft" value="6" enum="JointType">
-		</constant>
-		<constant name="HandLeft" value="7" enum="JointType">
-		</constant>
-		<constant name="ShoulderRight" value="8" enum="JointType">
-		</constant>
-		<constant name="ElbowRight" value="9" enum="JointType">
-		</constant>
-		<constant name="WristRight" value="10" enum="JointType">
-		</constant>
-		<constant name="HandRight" value="11" enum="JointType">
-		</constant>
-		<constant name="HipLeft" value="12" enum="JointType">
-		</constant>
-		<constant name="KneeLeft" value="13" enum="JointType">
-		</constant>
-		<constant name="AnkleLeft" value="14" enum="JointType">
-		</constant>
-		<constant name="FootLeft" value="15" enum="JointType">
-		</constant>
-		<constant name="HipRight" value="16" enum="JointType">
-		</constant>
-		<constant name="KneeRight" value="17" enum="JointType">
-		</constant>
-		<constant name="AnkleRight" value="18" enum="JointType">
-		</constant>
-		<constant name="FootRight" value="19" enum="JointType">
-		</constant>
-		<constant name="SpineShoulder" value="20" enum="JointType">
-		</constant>
-		<constant name="HandTipLeft" value="21" enum="JointType">
-		</constant>
-		<constant name="ThumbLeft" value="22" enum="JointType">
-		</constant>
-		<constant name="HandTipRight" value="23" enum="JointType">
-		</constant>
-		<constant name="ThumbRight" value="24" enum="JointType">
-		</constant>
-		<constant name="Count" value="25" enum="JointType">
-		</constant>
-	</constants>
+    <brief_description>
+        Node for communication with a Microsoft Kinect v2.
+    </brief_description>
+    <description>
+        A node that can communicate with the Kinect v2, allowing for skeletal tracking of up to 6 people simultaneously.
+    </description>
+    <tutorials>
+    </tutorials>
+    <methods>
+        <method name="getBodyJointPositions2D">
+            <return type="Vector2[]" />
+            <description>
+            </description>
+        </method>
+        <method name="getBodyJointPositions3D">
+            <return type="Vector3[]" />
+            <description>
+            </description>
+        </method>
+        <method name="getTrackedBodyCount">
+            <return type="int" />
+            <description>
+                Returns the current number of tracked bodies.
+                [b]NOTE[/b]: This is only the AMOUNT of bodies tracked, meaning that a count of [code]3[/code] does not necessarily mean that body indices [code]0, 1, [/code] and [code]2[/code] are tracked.
+            </description>
+        </method>
+        <method name="initialize">
+            <return type="bool" />
+            <description>
+                Initializes the Kinect sensor. Returns [code]false[/code] if successful; [code]true[/code] if it failed.
+            </description>
+        </method>
+        <method name="update">
+            <return type="void" />
+            <param index="0" name="delta" type="float" />
+            <description>
+                Polls the Kinect for updates on number of bodies tracked, new joint positions, etc. Should be called only once per frame before accessing any Kinect properties to ensure access to the latest data.
+                [b]Example:[/b]
+                [gdscript]
+                func _process(delta: float) -> void:
+                    # Get the latest data from the Kinect
+                    update(delta)
+                    
+                    # ... Do something with data after
+                    var jointPoints := getBodyJointPositions2D()
+                    # ...
+                [/gdscript]
+            </description>
+        </method>
+    </methods>
+    <members>
+        <member name="kodotBodies" type="Kodot2Body[]" setter="set_kodotBodies" getter="get_kodotBodies" default="[]">
+        </member>
+        <member name="printVerboseErrors" type="bool" setter="set_printVerboseErrors" getter="get_printVerboseErrors" default="false">
+        </member>
+        <member name="screenSize" type="Vector2" setter="set_screenSize" getter="get_screenSize" default="Vector2(1920, 1080)">
+        </member>
+    </members>
+    <constants>
+        <constant name="SpineBase" value="0" enum="JointType">
+        </constant>
+        <constant name="SpineMid" value="1" enum="JointType">
+        </constant>
+        <constant name="Neck" value="2" enum="JointType">
+        </constant>
+        <constant name="Head" value="3" enum="JointType">
+        </constant>
+        <constant name="ShoulderLeft" value="4" enum="JointType">
+        </constant>
+        <constant name="ElbowLeft" value="5" enum="JointType">
+        </constant>
+        <constant name="WristLeft" value="6" enum="JointType">
+        </constant>
+        <constant name="HandLeft" value="7" enum="JointType">
+        </constant>
+        <constant name="ShoulderRight" value="8" enum="JointType">
+        </constant>
+        <constant name="ElbowRight" value="9" enum="JointType">
+        </constant>
+        <constant name="WristRight" value="10" enum="JointType">
+        </constant>
+        <constant name="HandRight" value="11" enum="JointType">
+        </constant>
+        <constant name="HipLeft" value="12" enum="JointType">
+        </constant>
+        <constant name="KneeLeft" value="13" enum="JointType">
+        </constant>
+        <constant name="AnkleLeft" value="14" enum="JointType">
+        </constant>
+        <constant name="FootLeft" value="15" enum="JointType">
+        </constant>
+        <constant name="HipRight" value="16" enum="JointType">
+        </constant>
+        <constant name="KneeRight" value="17" enum="JointType">
+        </constant>
+        <constant name="AnkleRight" value="18" enum="JointType">
+        </constant>
+        <constant name="FootRight" value="19" enum="JointType">
+        </constant>
+        <constant name="SpineShoulder" value="20" enum="JointType">
+        </constant>
+        <constant name="HandTipLeft" value="21" enum="JointType">
+        </constant>
+        <constant name="ThumbLeft" value="22" enum="JointType">
+        </constant>
+        <constant name="HandTipRight" value="23" enum="JointType">
+        </constant>
+        <constant name="ThumbRight" value="24" enum="JointType">
+        </constant>
+        <constant name="Count" value="25" enum="JointType">
+        </constant>
+    </constants>
 </class>
