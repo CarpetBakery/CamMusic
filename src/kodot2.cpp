@@ -14,8 +14,12 @@ void godot::Kodot2::_bind_methods()
     // Expose methods to GDScript
     ClassDB::bind_method(D_METHOD("initialize"), &godot::Kodot2::initialize);
     ClassDB::bind_method(D_METHOD("update", "delta"), &godot::Kodot2::update);
-    ClassDB::bind_method(D_METHOD("getBodyJointPositions3D"), &godot::Kodot2::getBodyJointPositions3D);
-    ClassDB::bind_method(D_METHOD("getBodyJointPositions2D"), &godot::Kodot2::getBodyJointPositions2D);
+    ClassDB::bind_method(D_METHOD("getBodyJointPositions3D", "bodyId"), &godot::Kodot2::getBodyJointPositions3D);
+    ClassDB::bind_method(D_METHOD("getBodyJointPositions2D", "bodyId"), &godot::Kodot2::getBodyJointPositions2D);
+
+    ClassDB::bind_method(D_METHOD("getBody", "_bodyIndex"), &godot::Kodot2::getBody);
+    ClassDB::bind_method(D_METHOD("getFirstTrackedBody"), &godot::Kodot2::getFirstTrackedBody);
+    ClassDB::bind_method(D_METHOD("getAllTrackedBodies"), &godot::Kodot2::getAllTrackedBodies);
 
     // -- Get/set --
     ClassDB::bind_method(D_METHOD("getTrackedBodyCount"), &godot::Kodot2::getTrackedBodyCount);
@@ -276,16 +280,16 @@ godot::TypedArray<godot::Kodot2Body> godot::Kodot2::getAllTrackedBodies()
     return _trackedBodies;
 }
 
-godot::TypedArray<godot::Vector2> godot::Kodot2::getBodyJointPositions2D(int _bodyId)
+godot::TypedArray<godot::Vector2> godot::Kodot2::getBodyJointPositions2D(int bodyId)
 {
     Kodot2Body* body;
-    if (_bodyId < 0)
+    if (bodyId < 0)
     {
         body = getFirstTrackedBody();
     }
     else
     {
-        body = getBody(_bodyId);
+        body = getBody(bodyId);
     }
 
     if (body == nullptr)
@@ -296,16 +300,16 @@ godot::TypedArray<godot::Vector2> godot::Kodot2::getBodyJointPositions2D(int _bo
     return body->getJointPositions2D();
 }
 
-godot::TypedArray<godot::Vector3> godot::Kodot2::getBodyJointPositions3D(int _bodyId)
+godot::TypedArray<godot::Vector3> godot::Kodot2::getBodyJointPositions3D(int bodyId)
 {
     Kodot2Body* body;
-    if (_bodyId < 0)
+    if (bodyId < 0)
     {
         body = getFirstTrackedBody();
     }
     else
     {
-        body = getBody(_bodyId);
+        body = getBody(bodyId);
     }
 
     if (body == nullptr)

@@ -99,9 +99,9 @@ namespace godot
         void update(double delta);
 
         // Get joint positions in 3D space (default value gets the first tracked body)
-        TypedArray<Vector3> getBodyJointPositions3D(int _bodyId = -1);
+        TypedArray<Vector3> getBodyJointPositions3D(int bodyId = -1);
         // Get joint positions in 2D space
-        TypedArray<Vector2> getBodyJointPositions2D(int _bodyId = -1);
+        TypedArray<Vector2> getBodyJointPositions2D(int bodyId = -1);
 
         // Get a body from the bodies array
         Kodot2Body* getBody(int _bodyIndex);
