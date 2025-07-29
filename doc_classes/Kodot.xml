@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="Kodot" inherits="Node3D" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/godot/master/doc/class.xsd">
+	<brief_description>
+	</brief_description>
+	<description>
+	</description>
+	<tutorials>
+	</tutorials>
+	<methods>
+		<method name="getSkeletonJoints">
+			<return type="Dictionary[int, Vector2]" />
+			<param index="0" name="skeletonId" type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="getSkeletonJoints3D">
+			<return type="Dictionary[int, Vector3]" />
+			<description>
+			</description>
+		</method>
+		<method name="get_sensorAngle">
+			<return type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="initialize">
+			<return type="bool" />
+			<description>
+			</description>
+		</method>
+		<method name="set_sensorAngle">
+			<return type="void" />
+			<param index="0" name="p_sensorAngle" type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="update">
+			<return type="void" />
+			<param index="0" name="delta" type="float" />
+			<description>
+			</description>
+		</method>
+	</methods>
+	<members>
+		<member name="screenSize" type="Vector2" setter="set_screenSize" getter="get_screenSize" default="Vector2(1920, 1080)">
+		</member>
+		<member name="seatedMode" type="bool" setter="set_seatedMode" getter="get_seatedMode" default="false">
+		</member>
+	</members>
+</class>
