@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <class name="Kodot2Body" inherits="Resource" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/godot/master/doc/class.xsd">
 	<brief_description>
+		A body tracked by the Kinect v2.
 	</brief_description>
 	<description>
+		A body tracked by the Kinect v2. Contains data such as the skeletal joint positions in 2D/3D.
 	</description>
 	<tutorials>
 	</tutorials>
@@ -10,18 +12,18 @@
 		<method name="getJointPositions2D">
 			<return type="Vector2[]" />
 			<description>
+				Returns joint positions as an array of Vector2's. [b]NOTE:[/b] Will be empty or inaccurate if this body isn't currently tracked.
 			</description>
 		</method>
 		<method name="getJointPositions3D">
 			<return type="Vector3[]" />
 			<description>
+				Returns joint positions as an array of Vector3's. [b]NOTE:[/b] Will be empty or inaccurate if this body isn't currently tracked.
 			</description>
 		</method>
 	</methods>
 	<members>
 		<member name="isTracked" type="bool" setter="set_isTracked" getter="get_isTracked" default="false">
-		</member>
-		<member name="joints" type="Vector3[]" setter="set_joints" getter="get_joints" default="[Vector3(0, 0, 0), Vector3(0, 0, 0), Vector3(0, 0, 0), Vector3(0, 0, 0), Vector3(0, 0, 0), Vector3(0, 0, 0), Vector3(0, 0, 0), Vector3(0, 0, 0), Vector3(0, 0, 0), Vector3(0, 0, 0), Vector3(0, 0, 0), Vector3(0, 0, 0), Vector3(0, 0, 0), Vector3(0, 0, 0), Vector3(0, 0, 0), Vector3(0, 0, 0), Vector3(0, 0, 0), Vector3(0, 0, 0), Vector3(0, 0, 0), Vector3(0, 0, 0), Vector3(0, 0, 0), Vector3(0, 0, 0), Vector3(0, 0, 0), Vector3(0, 0, 0), Vector3(0, 0, 0)]">
 		</member>
 	</members>
 </class>
