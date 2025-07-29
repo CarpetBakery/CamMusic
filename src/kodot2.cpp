@@ -18,7 +18,7 @@ void godot::Kodot2::_bind_methods()
     ClassDB::bind_method(D_METHOD("getBodyJointPositions2D"), &godot::Kodot2::getBodyJointPositions2D);
 
     // -- Get/set --
-    ClassDB::bind_method(D_METHOD("getBodyCount"), &godot::Kodot2::getBodyCount);
+    ClassDB::bind_method(D_METHOD("getTrackedBodyCount"), &godot::Kodot2::getTrackedBodyCount);
 
     // -- Exports --
     ClassDB::bind_method(D_METHOD("get_printVerboseErrors"), &godot::Kodot2::get_printVerboseErrors);
@@ -298,7 +298,7 @@ godot::Vector2 godot::Kodot2::bodyToScreen(godot::Vector3 bodyPoint)
 
 
 // -- Get/set --
-int godot::Kodot2::getBodyCount()
+int godot::Kodot2::getTrackedBodyCount()
 {
     return BODY_COUNT;
 }        

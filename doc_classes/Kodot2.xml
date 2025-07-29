@@ -1,17 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <class name="Kodot2" inherits="Node" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/godot/master/doc/class.xsd">
 	<brief_description>
+		Node for communication with a Microsoft Kinect v2.
 	</brief_description>
 	<description>
+		A node that can communicate with the Kinect v2, allowing for skeletal tracking of up to 6 people simultaneously.
 	</description>
 	<tutorials>
 	</tutorials>
 	<methods>
-		<method name="getBodyCount">
-			<return type="int" />
-			<description>
-			</description>
-		</method>
 		<method name="getBodyJointPositions2D">
 			<return type="Vector2[]" />
 			<description>
@@ -20,6 +17,13 @@
 		<method name="getBodyJointPositions3D">
 			<return type="Vector3[]" />
 			<description>
+			</description>
+		</method>
+		<method name="getTrackedBodyCount">
+			<return type="int" />
+			<description>
+				Returns the current number of tracked bodies.
+				[b]NOTE[/b]: This is only the AMOUNT of bodies tracked, meaning that a count of [code]3[/code] does not necessarily mean that body indices [code]0, 1, [/code] and [code]2[/code] are tracked.
 			</description>
 		</method>
 		<method name="initialize">

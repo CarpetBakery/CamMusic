@@ -117,7 +117,7 @@ namespace godot
 
         // -- Get/set --
         // Get the number of currently detected bodies
-        int getBodyCount();        
+        int getTrackedBodyCount();        
 
     };
 }

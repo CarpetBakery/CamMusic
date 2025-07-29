@@ -2,6 +2,10 @@
 import os
 import sys
 
+GODOT_PROJECT_NAME = "CamMusic"
+EXTENSION_NAME = "kodot"
+
+
 env = SConscript("godot-cpp/SConstruct")
 
 # For reference:
@@ -32,12 +36,19 @@ env.Append(LIBS = [
 ])
 
 
-godotProjectName = "CamMusic"
-extensionName = "kodot"
+# Include documentation
+if env["target"] in ["editor", "template_debug"]:
+    try:
+        doc_data = env.GodotCPPDocData("src/gen/doc_data.gen.cpp", source=Glob("doc_classes/*.xml"))
+        sources.append(doc_data)
+        print("Including documentation...")
+    except AttributeError:
+        print("Not including class reference as we're targeting a pre-4.3 baseline.")
+
 
 if env["platform"] == "macos":
     library = env.SharedLibrary(
-        godotProjectName + "/bin/" + extensionName + ".{}.{}.framework/" + extensionName + ".{}.{}".format(
+        GODOT_PROJECT_NAME + "/bin/" + EXTENSION_NAME + ".{}.{}.framework/" + EXTENSION_NAME + ".{}.{}".format(
             env["platform"], env["target"], env["platform"], env["target"]
         ),
         source=sources,
@@ -45,18 +56,19 @@ if env["platform"] == "macos":
 elif env["platform"] == "ios":
     if env["ios_simulator"]:
         library = env.StaticLibrary(
-            godotProjectName + "/bin/" + extensionName + ".{}.{}.simulator.a".format(env["platform"], env["target"]),
+            GODOT_PROJECT_NAME + "/bin/" + EXTENSION_NAME + ".{}.{}.simulator.a".format(env["platform"], env["target"]),
             source=sources,
         )
     else:
         library = env.StaticLibrary(
-            godotProjectName + "/bin/" + extensionName + ".{}.{}.a".format(env["platform"], env["target"]),
+            GODOT_PROJECT_NAME + "/bin/" + EXTENSION_NAME + ".{}.{}.a".format(env["platform"], env["target"]),
             source=sources,
         )
 else:
     library = env.SharedLibrary(
-        godotProjectName + "/bin/" + extensionName + "{}{}".format(env["suffix"], env["SHLIBSUFFIX"]),
+        GODOT_PROJECT_NAME + "/bin/" + EXTENSION_NAME + "{}{}".format(env["suffix"], env["SHLIBSUFFIX"]),
         source=sources,
     )
+
 
 Default(library)
