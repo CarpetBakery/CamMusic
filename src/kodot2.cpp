@@ -177,7 +177,7 @@ void godot::Kodot2::processBodies(uint64_t nTime, int bodyCount, IBody** iBodies
     for (int i = 0; i < bodyCount; i++)
     {
         Kodot2Body* body = cast_to<Kodot2Body>(kodotBodies.get(i));
-        body->isTracked = false;
+        body->tracked = false;
     }
     trackedBodyCount = 0;
 
@@ -216,7 +216,7 @@ void godot::Kodot2::processBodies(uint64_t nTime, int bodyCount, IBody** iBodies
 
         // We were able to get this body's joints; set this body as tracked
         Kodot2Body* body = cast_to<Kodot2Body>(kodotBodies.get(i));
-        body->isTracked = true;
+        body->tracked = true;
 
         // Add joint positions to this body's joints
         for (int k = 0; k < JointType_Count; k++)
@@ -257,7 +257,7 @@ godot::Kodot2Body* godot::Kodot2::getFirstTrackedBody()
     for (int i = 0; i < len; i++)
     {
         Kodot2Body* body = getBody(i);
-        if (body->isTracked)
+        if (body->isTracked())
         {
             return body;
         }
@@ -273,7 +273,7 @@ godot::TypedArray<godot::Kodot2Body> godot::Kodot2::getAllTrackedBodies()
     for (int i = 0; i < len; i++)
     {
         Kodot2Body* body = getBody(i);
-        if (body->isTracked)
+        if (body->isTracked())
         {
             _trackedBodies.push_back(body);
         }

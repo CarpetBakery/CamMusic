@@ -21,9 +21,11 @@
 				Returns joint positions as an array of Vector3's. [b]NOTE:[/b] Will be empty or inaccurate if this body isn't currently tracked.
 			</description>
 		</method>
+		<method name="isTracked">
+			<return type="bool" />
+			<description>
+				Is this body currently being tracked by the Kinect?
+			</description>
+		</method>
 	</methods>
-	<members>
-		<member name="isTracked" type="bool" setter="set_isTracked" getter="get_isTracked" default="false">
-		</member>
-	</members>
 </class>

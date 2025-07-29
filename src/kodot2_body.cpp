@@ -9,10 +9,7 @@ void Kodot2Body::_bind_methods()
     ClassDB::bind_method(D_METHOD("getJointPositions3D"), &Kodot2Body::getJointPositions3D);
     ClassDB::bind_method(D_METHOD("getJointPositions2D"), &Kodot2Body::getJointPositions2D);
 
-    // -- Exports --
-    ClassDB::bind_method(D_METHOD("get_isTracked"), &Kodot2Body::get_isTracked);
-	ClassDB::bind_method(D_METHOD("set_isTracked", "p_isTracked"), &Kodot2Body::set_isTracked);
-    ADD_PROPERTY(PropertyInfo(Variant::BOOL, "isTracked"), "set_isTracked", "get_isTracked");
+    ClassDB::bind_method(D_METHOD("isTracked"), &Kodot2Body::isTracked);
 }
 
 
@@ -30,15 +27,6 @@ Kodot2Body::~Kodot2Body()
     print_line("Kodot Body Destroyed");
 }
 
-String Kodot2Body::toString()
-{
-    if (isTracked)
-    {
-        return "true";
-    }
-    return "false";
-}
-
 TypedArray<Vector3> Kodot2Body::getJointPositions3D()
 {
     return joints;
@@ -49,13 +37,7 @@ TypedArray<Vector2> Kodot2Body::getJointPositions2D()
     return joints2D;
 }
 
-
-// -- Exports --
-void Kodot2Body::set_isTracked(bool const p_isTracked)
+bool Kodot2Body::isTracked()
 {
-    isTracked = p_isTracked;
-}
-bool Kodot2Body::get_isTracked() const
-{
-    return isTracked;
+    return tracked;
 }
