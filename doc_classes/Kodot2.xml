@@ -29,12 +29,14 @@
 		<method name="initialize">
 			<return type="bool" />
 			<description>
+				Initializes the Kinect sensor. [b]Returns [code]false[/code] if successful; [code]true[/code] if it failed.[/b]
 			</description>
 		</method>
 		<method name="update">
 			<return type="void" />
 			<param index="0" name="delta" type="float" />
 			<description>
+				Polls the Kinect for updates on number of bodies tracked, new joint positions, etc. Should be called only once per frame before accessing any Kinect properties to ensure access to the latest data.
 			</description>
 		</method>
 	</methods>

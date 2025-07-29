@@ -1,7 +1,9 @@
+/.godot
+**/src/gen
+
 *.obj
 *.dll
 *.exp
 *.lib
 *.pdb
-/.godot
 *.dblite
