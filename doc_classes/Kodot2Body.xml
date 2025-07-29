@@ -6,6 +6,18 @@
 	</description>
 	<tutorials>
 	</tutorials>
+	<methods>
+		<method name="getJointPositions2D">
+			<return type="Vector2[]" />
+			<description>
+			</description>
+		</method>
+		<method name="getJointPositions3D">
+			<return type="Vector3[]" />
+			<description>
+			</description>
+		</method>
+	</methods>
 	<members>
 		<member name="isTracked" type="bool" setter="set_isTracked" getter="get_isTracked" default="false">
 		</member>
