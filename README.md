@@ -1,0 +1,3 @@
+# CamMusic
+Test programs for Kodot library.
+Currently very wip...
