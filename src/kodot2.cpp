@@ -177,10 +177,12 @@ void godot::Kodot2::processBodies(uint64_t nTime, int bodyCount, IBody** iBodies
     {
         Kodot2Body* body = cast_to<Kodot2Body>(kodotBodies.get(i));
         body->isTracked = false;
-    }    
+    }
+    trackedBodyCount = 0;
 
     HRESULT hr;
     TypedArray<Vector2> jointPoints;
+
     for (int i = 0; i < bodyCount; i++)
     {        
         IBody* iBody = iBodies[i];
@@ -225,10 +227,12 @@ void godot::Kodot2::processBodies(uint64_t nTime, int bodyCount, IBody** iBodies
                 jPos.Z
             ));
         }
+
+        trackedBodyCount++;
     }
 }
 
-godot::Kodot2Body* godot::Kodot2::getFirstValidBody()
+godot::Kodot2Body* godot::Kodot2::getFirstTrackedBody()
 {
     for (int k = 0; k < kodotBodies.size(); k++)
     {
@@ -248,7 +252,7 @@ bool godot::Kodot2::getJoints(int bodyId, _Joint* joints)
 
 godot::TypedArray<godot::Vector2> godot::Kodot2::getBodyJointPositions2D()
 {
-    Kodot2Body* body = getFirstValidBody();
+    Kodot2Body* body = getFirstTrackedBody();
     TypedArray<Vector2> jointPoints;
 
     if (body == nullptr)
@@ -268,7 +272,7 @@ godot::TypedArray<godot::Vector2> godot::Kodot2::getBodyJointPositions2D()
 
 godot::TypedArray<godot::Vector3> godot::Kodot2::getBodyJointPositions3D()
 {
-    Kodot2Body* body = getFirstValidBody();
+    Kodot2Body* body = getFirstTrackedBody();
     if (body == nullptr)
     {
         return TypedArray<Vector3>();
@@ -299,7 +303,7 @@ godot::Vector2 godot::Kodot2::bodyToScreen(godot::Vector3 bodyPoint)
 // -- Get/set --
 int godot::Kodot2::getTrackedBodyCount()
 {
-    return BODY_COUNT;
+    return trackedBodyCount;
 }        
 
 

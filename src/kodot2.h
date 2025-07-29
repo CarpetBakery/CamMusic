@@ -67,6 +67,10 @@ namespace godot
         // TODO: Maybe remove this later it's kind of ambiguous
         bool printVerboseErrors = false;
 
+        // How many bodies are currently being tracked?
+        int trackedBodyCount = 0;
+
+
         // Process all bodies in the current frame
         void processBodies(uint64_t nTime, int bodyCount, IBody** bodies);
 
@@ -74,7 +78,7 @@ namespace godot
         bool getJoints(int bodyId, _Joint* joints);
 
         // Get first valid body in our bodies list
-        Kodot2Body* getFirstValidBody();
+        Kodot2Body* getFirstTrackedBody();
 
         // Convert world coord to screen
         Vector2 bodyToScreen(float x, float y, float z);
