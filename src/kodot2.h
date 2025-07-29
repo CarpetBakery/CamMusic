@@ -104,11 +104,10 @@ namespace godot
         // Call at the beginning of the frame to update bodies and their joints
         void update(double delta);
 
-        // Get an array of joint positions based on bodyId
         TypedArray<Vector2> getBodyJointPositions2D();
         TypedArray<Vector3> getBodyJointPositions3D();
 
-
+        
         // -- Get/set --
         // Get the number of currently detected bodies
         int getTrackedBodyCount();        

@@ -221,11 +221,13 @@ void godot::Kodot2::processBodies(uint64_t nTime, int bodyCount, IBody** iBodies
         for (int k = 0; k < JointType_Count; k++)
         {
             CameraSpacePoint jPos = joints[k].Position;
+
             body->joints.set(k, Vector3(
                 jPos.X,
                 jPos.Y,
                 jPos.Z
             ));
+            body->joints2D.set(k, bodyToScreen(body->joints.get(k)));
         }
 
         trackedBodyCount++;
@@ -261,13 +263,14 @@ godot::TypedArray<godot::Vector2> godot::Kodot2::getBodyJointPositions2D()
         return jointPoints;
     }
 
-    TypedArray<Vector3> joints = body->joints;
-    for (int i = 0; i < joints.size(); i++)
-    {
-        jointPoints.push_back(bodyToScreen(joints.get(i)));
-    }
+    // TypedArray<Vector3> joints = body->joints;
+    // for (int i = 0; i < joints.size(); i++)
+    // {
+    //     jointPoints.push_back(bodyToScreen(joints.get(i)));
+    // }
+    // return jointPoints;
 
-    return jointPoints;
+    return body->getJointPositions2D();
 }
 
 godot::TypedArray<godot::Vector3> godot::Kodot2::getBodyJointPositions3D()
@@ -278,7 +281,9 @@ godot::TypedArray<godot::Vector3> godot::Kodot2::getBodyJointPositions3D()
         return TypedArray<Vector3>();
     }
 
-    return body->joints;
+    // return body->joints;
+
+    return body->getJointPositions3D();
 }
 
 godot::Vector2 godot::Kodot2::bodyToScreen(float x, float y, float z)

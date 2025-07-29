@@ -13,19 +13,23 @@ namespace godot
     protected:
         static void _bind_methods();
     
-    private:
-        
     public:
         // Is this body currently being tracked?
         bool isTracked = false;
 
         // Joint positions in 3D Space
         TypedArray<Vector3> joints;
+        // Joint positions in 2D Space
+        TypedArray<Vector3> joints2D;
+
 
         Kodot2Body();
         ~Kodot2Body();
 
         String toString();
+
+        TypedArray<Vector3> getJointPositions3D();
+        TypedArray<Vector2> getJointPositions2D();
 
         // -- Exports --
         void set_isTracked(bool const p_isTracked);
