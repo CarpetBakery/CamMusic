@@ -34,7 +34,7 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	update(delta)
 	
-	var joints := getBodyJointPositions2D(-1)
+	var joints := getBodyJointPositions2D()
 	if joints.is_empty():
 		return
 	

@@ -9,47 +9,6 @@
 	<tutorials>
 	</tutorials>
 	<methods>
-		<method name="getAllTrackedBodies">
-			<return type="Kodot2Body[]" />
-			<description>
-			</description>
-		</method>
-		<method name="getBody">
-			<return type="Kodot2Body" />
-			<param index="0" name="_bodyIndex" type="int" />
-			<description>
-			</description>
-		</method>
-		<method name="getBodyJointPositions2D">
-			<return type="Vector2[]" />
-			<param index="0" name="bodyId" type="int" default="-1" />
-			<description>
-				Return the 2D joint positions of the desired body.
-			</description>
-		</method>
-		<method name="getBodyJointPositions3D">
-			<return type="Vector3[]" />
-			<param index="0" name="bodyId" type="int" default="-1" />
-			<description>
-			</description>
-		</method>
-		<method name="getFirstTrackedBody">
-			<return type="Kodot2Body" />
-			<description>
-			</description>
-		</method>
-		<method name="getTrackedBodyCount">
-			<return type="int" />
-			<description>
-				Returns the current number of tracked bodies.
-				                [b]NOTE[/b]: This is only the AMOUNT of bodies tracked, meaning that a count of [code]3[/code] does not necessarily mean that body indices [code]0, 1, [/code] and [code]2[/code] are tracked.
-			</description>
-		</method>
-		<method name="get_kodotBodies" qualifiers="const">
-			<return type="Kodot2Body[]" />
-			<description>
-			</description>
-		</method>
 		<method name="initialize">
 			<return type="bool" />
 			<description>
@@ -71,6 +30,51 @@
 				                    var jointPoints := getBodyJointPositions2D()
 				                    # ...
 				                [/gdscript]
+			</description>
+		</method>
+		<method name="getBodyJointPositions2D">
+			<return type="Vector2[]" />
+			<param index="0" name="bodyId" type="int" default="-1" />
+			<description>
+				Returns the 2D joint positions of the desired body. Default parameter returns the first tracked body in bodies list.
+			</description>
+		</method>
+		<method name="getBodyJointPositions3D">
+			<return type="Vector3[]" />
+			<param index="0" name="bodyId" type="int" default="-1" />
+			<description>
+				Returns the 3D joint positions of the desired body. Default parameter returns the first tracked body in bodies list.
+			</description>
+		</method>
+		<method name="getAllTrackedBodies">
+			<return type="Kodot2Body[]" />
+			<description>
+				Returns an array of all bodies which are currently being tracked.
+			</description>
+		</method>
+		<method name="getBody">
+			<return type="Kodot2Body" />
+			<param index="0" name="_bodyIndex" type="int" />
+			<description>
+				Returns a body from the array of all bodies, whether it's tracked or not.
+			</description>
+		</method>
+		<method name="getFirstTrackedBody">
+			<return type="Kodot2Body" />
+			<description>
+				Returns the first tracked the Kinect can find.
+			</description>
+		</method>
+		<method name="getTrackedBodyCount">
+			<return type="int" />
+			<description>
+				Returns the current number of tracked bodies.
+				                [b]NOTE[/b]: This is only the AMOUNT of bodies tracked, meaning that a count of [code]3[/code] does not necessarily mean that body indices [code]0, 1, [/code] and [code]2[/code] are tracked.
+			</description>
+		</method>
+		<method name="get_kodotBodies" qualifiers="const">
+			<return type="Kodot2Body[]" />
+			<description>
 			</description>
 		</method>
 	</methods>
