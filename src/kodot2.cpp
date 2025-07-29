@@ -14,8 +14,8 @@ void godot::Kodot2::_bind_methods()
     // Expose methods to GDScript
     ClassDB::bind_method(D_METHOD("initialize"), &godot::Kodot2::initialize);
     ClassDB::bind_method(D_METHOD("update", "delta"), &godot::Kodot2::update);
-    ClassDB::bind_method(D_METHOD("getBodyJointPositions3D", "bodyId"), &godot::Kodot2::getBodyJointPositions3D);
-    ClassDB::bind_method(D_METHOD("getBodyJointPositions2D", "bodyId"), &godot::Kodot2::getBodyJointPositions2D);
+    ClassDB::bind_method(D_METHOD("getBodyJointPositions3D", "bodyId"), &godot::Kodot2::getBodyJointPositions3D, DEFVAL(-1));
+    ClassDB::bind_method(D_METHOD("getBodyJointPositions2D", "bodyId"), &godot::Kodot2::getBodyJointPositions2D, DEFVAL(-1));
 
     ClassDB::bind_method(D_METHOD("getBody", "_bodyIndex"), &godot::Kodot2::getBody);
     ClassDB::bind_method(D_METHOD("getFirstTrackedBody"), &godot::Kodot2::getFirstTrackedBody);
@@ -34,8 +34,8 @@ void godot::Kodot2::_bind_methods()
     ADD_PROPERTY(PropertyInfo(Variant::VECTOR2, "screenSize"), "set_screenSize", "get_screenSize");
     
     ClassDB::bind_method(D_METHOD("get_kodotBodies"), &godot::Kodot2::get_kodotBodies);
-	ClassDB::bind_method(D_METHOD("set_kodotBodies", "p_kodotBodies"), &godot::Kodot2::set_kodotBodies);
-    ADD_PROPERTY(PropertyInfo(Variant::ARRAY, "kodotBodies"), "set_kodotBodies", "get_kodotBodies");
+	// ClassDB::bind_method(D_METHOD("set_kodotBodies", "p_kodotBodies"), &godot::Kodot2::set_kodotBodies);
+    // ADD_PROPERTY(PropertyInfo(Variant::ARRAY, "kodotBodies"), "set_kodotBodies", "get_kodotBodies");
 
 
     // Joints enum

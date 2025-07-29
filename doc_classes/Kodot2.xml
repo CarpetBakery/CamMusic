@@ -45,6 +45,11 @@
 				                [b]NOTE[/b]: This is only the AMOUNT of bodies tracked, meaning that a count of [code]3[/code] does not necessarily mean that body indices [code]0, 1, [/code] and [code]2[/code] are tracked.
 			</description>
 		</method>
+		<method name="get_kodotBodies" qualifiers="const">
+			<return type="Kodot2Body[]" />
+			<description>
+			</description>
+		</method>
 		<method name="initialize">
 			<return type="bool" />
 			<description>
@@ -70,8 +75,6 @@
 		</method>
 	</methods>
 	<members>
-		<member name="kodotBodies" type="Kodot2Body[]" setter="set_kodotBodies" getter="get_kodotBodies" default="[]">
-		</member>
 		<member name="printVerboseErrors" type="bool" setter="set_printVerboseErrors" getter="get_printVerboseErrors" default="false">
 		</member>
 		<member name="screenSize" type="Vector2" setter="set_screenSize" getter="get_screenSize" default="Vector2(1920, 1080)">
