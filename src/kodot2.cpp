@@ -17,9 +17,9 @@ void godot::Kodot2::_bind_methods()
     ClassDB::bind_method(D_METHOD("getBodyJointPositions3D", "bodyId"), &godot::Kodot2::getBodyJointPositions3D, DEFVAL(-1));
     ClassDB::bind_method(D_METHOD("getBodyJointPositions2D", "bodyId"), &godot::Kodot2::getBodyJointPositions2D, DEFVAL(-1));
 
-    ClassDB::bind_method(D_METHOD("getBody", "_bodyIndex"), &godot::Kodot2::getBody);
     ClassDB::bind_method(D_METHOD("getFirstTrackedBody"), &godot::Kodot2::getFirstTrackedBody);
     ClassDB::bind_method(D_METHOD("getAllTrackedBodies"), &godot::Kodot2::getAllTrackedBodies);
+    ClassDB::bind_method(D_METHOD("getAllBodies"), &godot::Kodot2::getAllBodies);
 
     // -- Get/set --
     ClassDB::bind_method(D_METHOD("getTrackedBodyCount"), &godot::Kodot2::getTrackedBodyCount);
@@ -33,9 +33,6 @@ void godot::Kodot2::_bind_methods()
 	ClassDB::bind_method(D_METHOD("set_screenSize", "p_screenSize"), &godot::Kodot2::set_screenSize);
     ADD_PROPERTY(PropertyInfo(Variant::VECTOR2, "screenSize"), "set_screenSize", "get_screenSize");
     
-    ClassDB::bind_method(D_METHOD("get_kodotBodies"), &godot::Kodot2::get_kodotBodies);
-	// ClassDB::bind_method(D_METHOD("set_kodotBodies", "p_kodotBodies"), &godot::Kodot2::set_kodotBodies);
-    // ADD_PROPERTY(PropertyInfo(Variant::ARRAY, "kodotBodies"), "set_kodotBodies", "get_kodotBodies");
 
 
     // Joints enum
@@ -249,6 +246,11 @@ godot::Kodot2Body* godot::Kodot2::getBody(int _bodyIndex)
     return cast_to<Kodot2Body>(kodotBodies.get(_bodyIndex));
 }
 
+godot::TypedArray<godot::Kodot2Body> godot::Kodot2::getAllBodies()
+{
+    return kodotBodies;
+}
+
 godot::Kodot2Body* godot::Kodot2::getFirstTrackedBody()
 {
     size_t len = kodotBodies.size();
@@ -362,15 +364,6 @@ void godot::Kodot2::set_screenSize(Vector2 const p_screenSize)
 godot::Vector2 godot::Kodot2::get_screenSize() const
 {
     return screenSize;
-}
-
-void godot::Kodot2::set_kodotBodies(TypedArray<Kodot2Body> const p_kodotBodies)
-{
-    kodotBodies = p_kodotBodies;
-}
-godot::TypedArray<godot::Kodot2Body> godot::Kodot2::get_kodotBodies() const
-{
-    return kodotBodies;
 }
 
 
