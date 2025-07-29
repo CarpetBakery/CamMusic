@@ -293,14 +293,6 @@ godot::TypedArray<godot::Vector2> godot::Kodot2::getBodyJointPositions2D(int _bo
         return TypedArray<Vector2>();
     }
 
-    // TypedArray<Vector2> jointPoints;
-    // TypedArray<Vector3> joints = body->joints;
-    // for (int i = 0; i < joints.size(); i++)
-    // {
-    //     jointPoints.push_back(bodyToScreen(joints.get(i)));
-    // }
-    // return jointPoints;
-
     return body->getJointPositions2D();
 }
 
@@ -320,9 +312,7 @@ godot::TypedArray<godot::Vector3> godot::Kodot2::getBodyJointPositions3D(int _bo
     {
         return TypedArray<Vector3>();
     }
-
-    // return body->joints;
-
+    
     return body->getJointPositions3D();
 }
 
