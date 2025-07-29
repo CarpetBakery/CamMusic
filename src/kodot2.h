@@ -74,12 +74,6 @@ namespace godot
         // Process all bodies in the current frame
         void processBodies(uint64_t nTime, int bodyCount, IBody** bodies);
 
-        // Get a body's joints
-        bool getJoints(int bodyId, _Joint* joints);
-
-        // Get first valid body in our bodies list
-        Kodot2Body* getFirstTrackedBody();
-
         // Convert world coord to screen
         Vector2 bodyToScreen(float x, float y, float z);
         Vector2 bodyToScreen(Vector3 bodyPoint);
@@ -104,13 +98,21 @@ namespace godot
         // Call at the beginning of the frame to update bodies and their joints
         void update(double delta);
 
-        TypedArray<Vector2> getBodyJointPositions2D();
-        TypedArray<Vector3> getBodyJointPositions3D();
+        // Get joint positions in 3D space (default value gets the first tracked body)
+        TypedArray<Vector3> getBodyJointPositions3D(int _bodyId = -1);
+        // Get joint positions in 2D space
+        TypedArray<Vector2> getBodyJointPositions2D(int _bodyId = -1);
 
+        // Get a body from the bodies array
+        Kodot2Body* getBody(int _bodyIndex);
+        // Get first tracked body in our bodies list
+        Kodot2Body* getFirstTrackedBody();
+        TypedArray<Kodot2Body> getAllTrackedBodies();
         
+
         // -- Get/set --
-        // Get the number of currently detected bodies
-        int getTrackedBodyCount();        
+        // Get the number of currently tracked bodies
+        int getTrackedBodyCount();
 
         // -- Exports --
         void set_printVerboseErrors(bool const p_printVerboseErrors);
