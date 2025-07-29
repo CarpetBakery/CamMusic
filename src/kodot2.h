@@ -105,10 +105,13 @@ namespace godot
 
         // Get a body from the bodies array
         Kodot2Body* getBody(int _bodyIndex);
+        
         // Return our kodotBodies array
         TypedArray<Kodot2Body> getAllBodies();
+
         // Get first tracked body in our bodies array
         Kodot2Body* getFirstTrackedBody();
+
         // Get all tracked bodies in our bodies array
         TypedArray<Kodot2Body> getAllTrackedBodies();
         
