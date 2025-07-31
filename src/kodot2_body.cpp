@@ -1,6 +1,8 @@
 #include "kodot2_body.h"
 #include "kodot2.h"
 
+#include <godot_cpp/classes/engine.hpp>
+
 using namespace godot;
 
 
@@ -16,6 +18,11 @@ void Kodot2Body::_bind_methods()
 
 Kodot2Body::Kodot2Body() 
 {
+    if (Engine::get_singleton()->is_editor_hint())
+    {
+        return;
+    }
+
     // Allocate joints array
     joints.resize(JointType::Count);
     joints2D.resize(JointType::Count);
@@ -23,6 +30,10 @@ Kodot2Body::Kodot2Body()
 
 Kodot2Body::~Kodot2Body() 
 {
+    if (Engine::get_singleton()->is_editor_hint())
+    {
+        return;
+    }
 }
 
 TypedArray<Vector3> Kodot2Body::getJointPositions3D()

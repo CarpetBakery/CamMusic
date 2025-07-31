@@ -90,6 +90,9 @@ namespace godot
         // Body reader
         IBodyFrameReader* bodyFrameReader;
 
+        Kodot2();
+        ~Kodot2();
+
         void _exit_tree() override;
         
         // Initialize Kinect sensor

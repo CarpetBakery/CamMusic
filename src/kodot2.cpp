@@ -6,8 +6,9 @@
 
 #include <godot_cpp/core/class_db.hpp>
 #include <godot_cpp/core/error_macros.hpp>
-#include <godot_cpp/variant/utility_functions.hpp>
 #include <godot_cpp/classes/time.hpp>
+#include <godot_cpp/classes/engine.hpp>
+#include <godot_cpp/variant/utility_functions.hpp>
 
 
 void godot::Kodot2::_bind_methods()
@@ -34,7 +35,6 @@ void godot::Kodot2::_bind_methods()
 	ClassDB::bind_method(D_METHOD("set_screenSize", "p_screenSize"), &godot::Kodot2::set_screenSize);
     ADD_PROPERTY(PropertyInfo(Variant::VECTOR2, "screenSize"), "set_screenSize", "get_screenSize");
     
-
 
     // Joints enum
     BIND_ENUM_CONSTANT(SpineBase);
@@ -118,15 +118,7 @@ bool godot::Kodot2::kinectInitialize()
 
 void godot::Kodot2::_exit_tree()
 {
-    SafeRelease(bodyFrameReader);
-    SafeRelease(coordMapper);
 
-    // Close Kinect sensor
-    if (kinectSensor)
-    {
-        kinectSensor->Close();
-    }
-    SafeRelease(kinectSensor);
 }
 
 void godot::Kodot2::kinectUpdate()
@@ -376,4 +368,32 @@ void godot::Kodot2::printErr(const godot::Variant &p_variant)
         return;
     }
     print_error(p_variant);
+}
+
+godot::Kodot2::Kodot2()
+{
+    // GDExtension classes are constructed/destructed once when the extension is loaded
+    // This seems to be the behavior even as of 2025-07-31
+    // See: https://github.com/godotengine/godot/pull/82554#issuecomment-1744888107
+}
+
+godot::Kodot2::~Kodot2()
+{
+    if (Engine::get_singleton()->is_editor_hint())
+    {
+        return;
+    }
+
+    // Cleanup
+    SafeRelease(bodyFrameReader);
+    SafeRelease(coordMapper);
+
+    // Close Kinect sensor
+    if (kinectSensor)
+    {
+        kinectSensor->Close();
+    }
+    SafeRelease(kinectSensor);
+
+    print_line("Kodot2 Freed");
 }
