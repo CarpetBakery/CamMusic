@@ -16,8 +16,12 @@ void godot::Kodot2::_bind_methods()
     // Expose methods to GDScript
     ClassDB::bind_method(D_METHOD("kinect_init"), &Kodot2::kinectInitialize);
     ClassDB::bind_method(D_METHOD("kinect_update"), &Kodot2::kinectUpdate);
+    
     ClassDB::bind_method(D_METHOD("get_body_joint_positions_3d", "bodyId"), &Kodot2::getBodyJointPositions3D, DEFVAL(-1));
     ClassDB::bind_method(D_METHOD("get_body_joint_positions_2d", "bodyId"), &Kodot2::getBodyJointPositions2D, DEFVAL(-1));
+
+    ClassDB::bind_method(D_METHOD("get_body_left_hand_state", "bodyId"), &Kodot2::getBodyLeftHandState, DEFVAL(-1));
+    ClassDB::bind_method(D_METHOD("get_body_right_hand_state", "bodyId"), &Kodot2::getBodyRightHandState, DEFVAL(-1));
 
     ClassDB::bind_method(D_METHOD("get_first_tracked_body"), &Kodot2::getFirstTrackedBody);
     ClassDB::bind_method(D_METHOD("get_tracked_bodies"), &Kodot2::getTrackedBodies);
@@ -293,31 +297,26 @@ godot::TypedArray<godot::Kodot2Body> godot::Kodot2::getTrackedBodies()
 
 godot::TypedArray<godot::Vector2> godot::Kodot2::getBodyJointPositions2D(int bodyId)
 {
-    Kodot2Body* body;
-    if (bodyId < 0)
-    {
-        body = getFirstTrackedBody();
-    }
-    else
-    {
-        body = getBody(bodyId);
-    }
-    return body->getJointPositions2D();
+    return getBodyFirstTrackedOrId(bodyId)->getJointPositions2D();
 }
 
 godot::TypedArray<godot::Vector3> godot::Kodot2::getBodyJointPositions3D(int bodyId)
 {
-    Kodot2Body* body;
-    if (bodyId < 0)
-    {
-        body = getFirstTrackedBody();
-    }
-    else
-    {
-        body = getBody(bodyId);
-    }
-    return body->getJointPositions3D();
+    return getBodyFirstTrackedOrId(bodyId)->getJointPositions3D();
 }
+
+godot::KodotHandState godot::Kodot2::getBodyLeftHandState(int bodyId)
+{
+    int _handState = getBodyFirstTrackedOrId(bodyId)->getLeftHandState();
+    return static_cast<KodotHandState>(_handState);
+}
+
+godot::KodotHandState godot::Kodot2::getBodyRightHandState(int bodyId)
+{
+    int _handState = getBodyFirstTrackedOrId(bodyId)->getRightHandState();
+    return static_cast<KodotHandState>(_handState);
+}
+
 
 godot::Vector2 godot::Kodot2::bodyToScreen(float x, float y, float z)
 {
@@ -335,6 +334,15 @@ godot::Vector2 godot::Kodot2::bodyToScreen(float x, float y, float z)
 godot::Vector2 godot::Kodot2::bodyToScreen(godot::Vector3 bodyPoint)
 {
     return bodyToScreen(bodyPoint.x, bodyPoint.y, bodyPoint.z);
+}
+
+godot::Kodot2Body* godot::Kodot2::getBodyFirstTrackedOrId(int bodyId)
+{
+    if (bodyId < 0)
+    {
+        return getFirstTrackedBody();
+    }
+    return getBody(bodyId);
 }
 
 

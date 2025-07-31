@@ -93,6 +93,8 @@ namespace godot
         Vector2 bodyToScreen(float x, float y, float z);
         Vector2 bodyToScreen(Vector3 bodyPoint);
         
+        // Get either first tracked body, or body index
+        Kodot2Body* getBodyFirstTrackedOrId(int bodyId = -1);
 
         // -- Debug --
         void printErr(const godot::Variant &p_variant);
@@ -120,6 +122,9 @@ namespace godot
         TypedArray<Vector3> getBodyJointPositions3D(int bodyId = -1);
         // Get joint positions in 2D space
         TypedArray<Vector2> getBodyJointPositions2D(int bodyId = -1);
+
+        KodotHandState getBodyLeftHandState(int bodyId = -1);
+        KodotHandState getBodyRightHandState(int bodyId = -1);
 
         // Get a body from the bodies array
         Kodot2Body* getBody(int _bodyIndex);

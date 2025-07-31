@@ -58,6 +58,7 @@ func _process(delta: float) -> void:
 	
 	kinect_update()
 	
+	
 	var jointPoints := get_body_joint_positions_2d(-1)
 	if jointPoints.is_empty():
 		return
