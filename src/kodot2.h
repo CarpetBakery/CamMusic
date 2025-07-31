@@ -93,10 +93,10 @@ namespace godot
         void _exit_tree() override;
         
         // Initialize Kinect sensor
-        bool initialize();
+        bool kinectInitialize();
 
         // Call at the beginning of the frame to update bodies and their joints
-        void update(double delta);
+        void kinectUpdate(double delta);
 
         // Get joint positions in 3D space (default value gets the first tracked body)
         TypedArray<Vector3> getBodyJointPositions3D(int bodyId = -1);

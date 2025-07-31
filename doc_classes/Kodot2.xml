@@ -48,13 +48,18 @@
 				[b]NOTE[/b]: This is only the AMOUNT of bodies tracked, meaning that a count of [code]3[/code] does not necessarily mean that body indices [code]0, 1, [/code] and [code]2[/code] are tracked.
 			</description>
 		</method>
-		<method name="init_kinect">
+		<method name="kinect_init">
 			<return type="bool" />
 			<description>
 				Initializes the Kinect sensor. Returns [code]false[/code] if successful; [code]true[/code] if it failed.
+				[b]Example:[/b]
+				[gdscript]
+				func _ready():
+                    # The Kinect must be initialized before we can access its skeletal tracking capabilities
+				[/gdscript]
 			</description>
 		</method>
-		<method name="update_kinect">
+		<method name="kinect_update">
 			<return type="void" />
 			<param index="0" name="delta" type="float" />
 			<description>
@@ -62,12 +67,12 @@
 				[b]Example:[/b]
 				[gdscript]
 				func _process(delta: float):
-					# Get the latest data from the Kinect
-					update(delta)
+				    # Get the latest data from the Kinect
+				    update(delta)
 
-					# ... Do something with data after
-					var jointPoints := getBodyJointPositions2D()
-					# ...
+				    # ... Do something with data after
+				    var jointPoints := getBodyJointPositions2D()
+				    # ...
 				[/gdscript]
 			</description>
 		</method>

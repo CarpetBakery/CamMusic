@@ -13,8 +13,8 @@
 void godot::Kodot2::_bind_methods()
 {
     // Expose methods to GDScript
-    ClassDB::bind_method(D_METHOD("init_kinect"), &godot::Kodot2::initialize);
-    ClassDB::bind_method(D_METHOD("update_kinect", "delta"), &godot::Kodot2::update);
+    ClassDB::bind_method(D_METHOD("kinect_init"), &godot::Kodot2::kinectInitialize);
+    ClassDB::bind_method(D_METHOD("kinect_update", "delta"), &godot::Kodot2::kinectUpdate);
     ClassDB::bind_method(D_METHOD("get_body_joint_positions_3d", "bodyId"), &godot::Kodot2::getBodyJointPositions3D, DEFVAL(-1));
     ClassDB::bind_method(D_METHOD("get_body_joint_positions_2d", "bodyId"), &godot::Kodot2::getBodyJointPositions2D, DEFVAL(-1));
 
@@ -65,7 +65,7 @@ ClassDB::bind_method(D_METHOD("get_all_tracked_bodies"), &godot::Kodot2::getAllT
     BIND_ENUM_CONSTANT(Count);
 }
 
-bool godot::Kodot2::initialize()
+bool godot::Kodot2::kinectInitialize()
 {
     print_line("Initializing Kinect 2");
 
@@ -129,7 +129,7 @@ void godot::Kodot2::_exit_tree()
     SafeRelease(kinectSensor);
 }
 
-void godot::Kodot2::update(double delta)
+void godot::Kodot2::kinectUpdate(double delta)
 {
     if (!bodyFrameReader)
     {
