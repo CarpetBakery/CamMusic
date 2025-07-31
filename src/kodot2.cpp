@@ -156,8 +156,14 @@ bool godot::Kodot2::kinectInitialize()
 
 void godot::Kodot2::kinectUpdate()
 {
-    ERR_FAIL_COND_MSG(!isKinectInitialized, "Trying to update when Kinect was never initialized. Try calling `kinect_init' in your ready function.");
+    ERR_FAIL_COND_MSG(!isKinectInitialized, "Trying to update when Kinect was never initialized. Try calling `kinect_init' in your _ready function.");
 
+    updateBody();
+    updateDepth();
+}
+
+void godot::Kodot2::updateBody()
+{
     if (!bodyFrameReader)
     {
         return;
@@ -168,8 +174,7 @@ void godot::Kodot2::kinectUpdate()
 
     if (SUCCEEDED(hr))
     {
-        // NOTE: We don't really need the timestamp stuff
-        // might remove this later
+        // TODO: Remove this timestamp stuff
         INT64 time = 0;
         hr = bodyFrame->get_RelativeTime(&time);
 
@@ -198,6 +203,19 @@ void godot::Kodot2::kinectUpdate()
 
     SafeRelease(bodyFrame);
 }
+
+void godot::Kodot2::updateDepth()
+{
+    if (!depthFrameReader)
+    {
+        return;
+    }
+
+    IDepthFrame* depthFrame = NULL;
+    HRESULT hr = depthFrameReader->AcquireLatestFrame(&depthFrame);
+
+}
+
 
 void godot::Kodot2::processBodies(uint64_t nTime, int bodyCount, IBody** iBodies)
 {

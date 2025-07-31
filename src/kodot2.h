@@ -87,6 +87,9 @@ namespace godot
         int firstTrackedBodyIndex = 0;
 
 
+        void updateBody();
+        void updateDepth();
+
         // Process all bodies in the current frame
         void processBodies(uint64_t nTime, int bodyCount, IBody** bodies);
 
