@@ -6,8 +6,9 @@ using namespace godot;
 
 void Kodot2Body::_bind_methods() 
 {
-    ClassDB::bind_method(D_METHOD("getJointPositions3D"), &Kodot2Body::getJointPositions3D);
-    ClassDB::bind_method(D_METHOD("getJointPositions2D"), &Kodot2Body::getJointPositions2D);
+    // ClassDB::bind_method(D_METHOD("getJointPositions3D"), &Kodot2Body::getJointPositions3D);
+    ClassDB::bind_method(D_METHOD("get_joint_positions_3d"), &Kodot2Body::getJointPositions3D);
+    ClassDB::bind_method(D_METHOD("get_joint_positions_2d"), &Kodot2Body::getJointPositions2D);
 
     ClassDB::bind_method(D_METHOD("isTracked"), &Kodot2Body::isTracked);
 }

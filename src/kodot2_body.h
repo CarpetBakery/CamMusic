@@ -1,14 +1,14 @@
 #ifndef KODOT2_BODY_H
 #define KODOT2_BODY_H
 
-#include <godot_cpp/classes/resource.hpp>
+#include <godot_cpp/classes/ref_counted.hpp>
 
 
 namespace godot
 {
-   class Kodot2Body : public Resource
+   class Kodot2Body : public RefCounted
 	{
-		GDCLASS(Kodot2Body, Resource)
+		GDCLASS(Kodot2Body, RefCounted)
 
 	protected:
 		static void _bind_methods();
