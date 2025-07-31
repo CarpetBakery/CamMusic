@@ -1,6 +1,6 @@
 class_name Kodot2Test extends Kodot2
 
-# TEMP
+# For testing
 var POS_INDEX_NAME := [
 	"SpineBase",
 	"SpineMid",
