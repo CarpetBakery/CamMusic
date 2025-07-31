@@ -48,7 +48,7 @@ var showJointNames := true:
 
 
 func _ready() -> void:
-	initialize()
+	init_kinect()
 	initVisuals()
 
 
@@ -56,9 +56,9 @@ func _process(delta: float) -> void:
 	if Input.is_action_just_pressed("ui_accept"):
 		showJointNames = !showJointNames
 	
-	update(delta)
+	update_kinect(delta)
 	
-	var jointPoints := getBodyJointPositions2D(-1)
+	var jointPoints := get_body_joint_positions_2d(-1)
 	if jointPoints.is_empty():
 		return
 	

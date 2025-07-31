@@ -16,7 +16,7 @@
 	<members>
 		<member name="amplitude" type="float" setter="set_amplitude" getter="get_amplitude" default="10.0">
 		</member>
-		<member name="speed" type="float" setter="set_speed" getter="get_speed" default="-4.91081e-309">
+		<member name="speed" type="float" setter="set_speed" getter="get_speed" default="0.0">
 		</member>
 	</members>
 </class>

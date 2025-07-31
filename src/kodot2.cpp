@@ -13,17 +13,17 @@
 void godot::Kodot2::_bind_methods()
 {
     // Expose methods to GDScript
-    ClassDB::bind_method(D_METHOD("initialize"), &godot::Kodot2::initialize);
-    ClassDB::bind_method(D_METHOD("update", "delta"), &godot::Kodot2::update);
-    ClassDB::bind_method(D_METHOD("getBodyJointPositions3D", "bodyId"), &godot::Kodot2::getBodyJointPositions3D, DEFVAL(-1));
-    ClassDB::bind_method(D_METHOD("getBodyJointPositions2D", "bodyId"), &godot::Kodot2::getBodyJointPositions2D, DEFVAL(-1));
+    ClassDB::bind_method(D_METHOD("init_kinect"), &godot::Kodot2::initialize);
+    ClassDB::bind_method(D_METHOD("update_kinect", "delta"), &godot::Kodot2::update);
+    ClassDB::bind_method(D_METHOD("get_body_joint_positions_3d", "bodyId"), &godot::Kodot2::getBodyJointPositions3D, DEFVAL(-1));
+    ClassDB::bind_method(D_METHOD("get_body_joint_positions_2d", "bodyId"), &godot::Kodot2::getBodyJointPositions2D, DEFVAL(-1));
 
-    ClassDB::bind_method(D_METHOD("getFirstTrackedBody"), &godot::Kodot2::getFirstTrackedBody);
-    ClassDB::bind_method(D_METHOD("getAllTrackedBodies"), &godot::Kodot2::getAllTrackedBodies);
-    ClassDB::bind_method(D_METHOD("getAllBodies"), &godot::Kodot2::getAllBodies);
+    ClassDB::bind_method(D_METHOD("get_first_tracked_body"), &godot::Kodot2::getFirstTrackedBody);
+ClassDB::bind_method(D_METHOD("get_all_tracked_bodies"), &godot::Kodot2::getAllTrackedBodies);
+    ClassDB::bind_method(D_METHOD("get_all_bodies"), &godot::Kodot2::getAllBodies);
 
     // -- Get/set --
-    ClassDB::bind_method(D_METHOD("getTrackedBodyCount"), &godot::Kodot2::getTrackedBodyCount);
+    ClassDB::bind_method(D_METHOD("get_tracked_body_count"), &godot::Kodot2::getTrackedBodyCount);
 
     // -- Exports --
     ClassDB::bind_method(D_METHOD("get_printVerboseErrors"), &godot::Kodot2::get_printVerboseErrors);

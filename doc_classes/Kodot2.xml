@@ -9,52 +9,52 @@
 	<tutorials>
 	</tutorials>
 	<methods>
-		<method name="getAllBodies">
+		<method name="get_all_bodies">
 			<return type="Kodot2Body[]" />
 			<description>
 				Returns an array of all body objects, regardless if they're being tracked.
 			</description>
 		</method>
-		<method name="getAllTrackedBodies">
+		<method name="get_all_tracked_bodies">
 			<return type="Kodot2Body[]" />
 			<description>
 				Returns an array of all bodies which are currently being tracked.
 			</description>
 		</method>
-		<method name="getBodyJointPositions2D">
+		<method name="get_body_joint_positions_2d">
 			<return type="Vector2[]" />
 			<param index="0" name="bodyId" type="int" default="-1" />
 			<description>
 				Returns the 2D joint positions of the desired body. Default parameter returns the first tracked body in bodies list.
 			</description>
 		</method>
-		<method name="getBodyJointPositions3D">
+		<method name="get_body_joint_positions_3d">
 			<return type="Vector3[]" />
 			<param index="0" name="bodyId" type="int" default="-1" />
 			<description>
 				Returns the 3D joint positions of the desired body. Default parameter returns the first tracked body in bodies list.
 			</description>
 		</method>
-		<method name="getFirstTrackedBody">
+		<method name="get_first_tracked_body">
 			<return type="Kodot2Body" />
 			<description>
 				Returns the first tracked the Kinect can find.
 			</description>
 		</method>
-		<method name="getTrackedBodyCount">
+		<method name="get_tracked_body_count">
 			<return type="int" />
 			<description>
 				Returns the current number of tracked bodies.
-				                                [b]NOTE[/b]: This is only the AMOUNT of bodies tracked, meaning that a count of [code]3[/code] does not necessarily mean that body indices [code]0, 1, [/code] and [code]2[/code] are tracked.
+				[b]NOTE[/b]: This is only the AMOUNT of bodies tracked, meaning that a count of [code]3[/code] does not necessarily mean that body indices [code]0, 1, [/code] and [code]2[/code] are tracked.
 			</description>
 		</method>
-		<method name="initialize">
+		<method name="init_kinect">
 			<return type="bool" />
 			<description>
 				Initializes the Kinect sensor. Returns [code]false[/code] if successful; [code]true[/code] if it failed.
 			</description>
 		</method>
-		<method name="update">
+		<method name="update_kinect">
 			<return type="void" />
 			<param index="0" name="delta" type="float" />
 			<description>
