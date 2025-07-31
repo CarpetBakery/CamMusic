@@ -73,6 +73,9 @@ namespace godot
         // How many bodies are currently being tracked?
         int trackedBodyCount = 0;
 
+        // Which index was previously the first tracked body?
+        int firstTrackedBodyIndex = 0;
+
 
         // Process all bodies in the current frame
         void processBodies(uint64_t nTime, int bodyCount, IBody** bodies);

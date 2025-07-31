@@ -239,7 +239,9 @@ void godot::Kodot2::processBodies(uint64_t nTime, int bodyCount, IBody** iBodies
 godot::Kodot2Body* godot::Kodot2::getBody(int _bodyIndex)
 {
     // Don't try to use an index out of range
-    ERR_FAIL_COND_V_MSG(_bodyIndex < 0 || _bodyIndex > BODY_COUNT - 1, nullptr, "Trying to get body index outside range.");
+    // Returns first body if this failed
+    ERR_FAIL_COND_V_MSG(_bodyIndex < 0 || _bodyIndex > BODY_COUNT - 1, cast_to<Kodot2Body>(kodotBodies.front()), "Trying to get body index outside range.");
+    
     return cast_to<Kodot2Body>(kodotBodies.get(_bodyIndex));
 }
 
@@ -256,10 +258,11 @@ godot::Kodot2Body* godot::Kodot2::getFirstTrackedBody()
         Kodot2Body* body = getBody(i);
         if (body->isTracked())
         {
+            firstTrackedBodyIndex = i;
             return body;
         }
     }
-    return nullptr;
+    return getBody(firstTrackedBodyIndex);
 }
 
 godot::TypedArray<godot::Kodot2Body> godot::Kodot2::getAllTrackedBodies()
@@ -290,12 +293,6 @@ godot::TypedArray<godot::Vector2> godot::Kodot2::getBodyJointPositions2D(int bod
     {
         body = getBody(bodyId);
     }
-
-    if (body == nullptr)
-    {
-        return TypedArray<Vector2>();
-    }
-
     return body->getJointPositions2D();
 }
 
@@ -310,12 +307,6 @@ godot::TypedArray<godot::Vector3> godot::Kodot2::getBodyJointPositions3D(int bod
     {
         body = getBody(bodyId);
     }
-
-    if (body == nullptr)
-    {
-        return TypedArray<Vector3>();
-    }
-    
     return body->getJointPositions3D();
 }
 
