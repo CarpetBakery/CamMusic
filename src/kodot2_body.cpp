@@ -16,8 +16,6 @@ void Kodot2Body::_bind_methods()
 
 Kodot2Body::Kodot2Body() 
 {
-    print_line("Kodot Body Created");
-    
     // Allocate joints array
     joints.resize(JointType::Count);
     joints2D.resize(JointType::Count);
@@ -25,7 +23,6 @@ Kodot2Body::Kodot2Body()
 
 Kodot2Body::~Kodot2Body() 
 {
-    print_line("Kodot Body Destroyed");
 }
 
 TypedArray<Vector3> Kodot2Body::getJointPositions3D()
