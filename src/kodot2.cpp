@@ -14,25 +14,25 @@
 void godot::Kodot2::_bind_methods()
 {
     // Expose methods to GDScript
-    ClassDB::bind_method(D_METHOD("kinect_init"), &godot::Kodot2::kinectInitialize);
-    ClassDB::bind_method(D_METHOD("kinect_update"), &godot::Kodot2::kinectUpdate);
-    ClassDB::bind_method(D_METHOD("get_body_joint_positions_3d", "bodyId"), &godot::Kodot2::getBodyJointPositions3D, DEFVAL(-1));
-    ClassDB::bind_method(D_METHOD("get_body_joint_positions_2d", "bodyId"), &godot::Kodot2::getBodyJointPositions2D, DEFVAL(-1));
+    ClassDB::bind_method(D_METHOD("kinect_init"), &Kodot2::kinectInitialize);
+    ClassDB::bind_method(D_METHOD("kinect_update"), &Kodot2::kinectUpdate);
+    ClassDB::bind_method(D_METHOD("get_body_joint_positions_3d", "bodyId"), &Kodot2::getBodyJointPositions3D, DEFVAL(-1));
+    ClassDB::bind_method(D_METHOD("get_body_joint_positions_2d", "bodyId"), &Kodot2::getBodyJointPositions2D, DEFVAL(-1));
 
-    ClassDB::bind_method(D_METHOD("get_first_tracked_body"), &godot::Kodot2::getFirstTrackedBody);
-    ClassDB::bind_method(D_METHOD("get_all_tracked_bodies"), &godot::Kodot2::getAllTrackedBodies);
-    ClassDB::bind_method(D_METHOD("get_all_bodies"), &godot::Kodot2::getAllBodies);
+    ClassDB::bind_method(D_METHOD("get_first_tracked_body"), &Kodot2::getFirstTrackedBody);
+    ClassDB::bind_method(D_METHOD("get_all_tracked_bodies"), &Kodot2::getAllTrackedBodies);
+    ClassDB::bind_method(D_METHOD("get_all_bodies"), &Kodot2::getAllBodies);
 
     // -- Get/set --
-    ClassDB::bind_method(D_METHOD("get_tracked_body_count"), &godot::Kodot2::getTrackedBodyCount);
+    ClassDB::bind_method(D_METHOD("get_tracked_body_count"), &Kodot2::getTrackedBodyCount);
 
     // -- Exports --
-    ClassDB::bind_method(D_METHOD("get_printVerboseErrors"), &godot::Kodot2::get_printVerboseErrors);
-	ClassDB::bind_method(D_METHOD("set_printVerboseErrors", "p_printVerboseErrors"), &godot::Kodot2::set_printVerboseErrors);
+    ClassDB::bind_method(D_METHOD("get_printVerboseErrors"), &Kodot2::get_printVerboseErrors);
+	ClassDB::bind_method(D_METHOD("set_printVerboseErrors", "p_printVerboseErrors"), &Kodot2::set_printVerboseErrors);
     ADD_PROPERTY(PropertyInfo(Variant::BOOL, "printVerboseErrors"), "set_printVerboseErrors", "get_printVerboseErrors");
 
-    ClassDB::bind_method(D_METHOD("get_screenSize"), &godot::Kodot2::get_screenSize);
-	ClassDB::bind_method(D_METHOD("set_screenSize", "p_screenSize"), &godot::Kodot2::set_screenSize);
+    ClassDB::bind_method(D_METHOD("get_screenSize"), &Kodot2::get_screenSize);
+	ClassDB::bind_method(D_METHOD("set_screenSize", "p_screenSize"), &Kodot2::set_screenSize);
     ADD_PROPERTY(PropertyInfo(Variant::VECTOR2, "screenSize"), "set_screenSize", "get_screenSize");
     
 
@@ -63,6 +63,20 @@ void godot::Kodot2::_bind_methods()
     BIND_ENUM_CONSTANT(HandTipRight);
     BIND_ENUM_CONSTANT(ThumbRight);
     BIND_ENUM_CONSTANT(Count);
+}
+
+void godot::Kodot2::_notification(int p_what)
+{
+    // For executing stuff in _ready and _process alongside GDScript
+    // switch (p_what)
+    // {
+    // case Node::NOTIFICATION_READY:
+    //     kinectInitialize();
+    //     break;
+    // case Node::NOTIFICATION_PROCESS:
+    //     kinectUpdate();
+    //     break;
+    // }
 }
 
 bool godot::Kodot2::kinectInitialize()
@@ -111,11 +125,6 @@ bool godot::Kodot2::kinectInitialize()
 
     print_line("Kinect 2 initialized");
     return false;
-}
-
-void godot::Kodot2::_exit_tree()
-{
-
 }
 
 void godot::Kodot2::kinectUpdate()

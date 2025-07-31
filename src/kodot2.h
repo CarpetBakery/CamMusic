@@ -96,7 +96,7 @@ namespace godot
         Kodot2();
         ~Kodot2();
 
-        void _exit_tree() override;
+        void _notification(int p_what);
         
         // Initialize Kinect sensor
         bool kinectInitialize();
