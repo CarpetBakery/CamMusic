@@ -61,7 +61,6 @@
 		</method>
 		<method name="kinect_update">
 			<return type="void" />
-			<param index="0" name="delta" type="float" />
 			<description>
 				Polls the Kinect for updates on number of bodies tracked, new joint positions, etc. [b]Should be called only once per frame[/b] before accessing any Kinect properties to ensure access to the latest data.
 				[b]Example:[/b]

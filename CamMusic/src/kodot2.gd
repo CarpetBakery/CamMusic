@@ -19,7 +19,7 @@ var skeletonTimeout := 2.0
 
 
 func _ready() -> void:
-	init_kinect()
+	kinect_init()
 	# set_sensorAngle(sensorAngle)
 	
 	skeletonLostTimer = Timer.new()
@@ -32,7 +32,7 @@ func _ready() -> void:
 
 
 func _process(delta: float) -> void:
-	update_kinect(delta)
+	kinect_update()
 	
 	var joints := get_body_joint_positions_2d()
 	if joints.is_empty():

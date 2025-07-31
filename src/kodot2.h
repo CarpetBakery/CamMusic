@@ -96,7 +96,7 @@ namespace godot
         bool kinectInitialize();
 
         // Call at the beginning of the frame to update bodies and their joints
-        void kinectUpdate(double delta);
+        void kinectUpdate();
 
         // Get joint positions in 3D space (default value gets the first tracked body)
         TypedArray<Vector3> getBodyJointPositions3D(int bodyId = -1);
