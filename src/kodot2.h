@@ -131,7 +131,7 @@ namespace godot
         Kodot2Body* getFirstTrackedBody();
 
         // Get all tracked bodies in our bodies array
-        TypedArray<Kodot2Body> getAllTrackedBodies();
+        TypedArray<Kodot2Body> getTrackedBodies();
         
 
         // -- Get/set --

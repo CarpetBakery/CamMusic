@@ -20,7 +20,7 @@ void godot::Kodot2::_bind_methods()
     ClassDB::bind_method(D_METHOD("get_body_joint_positions_2d", "bodyId"), &Kodot2::getBodyJointPositions2D, DEFVAL(-1));
 
     ClassDB::bind_method(D_METHOD("get_first_tracked_body"), &Kodot2::getFirstTrackedBody);
-    ClassDB::bind_method(D_METHOD("get_all_tracked_bodies"), &Kodot2::getAllTrackedBodies);
+    ClassDB::bind_method(D_METHOD("get_tracked_bodies"), &Kodot2::getTrackedBodies);
     ClassDB::bind_method(D_METHOD("get_all_bodies"), &Kodot2::getAllBodies);
 
     // -- Get/set --
@@ -274,7 +274,7 @@ godot::Kodot2Body* godot::Kodot2::getFirstTrackedBody()
     return getBody(firstTrackedBodyIndex);
 }
 
-godot::TypedArray<godot::Kodot2Body> godot::Kodot2::getAllTrackedBodies()
+godot::TypedArray<godot::Kodot2Body> godot::Kodot2::getTrackedBodies()
 {
     TypedArray<Kodot2Body> _trackedBodies;
 
