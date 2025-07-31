@@ -56,6 +56,7 @@
 				[gdscript]
 				func _ready():
                     # The Kinect must be initialized before we can access its skeletal tracking capabilities
+                    kinect_init()
 				[/gdscript]
 			</description>
 		</method>

@@ -58,6 +58,9 @@ namespace godot
         static const int DEPTH_WIDTH = 512;
         static const int DEPTH_HEIGHT = 424;
 
+        // Was the Kinect initialized?
+        bool isKinectInitialized = false;
+
         // The dimensions of the screen
         Vector2 screenSize = Vector2(1920, 1080);
 

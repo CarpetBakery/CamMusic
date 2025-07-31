@@ -67,7 +67,8 @@ void godot::Kodot2::_bind_methods()
 
 bool godot::Kodot2::kinectInitialize()
 {
-    print_line("Initializing Kinect 2");
+    print_line("Initializing Kinect 2...");
+    isKinectInitialized = true;
 
     HRESULT hr;
     hr = GetDefaultKinectSensor(&kinectSensor);
@@ -100,13 +101,9 @@ bool godot::Kodot2::kinectInitialize()
         SafeRelease(pBodyFrameSource);
     }
 
-    if (!kinectSensor || FAILED(hr))
-    {
-        print_error("No ready Kinect found!");
-        return true;
-    }
+    ERR_FAIL_COND_V_MSG(!kinectSensor || FAILED(hr), true, "No ready Kinect found!");
 
-    // Setup kodotBodies
+    // Populate kodotBodies
     for (int i = 0; i < BODY_COUNT; i++)
     {
         kodotBodies.push_back(memnew(Kodot2Body));
@@ -123,6 +120,8 @@ void godot::Kodot2::_exit_tree()
 
 void godot::Kodot2::kinectUpdate()
 {
+    ERR_FAIL_COND_MSG(!isKinectInitialized, "Trying to update when Kinect was never initialized. Try calling `kinect_init' in your ready function.");
+
     if (!bodyFrameReader)
     {
         return;
@@ -231,11 +230,7 @@ void godot::Kodot2::processBodies(uint64_t nTime, int bodyCount, IBody** iBodies
 godot::Kodot2Body* godot::Kodot2::getBody(int _bodyIndex)
 {
     // Don't try to use an index out of range
-    if (_bodyIndex < 0 || _bodyIndex > BODY_COUNT - 1)
-    {
-        print_error("Error: Trying to get body index outside range.");
-        return nullptr;
-    }
+    ERR_FAIL_COND_V_MSG(_bodyIndex < 0 || _bodyIndex > BODY_COUNT - 1, nullptr, "Trying to get body index outside range.");
     return cast_to<Kodot2Body>(kodotBodies.get(_bodyIndex));
 }
 
