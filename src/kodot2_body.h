@@ -14,21 +14,30 @@ namespace godot
 		static void _bind_methods();
 	
 	public:
-		// Is this body currently being tracked?
 		bool tracked = false;
 
-		// Joint positions in 3D Space
 		TypedArray<Vector3> joints;
-		// Joint positions in 2D Space
 		TypedArray<Vector2> joints2D;
+
+		// Hand gestures
+		int leftHandState;
+        int rightHandState;
+
+		enum _HandState working;
 
 		Kodot2Body();
 		~Kodot2Body();
 
+		// Is this body currently being tracked?
 		bool isTracked();
 
+		// Get joint positions as Vector3
 		TypedArray<Vector3> getJointPositions3D();
+		// Get joint positions as Vector2
 		TypedArray<Vector2> getJointPositions2D();
+
+		int getLeftHandState();
+		int getRightHandState();
 	};
 }
 

@@ -16,26 +16,6 @@ void Kodot2Body::_bind_methods()
 }
 
 
-Kodot2Body::Kodot2Body() 
-{
-    if (Engine::get_singleton()->is_editor_hint())
-    {
-        return;
-    }
-
-    // Allocate joints array
-    joints.resize(JointType::Count);
-    joints2D.resize(JointType::Count);
-}
-
-Kodot2Body::~Kodot2Body() 
-{
-    if (Engine::get_singleton()->is_editor_hint())
-    {
-        return;
-    }
-}
-
 TypedArray<Vector3> Kodot2Body::getJointPositions3D()
 {
     return joints;
@@ -49,4 +29,37 @@ TypedArray<Vector2> Kodot2Body::getJointPositions2D()
 bool Kodot2Body::isTracked()
 {
     return tracked;
+}
+
+int Kodot2Body::getLeftHandState()
+{
+    return leftHandState;
+}
+int Kodot2Body::getRightHandState()
+{
+    return rightHandState;
+}
+
+
+Kodot2Body::Kodot2Body() 
+{
+    if (Engine::get_singleton()->is_editor_hint())
+    {
+        return;
+    }
+
+    leftHandState = 0;
+    rightHandState = 0;
+
+    // Allocate joints array
+    joints.resize(JointType::Count);
+    joints2D.resize(JointType::Count);
+}
+
+Kodot2Body::~Kodot2Body() 
+{
+    if (Engine::get_singleton()->is_editor_hint())
+    {
+        return;
+    }
 }

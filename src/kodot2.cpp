@@ -63,6 +63,13 @@ void godot::Kodot2::_bind_methods()
     BIND_ENUM_CONSTANT(HandTipRight);
     BIND_ENUM_CONSTANT(ThumbRight);
     BIND_ENUM_CONSTANT(Count);
+
+    // HandState enum
+    BIND_ENUM_CONSTANT(Unknown);
+    BIND_ENUM_CONSTANT(NotTracked);
+    BIND_ENUM_CONSTANT(Open);
+    BIND_ENUM_CONSTANT(Closed);
+    BIND_ENUM_CONSTANT(Lasso);
 }
 
 void godot::Kodot2::_notification(int p_what)
@@ -204,10 +211,6 @@ void godot::Kodot2::processBodies(uint64_t nTime, int bodyCount, IBody** iBodies
         Joint joints[JointType_Count];
         HandState leftHandState = HandState_Unknown;
         HandState rightHandState = HandState_Unknown;
-        
-        // TODO: Do something with this information
-        iBody->get_HandLeftState(&leftHandState);
-        iBody->get_HandRightState(&rightHandState);
 
         hr = iBody->GetJoints(_countof(joints), joints);
         if (!SUCCEEDED(hr))
@@ -231,6 +234,12 @@ void godot::Kodot2::processBodies(uint64_t nTime, int bodyCount, IBody** iBodies
             ));
             body->joints2D.set(k, bodyToScreen(body->joints.get(k)));
         }
+
+        // Update hand states
+        iBody->get_HandLeftState(&leftHandState);
+        iBody->get_HandRightState(&rightHandState);
+        body->leftHandState = static_cast<int>(leftHandState);
+        body->rightHandState = static_cast<int>(rightHandState);
 
         trackedBodyCount++;
     }

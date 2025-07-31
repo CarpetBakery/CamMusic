@@ -47,6 +47,15 @@ namespace godot
         Count			= ( ThumbRight + 1 ) 
     };
 
+    enum KodotHandState
+    {
+        Unknown	= 0,
+        NotTracked	= 1,
+        Open	= 2,
+        Closed	= 3,
+        Lasso	= 4
+    };
+
     class Kodot2 : public Node
     {
         GDCLASS(Kodot2, Node);
@@ -139,6 +148,8 @@ namespace godot
 }
 
 // Needed to expose enum to GDScript
-VARIANT_ENUM_CAST(JointType)
+VARIANT_ENUM_CAST(JointType);
+VARIANT_ENUM_CAST(KodotHandState);
+
 
 #endif // KODOT2_H
