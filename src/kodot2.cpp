@@ -1,7 +1,7 @@
 #include "kodot2.h"
 
 #include "util.h"
-#include "windowsdef.h"
+// #include "windowsdef.h"
 #include <Kinect.h>
 
 #include <godot_cpp/core/class_db.hpp>
@@ -204,19 +204,6 @@ void godot::Kodot2::updateBody()
     SafeRelease(bodyFrame);
 }
 
-void godot::Kodot2::updateDepth()
-{
-    if (!depthFrameReader)
-    {
-        return;
-    }
-
-    IDepthFrame* depthFrame = NULL;
-    HRESULT hr = depthFrameReader->AcquireLatestFrame(&depthFrame);
-
-}
-
-
 void godot::Kodot2::processBodies(uint64_t nTime, int bodyCount, IBody** iBodies)
 {
     // Reset tracking flags on kodot bodies
@@ -282,6 +269,79 @@ void godot::Kodot2::processBodies(uint64_t nTime, int bodyCount, IBody** iBodies
         trackedBodyCount++;
     }
 }
+
+void godot::Kodot2::updateDepth()
+{
+    if (!depthFrameReader)
+    {
+        return;
+    }
+
+    IDepthFrame* depthFrame = NULL;
+    HRESULT hr = depthFrameReader->AcquireLatestFrame(&depthFrame);
+
+    if (SUCCEEDED(hr))
+    {
+        INT64 time = 0;
+        IFrameDescription *frameDescription = NULL;
+        int width = 0;
+        int height = 0;
+        USHORT depthMinReliableDistance = 0;
+        USHORT depthMaxDistance = 0;
+        UINT bufferSize = 0;
+        UINT16 *buffer  = NULL;
+
+        hr = depthFrame->get_RelativeTime(&time);
+
+        if (SUCCEEDED(hr))
+        {
+            hr = depthFrame->get_FrameDescription(&frameDescription);
+        }
+
+        if (SUCCEEDED(hr))
+        {
+            hr = frameDescription->get_Width(&width);
+        }
+
+        if (SUCCEEDED(hr))
+        {
+            hr = frameDescription->get_Height(&height);
+        }
+
+        if (SUCCEEDED(hr))
+        {
+            hr = depthFrame->get_DepthMinReliableDistance(&depthMinReliableDistance);
+        }
+
+        if (SUCCEEDED(hr))
+        {
+            
+			// In order to see the full range of depth (including the less reliable far field depth)
+			// we are setting nDepthMaxDistance to the extreme potential depth threshold
+			depthMaxDistance = USHRT_MAX;
+
+			// Note:  If you wish to filter by reliable depth distance, uncomment the following line.
+            //// hr = pDepthFrame->get_DepthMaxReliableDistance(&nDepthMaxDistance);
+        }
+
+        if (SUCCEEDED(hr))
+        {
+            hr = depthFrame->AccessUnderlyingBuffer(&bufferSize, &buffer);
+        }
+
+        if (SUCCEEDED(hr))
+        {
+            processDepth(time, buffer, width, height, depthMinReliableDistance, depthMaxDistance);
+        }
+    }
+    SafeRelease(depthFrame);
+}
+
+void godot::Kodot2::processDepth(INT64 nTime, const UINT16* buffer, int width, int height, USHORT minDepth, USHORT maxDepth)
+{
+
+}
+
 
 godot::Kodot2Body* godot::Kodot2::getBody(int _bodyIndex)
 {

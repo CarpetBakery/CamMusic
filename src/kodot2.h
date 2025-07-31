@@ -1,6 +1,10 @@
 #ifndef KODOT2_H
 #define KODOT2_H
 
+// For UINT64, USHORT, etc
+// TODO: Replace this with standard types
+#include "windowsdef.h"
+
 #include <godot_cpp/classes/node.hpp>
 #include <godot_cpp/variant/typed_dictionary.hpp>
 
@@ -92,6 +96,8 @@ namespace godot
 
         // Process all bodies in the current frame
         void processBodies(uint64_t nTime, int bodyCount, IBody** bodies);
+        // Process depth from the current frame
+        void processDepth(INT64 nTime, const UINT16* buffer, int width, int height, USHORT minDepth, USHORT maxDepth);
 
         // Convert world coord to screen
         Vector2 bodyToScreen(float x, float y, float z);
