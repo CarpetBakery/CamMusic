@@ -20,7 +20,7 @@ namespace godot
 		// Joint positions in 3D Space
 		TypedArray<Vector3> joints;
 		// Joint positions in 2D Space
-		TypedArray<Vector3> joints2D;
+		TypedArray<Vector2> joints2D;
 
 		Kodot2Body();
 		~Kodot2Body();
