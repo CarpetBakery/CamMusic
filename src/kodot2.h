@@ -11,6 +11,7 @@
 class IKinectSensor;
 class ICoordinateMapper;
 class IBodyFrameReader;
+class IDepthFrameReader;
 class IBody;
 struct _Joint;
 
@@ -106,6 +107,8 @@ namespace godot
 
         // Body reader
         IBodyFrameReader* bodyFrameReader;
+        // Depth reader
+        IDepthFrameReader* depthFrameReader;
 
         Kodot2();
         ~Kodot2();

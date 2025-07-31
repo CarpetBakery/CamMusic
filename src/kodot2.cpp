@@ -16,7 +16,7 @@ void godot::Kodot2::_bind_methods()
     // Expose methods to GDScript
     ClassDB::bind_method(D_METHOD("kinect_init"), &Kodot2::kinectInitialize);
     ClassDB::bind_method(D_METHOD("kinect_update"), &Kodot2::kinectUpdate);
-    
+
     ClassDB::bind_method(D_METHOD("get_body_joint_positions_3d", "bodyId"), &Kodot2::getBodyJointPositions3D, DEFVAL(-1));
     ClassDB::bind_method(D_METHOD("get_body_joint_positions_2d", "bodyId"), &Kodot2::getBodyJointPositions2D, DEFVAL(-1));
 
@@ -108,7 +108,10 @@ bool godot::Kodot2::kinectInitialize()
         IBodyFrameSource* pBodyFrameSource = NULL;
         hr = kinectSensor->Open();
 
-        if (SUCCEEDED(hr))
+        bool openSucceeded = SUCCEEDED(hr);
+
+        // Setup for skeletal tracking
+        if (openSucceeded)
         {
             hr = kinectSensor->get_CoordinateMapper(&coordMapper);
         }
@@ -122,8 +125,21 @@ bool godot::Kodot2::kinectInitialize()
         {
             hr = pBodyFrameSource->OpenReader(&bodyFrameReader);
         }
-
         SafeRelease(pBodyFrameSource);
+
+        // Setup for depth reading
+        IDepthFrameSource* pDepthFrameSource = NULL;
+        if (openSucceeded)
+        {
+            hr = kinectSensor->get_DepthFrameSource(&pDepthFrameSource);
+        }
+
+        if (SUCCEEDED(hr))
+        {
+            hr = pDepthFrameSource->OpenReader(&depthFrameReader);
+        }
+
+        SafeRelease(pDepthFrameSource);
     }
 
     ERR_FAIL_COND_V_MSG(!kinectSensor || FAILED(hr), true, "No ready Kinect found!");
@@ -396,9 +412,12 @@ godot::Kodot2::~Kodot2()
         return;
     }
 
-    // Cleanup
+    // Cleanup body frame reader
     SafeRelease(bodyFrameReader);
     SafeRelease(coordMapper);
+
+    // Cleanup depth frame reader
+    SafeRelease(depthFrameReader);
 
     // Close Kinect sensor
     if (kinectSensor)
