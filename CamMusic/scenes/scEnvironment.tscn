@@ -8,7 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://de5ta8xcbroid" path="res://scenes/scTest.tscn" id="5_5177l"]
 [ext_resource type="PackedScene" uid="uid://rqdtnwf1wtb8" path="res://objects/Prim.tscn" id="6_uquk0"]
 [ext_resource type="Script" uid="uid://pamjchcrdg2u" path="res://src/test/MeltyTest.cs" id="7_e6pv5"]
-[ext_resource type="Script" uid="uid://btek54be5cctf" path="res://src/audio_visualizer.gd" id="7_upe25"]
+[ext_resource type="PackedScene" uid="uid://bdxhfitp1w07t" path="res://objects/AudioVisualizer.tscn" id="7_uquk0"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_r5s3b"]
 shader = ExtResource("1_axlu0")
@@ -132,11 +132,8 @@ layer = 0
 position = Vector2(956, 606)
 scale = Vector2(1.82569, 1.50569)
 
-[node name="Visualizer" type="Node2D" parent="2D Background/VisParent"]
+[node name="AudioVisualizer" parent="2D Background/VisParent" instance=ExtResource("7_uquk0")]
 position = Vector2(-407, -251)
-script = ExtResource("7_upe25")
-saturation = 0.5
-alpha = 0.575
 
 [node name="MeltyTest" type="Node" parent="2D Background" node_paths=PackedStringArray("player")]
 script = ExtResource("7_e6pv5")

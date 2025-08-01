@@ -1,8 +1,10 @@
-[gd_scene load_steps=5 format=3 uid="uid://dphxkkvrax1cd"]
+[gd_scene load_steps=7 format=3 uid="uid://dphxkkvrax1cd"]
 
 [ext_resource type="Script" uid="uid://bec7opnicuh26" path="res://src/cursor.gd" id="2_edv5a"]
 [ext_resource type="Texture2D" uid="uid://chykjr7e70qqa" path="res://assets/sprites/ui/cursor_1.png" id="3_oq6l7"]
 [ext_resource type="Script" uid="uid://d0fxbuao43h0a" path="res://src/test/kodot2_test.gd" id="3_pcuuj"]
+[ext_resource type="PackedScene" uid="uid://bdxhfitp1w07t" path="res://objects/AudioVisualizer.tscn" id="4_edv5a"]
+[ext_resource type="Script" uid="uid://big15dd1lfk5l" path="res://src/test/mic_test.gd" id="4_oq6l7"]
 
 [sub_resource type="Gradient" id="Gradient_g6t6r"]
 colors = PackedColorArray(1, 1, 1, 0.254902, 1, 1, 1, 0)
@@ -74,3 +76,11 @@ color_ramp = SubResource("Gradient_g6t6r")
 
 [node name="Sprite2D" type="Sprite2D" parent="Cursor"]
 texture = ExtResource("3_oq6l7")
+
+[node name="MicTest" type="Node" parent="." node_paths=PackedStringArray("player")]
+script = ExtResource("4_oq6l7")
+player = NodePath("AudioStreamPlayer")
+
+[node name="AudioVisualizer" parent="MicTest" instance=ExtResource("4_edv5a")]
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="MicTest"]

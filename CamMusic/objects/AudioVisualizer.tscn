@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://bdxhfitp1w07t"]
+
+[ext_resource type="Script" uid="uid://btek54be5cctf" path="res://src/audio_visualizer.gd" id="1_55x2g"]
+
+[node name="AudioVisualizer" type="Node2D"]
+script = ExtResource("1_55x2g")
+saturation = 0.5
+alpha = 0.575

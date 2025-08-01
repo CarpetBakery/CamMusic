@@ -12,9 +12,13 @@ config_version=5
 
 config/name="CamMusic"
 run/main_scene="uid://dphxkkvrax1cd"
-config/features=PackedStringArray("4.4", "Forward Plus")
+config/features=PackedStringArray("4.4", "C#", "Forward Plus")
 boot_splash/show_image=false
 config/icon="uid://egppiwpa1guo"
+
+[audio]
+
+driver/enable_input=true
 
 [autoload]
 
