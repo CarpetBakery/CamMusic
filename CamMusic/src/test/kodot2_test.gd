@@ -65,7 +65,7 @@ func _process(delta: float) -> void:
 	kinect_update()
 	skeletalUpdate(delta)
 	gestureUpdate(delta)
-	updateImage()
+	#updateImage()
 
 
 # -- Hand gesture demo --
@@ -131,5 +131,8 @@ func skeletalUpdate(delta: float):
 
 func updateImage():
 	# TODO: Change this so it's just an image texture
-	var img := image_test(640, 480, Color.BLACK)
-	depthStream.texture = img
+	#var img := image_test(640, 480, Color.BLACK)
+	#depthStream.texture = img
+	
+	depthStream.texture = get_depth_texture()
+	

@@ -91,6 +91,9 @@ namespace godot
         // Which index was previously the first tracked body?
         int firstTrackedBodyIndex = 0;
 
+        // The current depth image
+        Ref<ImageTexture> depthTexture;
+
 
         void updateBody();
         void updateDepth();
@@ -131,6 +134,7 @@ namespace godot
         // Call at the beginning of the frame to update bodies and their joints
         void kinectUpdate();
 
+        // -- Skeletal tracking --
         // Get joint positions in 3D space (default value gets the first tracked body)
         TypedArray<Vector3> getBodyJointPositions3D(int bodyId = -1);
         // Get joint positions in 2D space
@@ -153,12 +157,12 @@ namespace godot
         // Get all tracked bodies in our bodies array
         TypedArray<Kodot2Body> getTrackedBodies();
 
-        // -- TEST --
-        Ref<ImageTexture> imageTest(int width, int height, Color color);
-
-        // -- Get/set --
         // Get the number of currently tracked bodies
         int getTrackedBodyCount();
+        
+        // -- Image --
+        Ref<ImageTexture> getDepthTexture();
+        Ref<ImageTexture> imageTest(int width, int height, Color color);
 
         // -- Exports --
         void set_printVerboseErrors(bool const p_printVerboseErrors);

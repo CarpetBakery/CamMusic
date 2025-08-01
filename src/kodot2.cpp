@@ -27,6 +27,7 @@ void godot::Kodot2::_bind_methods()
     ClassDB::bind_method(D_METHOD("get_tracked_bodies"), &Kodot2::getTrackedBodies);
     ClassDB::bind_method(D_METHOD("get_all_bodies"), &Kodot2::getAllBodies);
 
+    ClassDB::bind_method(D_METHOD("get_depth_texture"), &Kodot2::getDepthTexture);
     ClassDB::bind_method(D_METHOD("image_test", "width", "height", "color"), &Kodot2::imageTest);
 
     // -- Get/set --
@@ -161,11 +162,13 @@ void godot::Kodot2::kinectUpdate()
     ERR_FAIL_COND_MSG(!isKinectInitialized, "Trying to update when Kinect was never initialized. Try calling `kinect_init' in your _ready function.");
 
     updateBody();
-    // updateDepth();
+    updateDepth();
 }
 
 void godot::Kodot2::updateBody()
 {
+    print_line("Updating body...");
+
     if (!bodyFrameReader)
     {
         return;
@@ -342,33 +345,34 @@ void godot::Kodot2::updateDepth()
 void godot::Kodot2::processDepth(INT64 nTime, const UINT16* buffer, int width, int height, USHORT minDepth, USHORT maxDepth)
 {
     // Make sure we've received valid data
-    ERR_FAIL_COND_MSG(width != DEPTH_WIDTH || height != DEPTH_WIDTH, "Invalid depth data.");
+    ERR_FAIL_COND_MSG(width != DEPTH_WIDTH || height != DEPTH_HEIGHT, "Invalid depth data.");
 
-    // End pixel is start + width*height - 1
-    const UINT16* bufferEnd = buffer + (width * height);
+    const int USHORT_MAX = pow(2, 16);
+    const uint8_t COLOR_CHANNELS = 3;
+    const size_t BUFFER_LEN = (width * height);
+    const size_t IMAGE_DATA_LEN = BUFFER_LEN * COLOR_CHANNELS;
 
-    while (buffer < bufferEnd)
+    // Allocate image data;
+    PackedByteArray imgData;
+    imgData.resize(IMAGE_DATA_LEN);
+
+    for (size_t i = 0; i < IMAGE_DATA_LEN; i += COLOR_CHANNELS)
     {
-        USHORT depth = *buffer;
+        // USHORT depth = *buffer;
+        float fDepth = (static_cast<float>(*buffer) / static_cast<float>(USHORT_MAX)) * 256.0f;
+        uint8_t depth = static_cast<uint8_t>(fDepth);
 
-        // To convert to a byte, we're discarding the most-significant
-        // rather than least-significant bits.
-        // We're preserving detail, although the intensity will "wrap."
-        // Values outside the reliable depth range are mapped to 0 (black).
+        imgData[i] = depth;
+        imgData[i + 1] = depth;
+        imgData[i + 2] = depth;
 
-        // Note: Using conditionals in this loop could degrade performance.
-        // Consider using a lookup table instead when writing production code.
-        BYTE intensity = static_cast<BYTE>((depth >= minDepth) && (depth <= maxDepth) ? (depth % 256) : 0);
-
-        // pRGBX->rgbRed   = intensity;
-        // pRGBX->rgbGreen = intensity;
-        // pRGBX->rgbBlue  = intensity;
-
-        // ++pRGBX;
-        // ++pBuffer;
+        ++buffer;
     }
-}
 
+    // Create new image texture from our depth data
+    Ref<Image> img = Image::create_from_data(width, height, false, Image::FORMAT_RGB8, imgData);
+    depthTexture = ImageTexture::create_from_image(img);
+}
 
 godot::Kodot2Body* godot::Kodot2::getBody(int _bodyIndex)
 {
@@ -475,12 +479,38 @@ godot::Kodot2Body* godot::Kodot2::getBodyFirstTrackedOrId(int bodyId)
     return getBody(bodyId);
 }
 
-
-// -- Get/set --
 int godot::Kodot2::getTrackedBodyCount()
 {
     return trackedBodyCount;
 }
+
+godot::Ref<godot::ImageTexture> godot::Kodot2::getDepthTexture()
+{
+    return depthTexture;
+}
+
+godot::Ref<godot::ImageTexture> godot::Kodot2::imageTest(int width, int height, Color color)
+{
+    const int COLOR_CHANNELS = 3;
+    PackedByteArray data;
+    size_t len = width * height * COLOR_CHANNELS;
+
+    // Allocate the memory we need
+    data.resize(len);
+
+    // Fill image with data
+    for (int i = 0; i < len; i += COLOR_CHANNELS)
+    {
+        data[i] = 255;
+        data[i + 1] = 0;
+        data[i + 2] = 255;
+    }
+
+    Ref<Image> img = Image::create_from_data(width, height, false, Image::FORMAT_RGB8, data);
+    return ImageTexture::create_from_image(img);
+}
+
+
 
 // -- Exports --
 void godot::Kodot2::set_printVerboseErrors(bool const p_printVerboseErrors)
@@ -542,24 +572,4 @@ godot::Kodot2::~Kodot2()
     SafeRelease(kinectSensor);
 
     print_line("Kodot2 Freed");
-}
-
-godot::Ref<godot::ImageTexture> godot::Kodot2::imageTest(int width, int height, Color color)
-{
-    PackedByteArray data;
-    size_t len = width * height * 3;
-
-    // Allocate the memory we need
-    data.resize(len);
-
-    // Make a blue image
-    for (int i = 0; i < len; i += 3)
-    {
-        data[i] = 255;
-        data[i + 1] = 0;
-        data[i + 2] = 255;
-    }
-
-    Ref<Image> img = Image::create_from_data(width, height, false, Image::FORMAT_RGB8, data);
-    return ImageTexture::create_from_image(img);
 }
