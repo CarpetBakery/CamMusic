@@ -41,8 +41,8 @@ var HAND_STATE_NAME = [
 @export_group("Nodes")
 @export var handLeft: Control
 @export var handRight: Control
-
 @export var squaresParent: Control
+@export var depthStream: TextureRect
 
 var jointSquares: Dictionary[int, ColorRect]
 var jointLabels: Dictionary[int, Label]
@@ -65,6 +65,7 @@ func _process(delta: float) -> void:
 	kinect_update()
 	skeletalUpdate(delta)
 	gestureUpdate(delta)
+	updateImage()
 
 
 # -- Hand gesture demo --
@@ -127,3 +128,8 @@ func skeletalUpdate(delta: float):
 		# NOTE: Coords are already corrected for now
 		var square: ColorRect = jointSquares.get(i)
 		square.position = jointPoints.get(i)
+
+func updateImage():
+	# TODO: Change this so it's just an image texture
+	var img := image_test(640, 480, Color.BLACK)
+	depthStream.texture = img

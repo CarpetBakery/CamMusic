@@ -6,6 +6,7 @@
 #include "windowsdef.h"
 
 #include <godot_cpp/classes/node.hpp>
+#include <godot_cpp/classes/image_texture.hpp>
 #include <godot_cpp/variant/typed_dictionary.hpp>
 
 #include "kodot2_body.h"
@@ -151,7 +152,9 @@ namespace godot
 
         // Get all tracked bodies in our bodies array
         TypedArray<Kodot2Body> getTrackedBodies();
-        
+
+        // -- TEST --
+        Ref<ImageTexture> imageTest(int width, int height, Color color);
 
         // -- Get/set --
         // Get the number of currently tracked bodies
