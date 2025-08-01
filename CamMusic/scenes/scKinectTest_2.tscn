@@ -10,10 +10,10 @@ colors = PackedColorArray(1, 1, 1, 0.254902, 1, 1, 1, 0)
 [node name="scKinectTest" type="Node3D"]
 
 [node name="DepthStream" type="TextureRect" parent="."]
-offset_left = 7.0
-offset_top = 4.0
-offset_right = 1287.0
-offset_bottom = 964.0
+offset_left = 376.0
+offset_top = 35.0
+offset_right = 1656.0
+offset_bottom = 995.0
 
 [node name="Kodot2" type="Kodot2" parent="." node_paths=PackedStringArray("handLeft", "handRight", "squaresParent", "depthStream")]
 script = ExtResource("3_pcuuj")
