@@ -5,10 +5,20 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "GDScript: Launch Project",
+            "type": "godot",
+            "request": "launch",
+            "project": "",
+            "debug_collisions": false,
+            "debug_paths": false,
+            "debug_navigation": false,
+            "additional_options": "--path ${workspaceFolder}/CamMusic"
+        },
+        {
             "type": "lldb",
             "request": "launch",
             // "preLaunchTask": "build_debug",
-            "name": "Debug",
+            "name": "Debug C++",
             "program": "godot",
             "args": ["--path", "${workspaceFolder}/CamMusic"],
             "cwd": "${workspaceFolder}"
