@@ -6,6 +6,7 @@
         "**/.DS_Store": true,
         "**/Thumbs.db": true,
         "**/*.obj": true,
+        "**/*.uid": true,
     },
     "cmake.ignoreCMakeListsMissing": true
 }
