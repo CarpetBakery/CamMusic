@@ -63,9 +63,12 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	# NOTE: Kinect will update roughly 30 times a second(?)
 	kinect_update()
+	
+	
+	
 	skeletalUpdate(delta)
 	gestureUpdate(delta)
-	#updateImage()
+	updateImage()
 
 
 # -- Hand gesture demo --
@@ -135,4 +138,3 @@ func updateImage():
 	#depthStream.texture = img
 	
 	depthStream.texture = get_depth_texture()
-	

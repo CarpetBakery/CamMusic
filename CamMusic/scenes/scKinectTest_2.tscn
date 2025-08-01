@@ -9,6 +9,12 @@ colors = PackedColorArray(1, 1, 1, 0.254902, 1, 1, 1, 0)
 
 [node name="scKinectTest" type="Node3D"]
 
+[node name="DepthStream" type="TextureRect" parent="."]
+offset_left = 7.0
+offset_top = 4.0
+offset_right = 1287.0
+offset_bottom = 964.0
+
 [node name="Kodot2" type="Kodot2" parent="." node_paths=PackedStringArray("handLeft", "handRight", "squaresParent", "depthStream")]
 script = ExtResource("3_pcuuj")
 handLeft = NodePath("../HandLeft")
@@ -68,7 +74,3 @@ color_ramp = SubResource("Gradient_g6t6r")
 
 [node name="Sprite2D" type="Sprite2D" parent="Cursor"]
 texture = ExtResource("3_oq6l7")
-
-[node name="DepthStream" type="TextureRect" parent="."]
-offset_right = 40.0
-offset_bottom = 40.0

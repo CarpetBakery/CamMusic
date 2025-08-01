@@ -167,8 +167,6 @@ void godot::Kodot2::kinectUpdate()
 
 void godot::Kodot2::updateBody()
 {
-    print_line("Updating body...");
-
     if (!bodyFrameReader)
     {
         return;
@@ -347,7 +345,6 @@ void godot::Kodot2::processDepth(INT64 nTime, const UINT16* buffer, int width, i
     // Make sure we've received valid data
     ERR_FAIL_COND_MSG(width != DEPTH_WIDTH || height != DEPTH_HEIGHT, "Invalid depth data.");
 
-    const int USHORT_MAX = pow(2, 16);
     const uint8_t COLOR_CHANNELS = 3;
     const size_t BUFFER_LEN = (width * height);
     const size_t IMAGE_DATA_LEN = BUFFER_LEN * COLOR_CHANNELS;
@@ -358,9 +355,11 @@ void godot::Kodot2::processDepth(INT64 nTime, const UINT16* buffer, int width, i
 
     for (size_t i = 0; i < IMAGE_DATA_LEN; i += COLOR_CHANNELS)
     {
-        // USHORT depth = *buffer;
-        float fDepth = (static_cast<float>(*buffer) / static_cast<float>(USHORT_MAX)) * 256.0f;
+        USHORT bufferDepth = *buffer - minDepth;
+        float fDepth = (static_cast<float>(bufferDepth) / static_cast<float>(maxDepth - minDepth)) * 256.0f * 20.0f;
         uint8_t depth = static_cast<uint8_t>(fDepth);
+
+        depth = 255 - depth;
 
         imgData[i] = depth;
         imgData[i + 1] = depth;
