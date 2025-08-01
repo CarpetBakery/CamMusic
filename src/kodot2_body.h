@@ -22,9 +22,7 @@ namespace godot
 		// Hand gestures
 		int leftHandState;
         int rightHandState;
-
-		enum _HandState working;
-
+		
 		Kodot2Body();
 		~Kodot2Body();
 

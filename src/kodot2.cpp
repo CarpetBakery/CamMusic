@@ -339,7 +339,7 @@ void godot::Kodot2::updateDepth()
 
 void godot::Kodot2::processDepth(INT64 nTime, const UINT16* buffer, int width, int height, USHORT minDepth, USHORT maxDepth)
 {
-
+    // TODO:
 }
 
 
@@ -362,7 +362,7 @@ godot::Kodot2Body* godot::Kodot2::getFirstTrackedBody()
     size_t len = kodotBodies.size();
     for (int i = 0; i < len; i++)
     {
-        Kodot2Body* body = getBody(i);
+        Kodot2Body* body = cast_to<Kodot2Body>(kodotBodies.get(i));
         if (body->isTracked())
         {
             firstTrackedBodyIndex = i;
@@ -379,7 +379,7 @@ godot::TypedArray<godot::Kodot2Body> godot::Kodot2::getTrackedBodies()
     size_t len = kodotBodies.size();
     for (int i = 0; i < len; i++)
     {
-        Kodot2Body* body = getBody(i);
+        Kodot2Body* body = cast_to<Kodot2Body>(kodotBodies.get(i));
         if (body->isTracked())
         {
             _trackedBodies.push_back(body);

@@ -23,7 +23,10 @@ TypedArray<Vector3> Kodot2Body::getJointPositions3D()
 
 TypedArray<Vector2> Kodot2Body::getJointPositions2D()
 {
-    return joints2D;
+    TypedArray<Vector2> temp = joints2D;
+    return temp;
+
+    // return joints2D;
 }
 
 bool Kodot2Body::isTracked()
@@ -39,7 +42,6 @@ int Kodot2Body::getRightHandState()
 {
     return rightHandState;
 }
-
 
 Kodot2Body::Kodot2Body() 
 {

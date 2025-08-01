@@ -64,7 +64,10 @@ func _process(delta: float) -> void:
 	# NOTE: Kinect will update roughly 30 times a second(?)
 	kinect_update()
 	skeletalUpdate(delta)
-	gestureUpdate(delta)
+	#gestureUpdate(delta)
+	
+	# TEST
+	get_first_tracked_body()
 
 
 # -- Hand gesture demo --
