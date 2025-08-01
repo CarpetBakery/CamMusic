@@ -49,26 +49,32 @@ var showJointNames := true:
 
 func _ready() -> void:
 	kinect_init()
-	initVisuals()
+	skeletalInit()
 
 
 func _process(delta: float) -> void:
-	if Input.is_action_just_pressed("ui_accept"):
-		showJointNames = !showJointNames
-	
+	# NOTE: Kinect will update roughly 30 times a second(?)
 	kinect_update()
-	
-	
-	var jointPoints := get_body_joint_positions_2d(-1)
-	if jointPoints.is_empty():
+	skeletalUpdate(delta)
+
+
+# -- Hand gesture demo --
+func updateHands(delta: float):
+	# Method 1
+	var leftHandState := get_body_left_hand_state()
+	var rightHandState := get_body_right_hand_state()
+
+	# Method 2
+	var body := get_first_tracked_body()
+	if not body:
 		return
-	
-	# NOTE: This only happens 30ish times a second, which seems to be the polling rate of the Kinect2
-	# Whenever we call "update", there's a very good chance there won't be any data
-	updateJoints(jointPoints)
+
+	leftHandState = body.get_left_hand_state()
+	rightHandState = body.get_right_hand_state()
 
 
-func initVisuals():
+# -- Skeletal tracking demo --
+func skeletalInit():
 	for i in range(JointType.Count):
 		var s := 20
 		var inst: ColorRect = ColorRect.new()
@@ -86,7 +92,14 @@ func initVisuals():
 		jointLabels.get_or_add(i, label)
 
 
-func updateJoints(jointPoints):
+func skeletalUpdate(delta: float):
+	var jointPoints := get_body_joint_positions_2d()
+	if jointPoints.is_empty():
+		return
+	
+	if Input.is_action_just_pressed("ui_accept"):
+		showJointNames = !showJointNames
+
 	for i in range(JointType.Count):
 		# NOTE: Coords are already corrected for now
 		var square: ColorRect = jointSquares.get(i)
