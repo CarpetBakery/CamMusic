@@ -23,7 +23,7 @@ void godot::Kodot2::_bind_methods()
     ClassDB::bind_method(D_METHOD("get_body_left_hand_state", "bodyId"), &Kodot2::getBodyLeftHandState, DEFVAL(-1));
     ClassDB::bind_method(D_METHOD("get_body_right_hand_state", "bodyId"), &Kodot2::getBodyRightHandState, DEFVAL(-1));
 
-    ClassDB::bind_method(D_METHOD("get_first_tracked_body"), &Kodot2::getFirstTrackedBody);
+    ClassDB::bind_method(D_METHOD("get_first_tracked_body"), &Kodot2::getFirstTrackedBodyExternal);
     ClassDB::bind_method(D_METHOD("get_tracked_bodies"), &Kodot2::getTrackedBodies);
     ClassDB::bind_method(D_METHOD("get_all_bodies"), &Kodot2::getAllBodies);
 
@@ -371,6 +371,12 @@ godot::Kodot2Body* godot::Kodot2::getFirstTrackedBody()
     }
     return getBody(firstTrackedBodyIndex);
 }
+
+godot::Ref<godot::Kodot2Body> godot::Kodot2::getFirstTrackedBodyExternal()
+{
+    return Ref<Kodot2Body>(getFirstTrackedBody());
+}
+
 
 godot::TypedArray<godot::Kodot2Body> godot::Kodot2::getTrackedBodies()
 {

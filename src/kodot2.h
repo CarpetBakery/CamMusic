@@ -146,6 +146,8 @@ namespace godot
 
         // Get first tracked body in our bodies array
         Kodot2Body* getFirstTrackedBody();
+        // The GDscript-facing function
+        Ref<Kodot2Body> getFirstTrackedBodyExternal();
 
         // Get all tracked bodies in our bodies array
         TypedArray<Kodot2Body> getTrackedBodies();

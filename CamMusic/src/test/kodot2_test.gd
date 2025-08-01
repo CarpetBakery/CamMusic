@@ -64,34 +64,28 @@ func _process(delta: float) -> void:
 	# NOTE: Kinect will update roughly 30 times a second(?)
 	kinect_update()
 	skeletalUpdate(delta)
-	#gestureUpdate(delta)
-	
-	# TEST
-	get_first_tracked_body()
+	gestureUpdate(delta)
 
 
 # -- Hand gesture demo --
 func gestureUpdate(delta: float):
-	# Method 1
-	var leftHandState := get_body_left_hand_state()
-	var rightHandState := get_body_right_hand_state()
+	var leftHandState: int
+	var rightHandState: int
 	
-	# Show hand state on hand labels
 	var leftLabel := jointLabels[JointType.HandLeft]
 	var rightLabel := jointLabels[JointType.HandRight]
 	
-	leftLabel.text = HAND_STATE_NAME[leftHandState]
-	rightLabel.text = HAND_STATE_NAME[rightHandState]
-	leftLabel.show()
-	rightLabel.show()
+	# Method 1
+	leftHandState = get_body_left_hand_state()
+	rightHandState = get_body_right_hand_state()
 	
-	return
 	
-	# Method 2 (broken???)
+	# Method 2
 	var body: Kodot2Body = get_first_tracked_body()
 	if not body.isTracked():
 		return
 	
+	# Show hand state on hand labels
 	leftHandState = body.get_left_hand_state()
 	rightHandState = body.get_right_hand_state()
 	
