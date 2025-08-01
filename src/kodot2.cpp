@@ -391,7 +391,10 @@ godot::TypedArray<godot::Kodot2Body> godot::Kodot2::getTrackedBodies()
 
 godot::TypedArray<godot::Vector2> godot::Kodot2::getBodyJointPositions2D(int bodyId)
 {
-    return getBodyFirstTrackedOrId(bodyId)->getJointPositions2D();
+    Kodot2Body* body = getBodyFirstTrackedOrId(bodyId);
+    return body->getJointPositions2D();
+
+    // return getBodyFirstTrackedOrId(bodyId)->getJointPositions2D();
 }
 
 godot::TypedArray<godot::Vector3> godot::Kodot2::getBodyJointPositions3D(int bodyId)
@@ -481,6 +484,7 @@ godot::Kodot2::Kodot2()
     // GDExtension classes are constructed/destructed once when the extension is loaded
     // This seems to be the behavior even as of 2025-07-31
     // See: https://github.com/godotengine/godot/pull/82554#issuecomment-1744888107
+    firstTrackedBodyIndex = 0;
 }
 
 godot::Kodot2::~Kodot2()

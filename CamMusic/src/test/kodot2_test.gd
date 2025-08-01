@@ -30,6 +30,14 @@ var POS_INDEX_NAME := [
 	"Count",
 ]
 
+var HAND_STATE_NAME = [
+	"Unknown",
+	"NotTracked",
+	"Open",
+	"Closed",
+	"Lasso",
+]
+
 @export_group("Nodes")
 @export var handLeft: Control
 @export var handRight: Control
@@ -56,21 +64,39 @@ func _process(delta: float) -> void:
 	# NOTE: Kinect will update roughly 30 times a second(?)
 	kinect_update()
 	skeletalUpdate(delta)
+	gestureUpdate(delta)
 
 
 # -- Hand gesture demo --
-func updateHands(delta: float):
+func gestureUpdate(delta: float):
 	# Method 1
 	var leftHandState := get_body_left_hand_state()
 	var rightHandState := get_body_right_hand_state()
-
-	# Method 2
-	var body := get_first_tracked_body()
-	if not body:
+	
+	# Show hand state on hand labels
+	var leftLabel := jointLabels[JointType.HandLeft]
+	var rightLabel := jointLabels[JointType.HandRight]
+	
+	leftLabel.text = HAND_STATE_NAME[leftHandState]
+	rightLabel.text = HAND_STATE_NAME[rightHandState]
+	leftLabel.show()
+	rightLabel.show()
+	
+	return
+	
+	# Method 2 (broken???)
+	var body: Kodot2Body = get_first_tracked_body()
+	if not body.isTracked():
 		return
-
+	
 	leftHandState = body.get_left_hand_state()
 	rightHandState = body.get_right_hand_state()
+	
+	# Show hand state on hand labels
+	leftLabel.text = HAND_STATE_NAME[leftHandState]
+	rightLabel.text = HAND_STATE_NAME[rightHandState]
+	leftLabel.show()
+	rightLabel.show()
 
 
 # -- Skeletal tracking demo --
